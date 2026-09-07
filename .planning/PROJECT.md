@@ -53,10 +53,12 @@ agente que actúa (recuerda, cobra, agenda, redacta) en nombre de la agencia.
 
 ### Dos números de WhatsApp, con propósitos distintos
 
-- **De cara al cliente**: cada agencia **conecta su propio número de WhatsApp
-  Business** durante el onboarding, para que el agente hable ahí con la marca y tono
-  de esa agencia (white-label) — el cliente final no percibe que usa una plataforma
-  compartida.
+- **De cara al cliente**: cada agencia conecta el número de WhatsApp Business
+  **que YA tiene y que sus clientes ya conocen** (no un número nuevo) — no es una
+  migración de clientes a un canal desconocido, es agregarle la capacidad del
+  agente a un canal que ya existe y en el que ya hay historial y confianza. El
+  agente responde ahí con la marca y tono de esa agencia (white-label) — el cliente
+  final no percibe que usa una plataforma compartida.
 - **Interno del equipo**: un **número único de la plataforma, compartido entre
   todas las agencias** (no requiere que cada agencia configure y verifique su propia
   línea de WhatsApp Business solo para uso interno). El sistema identifica a qué
@@ -88,6 +90,16 @@ que le escriben (siempre el mismo, el de la agencia) — lo decide **quién escr
   en la práctica).*
 - Número no registrado (ni equipo ni contacto autorizado) → el agente responde con
   el objetivo de convertirlo en cliente/prospecto (flujo de captación).
+- **Consentimiento de WhatsApp (opt-in) es obligatorio antes de mensajes
+  proactivos**: agregar un número como contacto autorizado NO es suficiente por sí
+  solo (política de Meta exige consentimiento afirmativo explícito). Al agregar un
+  contacto autorizado a la ficha de un cliente, el sistema exige confirmar que ese
+  contacto dio consentimiento explícito para recibir mensajes por WhatsApp — recién
+  ahí se habilitan mensajes proactivos del agente hacia él (recordatorios, etc.).
+- **Divulgación honesta**: si un contacto le pregunta directamente al agente si es
+  un bot/IA, el agente **siempre lo admite** — nunca sostiene el personaje para
+  negar o evadir esa pregunta, aunque tenga nombre y tono personalizados por la
+  agencia.
 - **Resolución de contexto por conversación**:
   - Chat 1:1 con miembro del equipo → responde con el alcance de su rol (admin ve
     todo; miembro solo sus clientes asignados)
@@ -122,9 +134,13 @@ el equipo, para poder auditar y corregir.
    edición, búsqueda
 3. Calendario: agendar/reagendar/cancelar citas de grabación; calendario de
    contenido (solo planeación, sin auto-publicar); recordatorios automáticos
-4. Cobros a clientes: registrar plan de pago, detectar próximos/vencidos,
-   recordatorio + link de pago, marcar pagado automáticamente, consultar estado de
-   cuenta ("¿quién me debe?")
+4. Cobros a clientes: registrar plan de pago **recurrente (mensualidad) o puntual
+   (por proyecto/entrega)**, detectar próximos/vencidos, recordatorio + link de
+   pago, consultar estado de cuenta ("¿quién me debe?"). El pago se marca como
+   pagado **solo con confirmación real del procesador de pagos** (nunca por
+   inferencia de lo que el cliente escribe en el chat, ej. "ya te pagué"); el
+   equipo de la agencia también puede marcarlo como pagado manualmente (ej. pago
+   recibido por fuera del sistema).
 5. Contenido: redactar/proponer piezas por cliente, enviar para aprobación,
    **regenerar automáticamente** ante feedback del cliente, marcar aprobado
 6. Comunicación con el cliente final: responder preguntas de su cuenta/agenda/pagos,
@@ -145,11 +161,10 @@ el equipo, para poder auditar y corregir.
   contexto por conversación, separación visible-cliente / solo-equipo (ver sección
   dedicada arriba)
 - **Biblioteca de assets** por cliente (logos, videos, fotos, archivos de marca)
-- **Panel de campañas de ads** (solo visibilidad de campañas activas y alertas de
-  presupuesto — no gestiona la campaña en sí)
 - **Ficha de colaboradores externos** (influencers/freelancers): directorio con
   datos de contacto y acuerdos
-- **Alertas de vencimiento de contrato** por cliente
+- **Contratos**: envío y **firma electrónica** dentro de la plataforma (no solo
+  alertas) + alertas de vencimiento/renovación por cliente
 - **Bóveda de credenciales del cliente** (accesos a redes, Ads, Analytics, dominio, etc.)
 - **Tablero de tareas internas** ligado al cliente/calendario
 - **Rentabilidad por cliente**
@@ -167,7 +182,7 @@ el equipo, para poder auditar y corregir.
 | Facturación formal (generar/enviar facturas) | v1 usa cobros simples + link de pago |
 | Auto-publicación en redes sociales | v1 es solo planeación; publicar sigue siendo manual |
 | Reportes/métricas de rendimiento (ROI, tráfico, resultados) | Requiere integraciones con Meta/Google Analytics/etc. |
-| Gestión activa de campañas de ads (crear/optimizar) | v1 solo da visibilidad |
+| Panel de campañas de ads (visibilidad y gestión) | Ningún competidor lo integra al CRM core; alto mantenimiento de las APIs de Meta/Google Ads para el valor que aporta en v1 |
 | SEO y mantenimiento técnico de sitio web | Trabajo técnico especializado, no encaja en el modelo cliente/calendario/pagos |
 | Planes/precios detallados del SaaS (tiers, límites) | Se define antes del lanzamiento, no bloquea la planeación funcional |
 
@@ -178,6 +193,15 @@ el equipo, para poder auditar y corregir.
   totalmente libre sin control
 - El aislamiento de información entre clientes es una regla dura, no configurable
   por agencia
+
+## Investigación de dominio
+
+Ver `.planning/research/FEATURES.md` (comparación con HoneyBook, Dubsado, ClickUp,
+Content Snare, Planable, etc.) y `.planning/research/PITFALLS.md` (riesgos
+específicos de un agente de IA mensajeando clientes de forma autónoma). Las
+decisiones que surgieron de esa investigación ya están incorporadas en las
+secciones de arriba (firma electrónica, consentimiento WhatsApp, divulgación del
+bot, confirmación de pago, alcance de ads y pipeline de prospectos).
 
 ## Repositorio
 
