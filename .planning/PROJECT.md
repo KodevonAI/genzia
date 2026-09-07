@@ -72,6 +72,38 @@ agente que actúa (recuerda, cobra, agenda, redacta) en nombre de la agencia.
 - Alta de un miembro del equipo: su número de WhatsApp se captura **al invitarlo a
   la plataforma** (el admin lo invita con su rol y su número).
 
+### Integración directa con Meta — sin intermediarios (Tech Provider)
+
+Genzia se conecta a la plataforma de WhatsApp Business **directamente con Meta**,
+sin pasar por un revendedor/BSP intermedio (tipo Twilio, 360dialog, etc.). Esto
+requiere que **Genzia/Kodevon se convierta en "Tech Provider" oficial de Meta**:
+el rol que permite administrar cuentas de WhatsApp Business de terceros (las
+agencias) en nombre propio.
+
+**Cómo se ve el flujo de conexión de una agencia:**
+1. Genzia (como Tech Provider) se registra y verifica como negocio ante Meta
+   (verificación de negocio: documentos legales, dominio propio) — trámite que
+   toma tiempo real y no depende del desarrollo del producto.
+2. Cuando una agencia llega al paso de "conectar tu WhatsApp" en el onboarding, ve
+   el flujo oficial de Meta llamado **Embedded Signup**, incrustado dentro de la
+   misma app de Genzia — la agencia nunca sale a un sitio de un tercero ni ve la
+   marca de un revendedor. Inicia sesión con su cuenta de Facebook Business,
+   selecciona o crea su cuenta de WhatsApp Business, y verifica su número (el que
+   ya tiene, como se definió arriba).
+3. Desde ese momento Genzia tiene acceso directo vía la API de Meta para
+   enviar/recibir mensajes en nombre de esa agencia — sin intermediario alguno.
+
+**Costos**: Meta cobra por conversación directamente al Tech Provider (Genzia).
+Ese costo se traslada a la agencia **como un cargo aparte y transparente**, no
+incluido de forma oculta en la suscripción — la agencia ve claramente cuánto le
+cuesta el uso de conversaciones de WhatsApp.
+
+**Dependencia crítica de cronograma**: la verificación de negocio de Genzia ante
+Meta (paso 1) debe iniciarse **desde la primera fase del roadmap**, en paralelo al
+desarrollo — es un trámite con Meta que puede ser el verdadero cuello de botella
+del lanzamiento, no algo que se resuelva en una tarde. Debe quedar marcada
+explícitamente como tarea temprana en `ROADMAP.md`.
+
 ## Modelo de identidad y permisos (crítico — evita fuga de información entre clientes)
 
 **Principio**: el agente nunca decide el alcance de la información por el número al
