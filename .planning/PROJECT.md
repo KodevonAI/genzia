@@ -197,8 +197,8 @@ el equipo, para poder auditar y corregir.
 - **Biblioteca de assets** por cliente (logos, videos, fotos, archivos de marca)
 - **Ficha de colaboradores externos** (influencers/freelancers): directorio con
   datos de contacto y acuerdos
-- **Contratos**: envío y **firma electrónica** dentro de la plataforma (no solo
-  alertas) + alertas de vencimiento/renovación por cliente
+- **Contratos**: alertas de vencimiento/renovación por cliente (la firma
+  electrónica dentro de la plataforma se movió a v2 — ver tabla de "Fuera de v1")
 - **Bóveda de credenciales del cliente** (accesos a redes, Ads, Analytics, dominio, etc.)
 - **Tablero de tareas internas** ligado al cliente/calendario
 - **Rentabilidad por cliente**
@@ -218,6 +218,7 @@ el equipo, para poder auditar y corregir.
 | Reportes/métricas de rendimiento (ROI, tráfico, resultados) | Requiere integraciones con Meta/Google Analytics/etc. |
 | Panel de campañas de ads (visibilidad y gestión) | Ningún competidor lo integra al CRM core; alto mantenimiento de las APIs de Meta/Google Ads para el valor que aporta en v1 |
 | SEO y mantenimiento técnico de sitio web | Trabajo técnico especializado, no encaja en el modelo cliente/calendario/pagos |
+| Firma electrónica de contratos dentro de la plataforma | La única opción viable evaluada (Documenso) cuesta US$250/mes fijo desde el primer contrato — no se justifica en v1; v1 mantiene solo alertas de vencimiento de contrato |
 | Planes/precios detallados del SaaS (tiers, límites) | Se define antes del lanzamiento, no bloquea la planeación funcional |
 
 ## No-goals explícitos

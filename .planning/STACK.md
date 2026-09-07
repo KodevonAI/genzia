@@ -78,7 +78,7 @@ que el agente participaría en grupos ya existentes de la agencia. **Decisión: 
 saca el soporte de grupos de v1** (actualizado en `PROJECT.md` y
 `REQUIREMENTS.md`, WA-06) — v1 es 1:1 únicamente, en WhatsApp y web.
 
-## Pagos y firma electrónica
+## Pagos y credenciales
 
 | Área | Decisión |
 |---|---|
@@ -87,20 +87,25 @@ saca el soporte de grupos de v1** (actualizado en `PROJECT.md` y
 | Confirmación de pago (COB-04) | Webhook dispara verificación real contra la API de MercadoPago (nunca se confía en el payload directo) + job periódico de reconciliación |
 | Pagos recurrentes | API de Preapproval/Subscriptions de MercadoPago (tarjeta); para PSE/Nequi se sigue mandando el link cada mes |
 | Facturación futura de Genzia a agencias | La misma API de Preapproval cubriría esto más adelante, sin segundo proveedor de pagos |
-| Firma electrónica (CTR-01) | **Documenso**, plan Platform en la nube: **US$250/mes (facturado anual, US$3,000/año)**, usuarios y documentos ilimitados, sin cobro por documento, incluye acceso a API y widget de firma incrustable/white-label en la UI de Genzia. Válida legalmente en Colombia bajo la Ley 527 de 1999 |
 | Bóveda de credenciales (BOV-01) | Cifrado por sobres (envelope encryption), AES-256-GCM a nivel de aplicación con llaves envueltas en KMS gestionado |
 
-### ¿Por qué no auto-hospedar Documenso gratis?
+### Firma electrónica (CTR-01) — movida a v2, no es parte del stack de v1
 
-Investigación inicial asumía que auto-hospedar Documenso era una alternativa
-gratis al plan de $250/mes. **Corrección tras verificar** (`research/STACK-VERIFY.md`):
-el código es de licencia AGPL-3.0 (gratis de correr), pero incrustar su flujo de
-firma dentro de un producto comercial de código cerrado como Genzia activa la
-obligación de copyleft de red de la AGPL — según los propios términos comerciales
-de Documenso, eso exige o el plan Platform en la nube ($250/mes) o una **licencia
-Enterprise auto-hospedada que arranca en US$30,000/año** (~10 veces más caro). El
-plan Platform en la nube **es la opción más barata legítima**, no una alternativa
-de presupuesto frente a un self-host gratuito real.
+**Decisión de producto**: la firma electrónica de contratos dentro de la
+plataforma se sacó de v1 (ver `PROJECT.md`/`REQUIREMENTS.md`) porque la única
+opción viable evaluada tiene un costo fijo alto desde el primer contrato. v1 solo
+mantiene alertas de vencimiento de contrato (CTR-02), sin costo de terceros.
+
+Queda documentado para cuando se retome en v2: **Documenso**, plan Platform en la
+nube, **US$250/mes (facturado anual, US$3,000/año)**, usuarios y documentos
+ilimitados, sin cobro por documento, incluye API y widget de firma
+incrustable/white-label. Válido legalmente en Colombia bajo la Ley 527 de 1999.
+**Auto-hospedarlo NO es una alternativa gratuita real**: el código es AGPL-3.0,
+pero incrustar su flujo de firma dentro de un producto comercial de código
+cerrado como Genzia activa la obligación de copyleft de red de la AGPL — según
+los propios términos comerciales de Documenso, eso exige el plan en la nube o una
+**licencia Enterprise auto-hospedada que arranca en US$30,000/año** (~10 veces más
+caro). Ver `research/STACK-VERIFY.md` para el detalle completo.
 
 ## Preguntas abiertas para etapas posteriores
 

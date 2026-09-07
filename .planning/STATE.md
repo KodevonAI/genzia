@@ -22,6 +22,13 @@ Etapa de **planeación funcional Y stack técnico** completadas: `PROJECT.md`,
       mano, MercadoPago (Split Payments), Documenso, KMS
 - [x] Ajuste de alcance derivado del research: grupos de WhatsApp sacados de v1
       (limitación real de la API de Meta)
+- [x] Ajuste de alcance: firma electrónica de contratos (CTR-01) movida a v2 —
+      costo fijo de US$250/mes desde el primer contrato no se justifica en v1;
+      v1 mantiene solo alertas de vencimiento (CTR-02)
+- [x] LLM consumido vía OpenRouter (endpoint compatible-Anthropic) en vez de
+      directo a Anthropic, para poder variar de modelo sin lock-in
+- [x] Costos de hosting verificados a 250 y 10,000 usuarios — la arquitectura
+      escala por facturación, no por reconstrucción
 
 ## Pendiente / próximos pasos
 

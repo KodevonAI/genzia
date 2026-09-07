@@ -94,8 +94,10 @@ planes de ejecución futuros. No define stack técnico — solo comportamiento.
 
 | ID | Requisito |
 |---|---|
-| CTR-01 | Enviar un contrato a un cliente para firma electrónica dentro de la plataforma. |
 | CTR-02 | Alertas de vencimiento/renovación de contrato por cliente. |
+
+*(CTR-01, firma electrónica dentro de la plataforma, se movió a v2/Futuro — ver
+tabla abajo.)*
 
 ## VEN — Ventas / prospectos
 
@@ -156,6 +158,7 @@ planes de ejecución futuros. No define stack técnico — solo comportamiento.
 | SEO y mantenimiento técnico de sitio web | Trabajo técnico especializado, no encaja en el modelo cliente/calendario/pagos |
 | Planes/precios detallados del SaaS (tiers, límites) | Se define antes del lanzamiento, no bloquea la planeación funcional |
 | Grupos de WhatsApp con el agente | La API de grupos de Meta es invite-only, se crea vía API (no se puede adoptar un grupo existente de la agencia), tope de 8 participantes, requiere Official Business Account — reevaluar si Meta flexibiliza esto |
+| CTR-01 — Firma electrónica de contratos dentro de la plataforma | La única opción viable evaluada (Documenso) cuesta US$250/mes fijo desde el primer contrato — no se justifica en v1; v1 mantiene solo CTR-02 (alertas de vencimiento) |
 
 ## Fuera de alcance (no es parte de esta planeación)
 

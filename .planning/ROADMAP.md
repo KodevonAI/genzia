@@ -116,13 +116,15 @@ aprueba una pieza de contenido y sube un archivo — nunca ve nada de otro clien
 
 ## Fase 10 — Contratos y bóveda de credenciales
 
-**Objetivo**: formalizar la relación con el cliente y guardar sus accesos de forma
-segura.
+**Objetivo**: dar seguimiento a la relación contractual con el cliente y guardar
+sus accesos de forma segura. *(La firma electrónica dentro de la plataforma,
+CTR-01, se movió a v2 — costaba US$250/mes fijo desde el primer contrato con la
+única opción viable evaluada, Documenso; no se justifica en v1.)*
 
-- CTR-01, CTR-02, BOV-01
+- CTR-02, BOV-01
 
-**Éxito**: se envía un contrato, el cliente lo firma electrónicamente dentro de la
-plataforma, y el equipo guarda credenciales del cliente visibles solo para ellos.
+**Éxito**: el sistema alerta a tiempo el vencimiento/renovación de un contrato, y
+el equipo guarda credenciales del cliente visibles solo para ellos.
 
 ## Fase 11 — Ventas, colaboradores externos y pagos a terceros
 
