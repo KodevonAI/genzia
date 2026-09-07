@@ -12,9 +12,9 @@ planes de ejecución futuros. No define stack técnico — solo comportamiento.
 | SEG-02 | Un número de teléfono está vinculado a un único cliente. Un cliente puede tener varios contactos autorizados. |
 | SEG-03 | Solo el equipo de la agencia agrega/quita contactos autorizados de la ficha de un cliente — el cliente nunca se autoriza a sí mismo. |
 | SEG-04 | Al agregar un contacto autorizado, el sistema exige confirmar consentimiento explícito de WhatsApp (opt-in) antes de habilitar mensajes proactivos del agente hacia ese contacto. |
-| SEG-05 | El contexto de una conversación (1:1 equipo, 1:1 cliente, grupo atado a un cliente) determina el alcance de datos que el agente puede usar — nunca por instrucción/filtro, sino porque el sistema no carga datos fuera de ese alcance. |
+| SEG-05 | El contexto de una conversación (1:1 equipo, 1:1 cliente) determina el alcance de datos que el agente puede usar — nunca por instrucción/filtro, sino porque el sistema no carga datos fuera de ese alcance. |
 | SEG-06 | Un chat 1:1 con un miembro de equipo respeta su rol: admin ve todos los clientes, miembro solo los asignados. |
-| SEG-07 | Un chat 1:1 o grupo con un contacto de cliente limita al agente a los datos de ese único cliente. |
+| SEG-07 | Un chat 1:1 con un contacto de cliente limita al agente a los datos de ese único cliente. |
 | SEG-08 | La ficha de cada cliente separa datos "visibles para el cliente" de datos "solo equipo" (notas internas, rentabilidad, riesgos); el agente nunca cruza esa frontera hacia el cliente. |
 | SEG-09 | Si un contacto pregunta directamente si el agente es una IA/bot, el agente siempre lo admite — nunca sostiene el personaje para negar o evadir. |
 | SEG-10 | Cada acción del agente se clasifica por riesgo: bajo riesgo se auto-ejecuta; alto riesgo requiere aprobación humana antes de llegar al cliente. |
@@ -30,7 +30,7 @@ planes de ejecución futuros. No define stack técnico — solo comportamiento.
 | WA-03 | Existe un número único de la plataforma, compartido entre todas las agencias, dedicado a las conversaciones internas del equipo (no requiere verificación propia por agencia). |
 | WA-04 | El sistema identifica a qué agencia pertenece cada miembro de equipo por su registro, no por el número al que escribe. |
 | WA-05 | El agente entiende texto, notas de voz e imágenes, en WhatsApp y en el chat web. |
-| WA-06 | El agente funciona en conversaciones 1:1 y en grupos de WhatsApp; un grupo siempre está atado a un único cliente. |
+| WA-06 | El agente funciona en conversaciones 1:1 (WhatsApp y web). Grupos de WhatsApp quedan fuera de v1 (ver v2/Futuro) — la API de grupos de Meta es invite-only, con tope de 8 participantes y requiere Official Business Account. |
 | WA-07 | El costo de conversación que Meta cobra al Tech Provider se traslada a la agencia como cargo aparte y transparente (no oculto en la suscripción). |
 
 ## CTA — Cuenta de agencia y equipo (multi-tenant)
@@ -155,6 +155,7 @@ planes de ejecución futuros. No define stack técnico — solo comportamiento.
 | Panel de campañas de ads (visibilidad y gestión) | Ningún competidor lo integra al CRM core; alto mantenimiento para el valor que aporta en v1 |
 | SEO y mantenimiento técnico de sitio web | Trabajo técnico especializado, no encaja en el modelo cliente/calendario/pagos |
 | Planes/precios detallados del SaaS (tiers, límites) | Se define antes del lanzamiento, no bloquea la planeación funcional |
+| Grupos de WhatsApp con el agente | La API de grupos de Meta es invite-only, se crea vía API (no se puede adoptar un grupo existente de la agencia), tope de 8 participantes, requiere Official Business Account — reevaluar si Meta flexibiliza esto |
 
 ## Fuera de alcance (no es parte de esta planeación)
 

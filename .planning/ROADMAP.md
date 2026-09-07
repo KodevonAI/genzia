@@ -41,7 +41,7 @@ cliente hacia otro.
 **Objetivo**: los mensajes de WhatsApp entran y salen del sistema.
 
 - WA-01 a WA-07 (Tech Provider, Embedded Signup, número interno compartido,
-  comprensión multimodal, 1:1 y grupos, costo transparente)
+  comprensión multimodal, conversaciones 1:1, costo transparente)
 - Depende de que la Fase 1 (verificación de negocio) esté suficientemente
   avanzada; si Meta aún no aprueba, esta fase puede empezar con el número interno
   de la plataforma y una cuenta de prueba, y conectar agencias reales apenas Meta

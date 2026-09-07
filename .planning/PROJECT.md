@@ -48,8 +48,12 @@ agente que actúa (recuerda, cobra, agenda, redacta) en nombre de la agencia.
 - **Equipo interno**: chat de texto dentro de la web app **y** WhatsApp
 - **Clientes finales**: WhatsApp, chat dentro del portal, o email
 - El agente entiende **texto, audio (notas de voz) e imágenes** en todos los canales
-- Funciona en conversaciones **1 a 1 y en grupos de WhatsApp** (un grupo siempre
-  corresponde a un único cliente; nunca mezcla clientes distintos)
+- Funciona en conversaciones **1 a 1** (WhatsApp y web). *Grupos de WhatsApp
+  quedan fuera de v1*: la API de Meta para grupos es nueva, solo por invitación,
+  se crean vía API (no se puede "adoptar" un grupo que la agencia ya tenga con un
+  cliente), con tope de 8 participantes y requiere estatus de "Official Business
+  Account" — no encaja con el valor que aportaría en v1 (ver
+  `research/STACK-AGENT.md`).
 
 ### Dos números de WhatsApp, con propósitos distintos
 
@@ -137,8 +141,6 @@ que le escriben (siempre el mismo, el de la agencia) — lo decide **quién escr
     todo; miembro solo sus clientes asignados)
   - Chat 1:1 con contacto autorizado de un cliente → el agente solo puede hablar de
     ESE cliente
-  - Grupo de WhatsApp → atado a un único cliente; el agente solo expone ahí lo de
-    ese cliente, sin importar quién más esté presente
 - **Aislamiento por diseño, no por filtro**: al llegar un mensaje, el sistema carga
   en el contexto del agente únicamente los datos del cliente correspondiente — los
   datos de otros clientes ni siquiera están disponibles en esa conversación. No es

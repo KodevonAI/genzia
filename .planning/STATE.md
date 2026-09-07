@@ -4,9 +4,9 @@
 
 ## Dónde vamos
 
-Etapa de **planeación** completada: `PROJECT.md`, `REQUIREMENTS.md` y
-`ROADMAP.md` están definidos. El stack técnico **todavía no se ha definido** — es
-la siguiente etapa, separada de esta.
+Etapa de **planeación funcional Y stack técnico** completadas: `PROJECT.md`,
+`REQUIREMENTS.md`, `ROADMAP.md` y `STACK.md` están definidos. Listo para pasar a
+`plan-phase 1` cuando se decida empezar a ejecutar.
 
 ## Completado
 
@@ -16,14 +16,21 @@ la siguiente etapa, separada de esta.
 - [x] `research/FEATURES.md` y `research/PITFALLS.md` — investigación de dominio
 - [x] `REQUIREMENTS.md` — requisitos v1 con REQ-IDs por categoría, backlog v2/futuro
 - [x] `ROADMAP.md` — 12 fases en orden de dependencia
+- [x] `research/STACK-WEB.md`, `STACK-AGENT.md`, `STACK-PAYMENTS.md` — investigación de stack
+- [x] `STACK.md` — síntesis de decisiones: Next.js 16, Postgres+RLS multi-tenant,
+      Drizzle, Neon, Clerk, Inngest, Claude Sonnet 5 + Haiku 4.5, orquestación a
+      mano, MercadoPago (Split Payments), Documenso, KMS
+- [x] Ajuste de alcance derivado del research: grupos de WhatsApp sacados de v1
+      (limitación real de la API de Meta)
 
 ## Pendiente / próximos pasos
 
-- [ ] Definir el **stack técnico** (etapa separada, aún no iniciada)
 - [ ] `plan-phase 1` cuando se decida empezar a ejecutar
 - [ ] Resolver con abogado la estructura corporativa (Kodevon SAS vs. SAS propia
       para Genzia) — idealmente antes de iniciar la verificación ante Meta
 - [ ] Iniciar el trámite de verificación de negocio ante Meta (Tech Provider)
+- [ ] Confirmar residencia de datos en Colombia (Ley 1581/Habeas Data) contra la
+      región elegida de Neon/Vercel/R2
 
 ## Decisiones clave que no deben perderse
 
