@@ -226,6 +226,40 @@ el equipo, para poder auditar y corregir.
 - El aislamiento de información entre clientes es una regla dura, no configurable
   por agencia
 
+## Consideraciones legales / estructura corporativa (abierto)
+
+> ⚠️ No es asesoría legal formal — pendiente de confirmar con un abogado
+> corporativo/tech antes de iniciar la verificación de negocio ante Meta.
+
+Hoy Genzia se plantea como un producto de **Kodevon SAS** (Colombia), que sería
+quien se registre y verifique ante Meta como Tech Provider. Puntos a resolver con
+asesoría legal antes de avanzar:
+
+- **Contaminación de responsabilidad entre líneas de negocio**: si Kodevon SAS es
+  quien firma el acuerdo de Tech Provider, cualquier incumplimiento de política
+  derivado de Genzia (mal uso de mensajes por una agencia cliente, disputa de un
+  cliente final, etc.) expone legalmente a Kodevon SAS, y podría afectar otras
+  actividades de Kodevon que también dependan de Meta (ads, otra cuenta de negocio),
+  al compartir la misma cuenta de negocio verificada.
+- **Separación futura**: si Genzia crece y en algún momento necesita levantar
+  inversión propia, sumar un socio, o separar su riesgo/patrimonio del resto de
+  Kodevon, mover la relación de Tech Provider y las cuentas de WhatsApp Business ya
+  conectadas de las agencias a una nueva entidad legal **no es trivial con Meta** —
+  puede implicar re-verificación completa y riesgo de interrupción del servicio
+  para agencias ya activas durante la transición.
+- **Mezcla contable/fiscal**: los ingresos de Genzia (SaaS) quedarían dentro de la
+  misma entidad que factura los servicios de agencia/consultoría de Kodevon.
+- **Recomendación a evaluar con el abogado**: dado que constituir una SAS nueva en
+  Colombia es relativamente rápido/barato, y que deshacer una relación de Tech
+  Provider ya establecida con Meta es lento y costoso, vale la pena confirmar si
+  conviene registrar **Genzia como su propia SAS desde ahora**, antes de iniciar el
+  trámite de verificación ante Meta, en vez de corregirlo después.
+- **Transparencia mínima mientras se decide**: independientemente de qué entidad
+  legal quede registrada ante Meta, los Términos de Servicio de Genzia deben
+  declarar explícitamente qué entidad opera el producto (ej. "Genzia es un producto
+  operado por Kodevon SAS") — la ambigüedad es lo que genera riesgo, no el hecho de
+  que una empresa tenga varias marcas.
+
 ## Investigación de dominio
 
 Ver `.planning/research/FEATURES.md` (comparación con HoneyBook, Dubsado, ClickUp,
