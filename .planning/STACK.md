@@ -92,20 +92,27 @@ saca el soporte de grupos de v1** (actualizado en `PROJECT.md` y
 ### Firma electrónica (CTR-01) — movida a v2, no es parte del stack de v1
 
 **Decisión de producto**: la firma electrónica de contratos dentro de la
-plataforma se sacó de v1 (ver `PROJECT.md`/`REQUIREMENTS.md`) porque la única
-opción viable evaluada tiene un costo fijo alto desde el primer contrato. v1 solo
-mantiene alertas de vencimiento de contrato (CTR-02), sin costo de terceros.
+plataforma se mantiene fuera de v1 (ver `PROJECT.md`/`REQUIREMENTS.md`), aunque
+el costo ya no es la razón de fondo — ver corrección abajo. v1 solo mantiene
+alertas de vencimiento de contrato (CTR-02), sin costo de terceros.
 
-Queda documentado para cuando se retome en v2: **Documenso**, plan Platform en la
-nube, **US$250/mes (facturado anual, US$3,000/año)**, usuarios y documentos
-ilimitados, sin cobro por documento, incluye API y widget de firma
-incrustable/white-label. Válido legalmente en Colombia bajo la Ley 527 de 1999.
-**Auto-hospedarlo NO es una alternativa gratuita real**: el código es AGPL-3.0,
-pero incrustar su flujo de firma dentro de un producto comercial de código
-cerrado como Genzia activa la obligación de copyleft de red de la AGPL — según
-los propios términos comerciales de Documenso, eso exige el plan en la nube o una
-**licencia Enterprise auto-hospedada que arranca en US$30,000/año** (~10 veces más
-caro). Ver `research/STACK-VERIFY.md` para el detalle completo.
+**Opción recomendada para cuando se retome en v2 — corregida tras verificar el
+plan hosted (no solo el self-hosted) de DocuSeal**: **DocuSeal Cloud Pro**,
+**US$20/mes por 1 asiento** (Genzia solo necesita un asiento: es quien
+tiene la llave de API, sin importar cuántas agencias/clientes firmen por debajo)
+**+ US$0.20 por documento completado** vía API/embebido. Incluye quitar la marca
+"Powered by DocuSeal" (white-label) y acceso completo a API/embedding para
+producción. Es su **servicio en la nube**, no auto-hospedado — al ser cliente de
+su SaaS (igual que el plan Platform de Documenso), no aplica la obligación de
+copyleft de red de la AGPL que sí afecta a un self-host. Es más barato que
+Documenso Platform ($250/mes fijo) hasta ~1,150 documentos/mes — con el volumen
+esperado en los primeros meses de v2, el costo real rondaría US$25-40/mes.
+Documenso Platform ($250/mes) queda como alternativa si en algún momento el
+volumen de documentos supera ese punto de equilibrio, o si DocuSeal no cubre
+algún requisito que surja al detallar la fase. Ver `research/STACK-ESIGN-OSS.md`
+para el detalle de por qué el auto-hospedaje (de cualquiera de las dos) no es
+gratis, y esta conversación (verificación de precios del plan hosted de DocuSeal)
+para el desglose del plan Cloud Pro.
 
 ## Preguntas abiertas para etapas posteriores
 

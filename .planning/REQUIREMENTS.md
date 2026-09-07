@@ -158,7 +158,7 @@ tabla abajo.)*
 | SEO y mantenimiento técnico de sitio web | Trabajo técnico especializado, no encaja en el modelo cliente/calendario/pagos |
 | Planes/precios detallados del SaaS (tiers, límites) | Se define antes del lanzamiento, no bloquea la planeación funcional |
 | Grupos de WhatsApp con el agente | La API de grupos de Meta es invite-only, se crea vía API (no se puede adoptar un grupo existente de la agencia), tope de 8 participantes, requiere Official Business Account — reevaluar si Meta flexibiliza esto |
-| CTR-01 — Firma electrónica de contratos dentro de la plataforma | La única opción viable evaluada (Documenso) cuesta US$250/mes fijo desde el primer contrato — no se justifica en v1; v1 mantiene solo CTR-02 (alertas de vencimiento) |
+| CTR-01 — Firma electrónica de contratos dentro de la plataforma | Se mantiene fuera de v1 por foco, no por costo (DocuSeal Cloud Pro ronda ~US$20/mes + US$0.20/documento — ver `STACK.md`); v1 mantiene solo CTR-02 (alertas de vencimiento) |
 
 ## Fuera de alcance (no es parte de esta planeación)
 

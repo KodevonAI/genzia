@@ -218,7 +218,7 @@ el equipo, para poder auditar y corregir.
 | Reportes/métricas de rendimiento (ROI, tráfico, resultados) | Requiere integraciones con Meta/Google Analytics/etc. |
 | Panel de campañas de ads (visibilidad y gestión) | Ningún competidor lo integra al CRM core; alto mantenimiento de las APIs de Meta/Google Ads para el valor que aporta en v1 |
 | SEO y mantenimiento técnico de sitio web | Trabajo técnico especializado, no encaja en el modelo cliente/calendario/pagos |
-| Firma electrónica de contratos dentro de la plataforma | La única opción viable evaluada (Documenso) cuesta US$250/mes fijo desde el primer contrato — no se justifica en v1; v1 mantiene solo alertas de vencimiento de contrato |
+| Firma electrónica de contratos dentro de la plataforma | Se mantiene fuera de v1 por foco, no por costo (existe una opción barata: DocuSeal Cloud Pro, ~US$20/mes + US$0.20/documento — ver `STACK.md`); v1 mantiene solo alertas de vencimiento de contrato |
 | Planes/precios detallados del SaaS (tiers, límites) | Se define antes del lanzamiento, no bloquea la planeación funcional |
 
 ## No-goals explícitos
