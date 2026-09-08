@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:verify-rls": "tsx scripts/verify-rls-isolation.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.1",
