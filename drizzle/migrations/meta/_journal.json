@@ -43,6 +43,13 @@
       "when": 1788901742302,
       "tag": "0005_phase2_identity_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1788902624000,
+      "tag": "0006_phase2_identity_rls",
+      "breakpoints": true
     }
   ]
 }
