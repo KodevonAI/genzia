@@ -11,6 +11,8 @@
     "db:verify-rls": "tsx scripts/verify-rls-isolation.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1127.0",
+    "@aws-sdk/s3-request-presigner": "^3.1127.0",
     "@clerk/nextjs": "^7.9.1",
     "@neondatabase/serverless": "^1.1.0",
     "drizzle-orm": "^0.45.2",
