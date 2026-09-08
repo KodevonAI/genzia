@@ -4,12 +4,18 @@
 
 ## Dónde vamos
 
-Fase 1 (fundaciones de cuenta y equipo) en ejecución. **Wave 1 y Wave 2
-completas**: `01-01` (Next.js 16 + schema Drizzle + RLS de Postgres), `01-05`
-(tracks externos no-código) y `01-02` (webhook de Clerk + signup/onboarding +
-dashboard). Con `01-02` cerrado, Wave 3 queda desbloqueada: `01-03` (marca del
-agente, CTA-02) y `01-04` (equipo, CTA-04/05/06) — ambos en paralelo, ambos
-`depends_on: ["01", "02"]`.
+**Fase 1 (fundaciones de cuenta y equipo) — COMPLETA.** Los 5 planes
+(`01-01`, `01-02`, `01-03`, `01-04`, `01-05`) están verificados de punta a
+punta contra Neon/Clerk/R2 reales, desde la máquina del usuario. `01-03` y
+`01-04` tenían código ya comiteado (`1be8855`/`e65b47d` y
+`240e009`/`433d11e`) de una sesión que nunca generó `SUMMARY.md` —
+backfilleados y luego confirmados con verificación manual real (ver sus
+SUMMARY.md para el detalle). Esa verificación encontró y corrigió 2 bugs
+reales más (van 5 en total a lo largo de la fase): `middleware.ts` excluía
+todas las rutas `/api/*` del contexto de auth de Clerk (rompía
+`/api/uploads/brand-logo`), y el bucket R2 no tenía política CORS. Pendiente
+formal: marcar la fase como cerrada en `ROADMAP.md` y decidir el siguiente
+paso (Fase 2: modelo de identidad y permisos).
 
 ## Completado
 
@@ -58,15 +64,27 @@ agente, CTA-02) y `01-04` (equipo, CTA-04/05/06) — ambos en paralelo, ambos
       `agencies` violaban RLS por no fijar `app.agency_id` antes de escribir
       — mismo patrón que el bug de `01-01`: RLS no tiene fallback seguro por
       defecto para un GUC olvidado)
+- [x] `01-03` — CTA-02 verificado de punta a punta: nombre/tono/logo se
+      guardan y persisten, aislados por agencia. 2 bugs reales encontrados y
+      corregidos en la verificación: `middleware.ts` excluía `/api/**` del
+      contexto de Clerk (rompía el upload de logo con 401), y faltaba
+      política CORS en el bucket R2 (bloqueaba el PUT presignado con 403) —
+      ver
+      `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-03-SUMMARY.md`
+- [x] `01-04` — CTA-04/05/06 verificado de punta a punta: founder queda
+      admin activo sin invitación (tras suscribir
+      `organizationMembership.created` en Clerk Dashboard), invitación con
+      rol+WhatsApp aceptada correctamente, miembro no-admin bloqueado de
+      páginas admin-only, asignar/desasignar cliente cambia inmediatamente
+      lo que el miembro ve — confirmado a nivel de datos (`client_assignments`),
+      no solo UI — ver
+      `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-04-SUMMARY.md`
 
 ## Pendiente / próximos pasos
 
-- [ ] `01-03` y `01-04` (Wave 3, desbloqueadas, en paralelo) — marca del
-      agente (CTA-02) y equipo/roles/asignación de clientes (CTA-04/05/06),
-      ambos sobre el dashboard shell de `01-02`. Nota para `01-04`: debe
-      confirmar que su manejo de `organizationMembership.created` también
-      aprovisiona el `team_members` del admin-fundador (no solo miembros
-      invitados) — ver "Next Phase Readiness" de `01-02`-SUMMARY.
+- [ ] Cerrar Fase 1 formalmente en `ROADMAP.md` (marcar sus 5 planes
+      completos) y decidir si seguir a Fase 2 (modelo de identidad y
+      permisos) o revisar backlog primero
 - [ ] Resolver con abogado la estructura corporativa (Kodevon SAS vs. SAS propia
       para Genzia) — consulta ya enviada (`01-05`), respuesta pendiente;
       idealmente antes de someter los pasos entidad-específicos de la
@@ -96,11 +114,11 @@ agente, CTA-02) y `01-04` (equipo, CTA-04/05/06) — ambos en paralelo, ambos
 
 ## Continuidad de sesión
 
-Última sesión: 2026-09-08 — Completado `01-fundaciones-cuenta-equipo-02-PLAN.md`
-(webhook de Clerk + signup/onboarding + dashboard shell; ver
-`01-fundaciones-cuenta-equipo-02-SUMMARY.md` para el checkpoint atravesado —
-mismo bloqueo de red de esta sesión sandboxed hacia Neon/Clerk documentado en
-`01-01`, resuelto verificando de punta a punta desde la máquina local del
-usuario, que encontró y corrigió un bug real de RLS en las escrituras del
-webhook). Wave 1 y Wave 2 de Fase 1 completas (`01-01` + `01-05` + `01-02`).
+Última sesión: 2026-09-08 — **Fase 1 completa.** Verificados `01-03` y
+`01-04` de punta a punta contra Neon/Clerk/R2 reales desde la máquina local
+del usuario, backfillenado sus SUMMARY.md (el código había llegado por una
+sesión previa sin generarlos). Encontrados y corregidos 2 bugs reales:
+`middleware.ts` excluía `/api/**` del contexto de auth de Clerk, y faltaba
+CORS en el bucket R2. Próximo paso: cerrar Fase 1 en `ROADMAP.md` y decidir
+si arrancar Fase 2 (modelo de identidad y permisos) o revisar backlog.
 Resume file: ninguno.

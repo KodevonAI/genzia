@@ -1,5 +1,5 @@
 {
   "mode": "yolo",
-  "depth": "comprehensive",
-  "execution": "parallel"
+  "execution": "parallel",
+  "granularity": "fine"
 }
