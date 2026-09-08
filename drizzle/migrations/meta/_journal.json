@@ -29,6 +29,13 @@
       "when": 1788877526604,
       "tag": "0003_agencies_status",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788877526605,
+      "tag": "0004_client_assignments_check",
+      "breakpoints": true
     }
   ]
 }
