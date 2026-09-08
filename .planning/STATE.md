@@ -4,11 +4,12 @@
 
 ## Dónde vamos
 
-Fase 1 (fundaciones de cuenta y equipo) en ejecución. **Wave 1 completa**:
-`01-01` (Next.js 16 + schema Drizzle + RLS de Postgres) y `01-05` (tracks
-externos no-código: verificación de negocio ante Meta y consulta legal de
-estructura corporativa). Con `01-01` cerrado, Wave 2 (`01-02` — webhook de
-Clerk y aprovisionamiento de agencia) queda desbloqueada.
+Fase 1 (fundaciones de cuenta y equipo) en ejecución. **Wave 1 y Wave 2
+completas**: `01-01` (Next.js 16 + schema Drizzle + RLS de Postgres), `01-05`
+(tracks externos no-código) y `01-02` (webhook de Clerk + signup/onboarding +
+dashboard). Con `01-02` cerrado, Wave 3 queda desbloqueada: `01-03` (marca del
+agente, CTA-02) y `01-04` (equipo, CTA-04/05/06) — ambos en paralelo, ambos
+`depends_on: ["01", "02"]`.
 
 ## Completado
 
@@ -45,11 +46,27 @@ Clerk y aprovisionamiento de agencia) queda desbloqueada.
       `scripts/verify-rls-isolation.ts` (7/7 aserciones) contra la base Neon
       real — ver
       `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-01-SUMMARY.md`
+- [x] `01-02` — webhook de Clerk (`organization.created`/`.deleted`,
+      verificado con Svix, idempotente) que aprovisiona `agencies` con
+      trial de 14 días; flujo self-serve completo signup -> onboarding
+      (crea la Clerk Organization) -> dashboard con banner de trial; probado
+      de punta a punta contra Neon/Clerk reales por el usuario (webhook vía
+      ngrok, dos agencias independientes, firma inválida rechazada con 400)
+      — ver
+      `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-02-SUMMARY.md`
+      para el bug real encontrado y corregido (escrituras del webhook a
+      `agencies` violaban RLS por no fijar `app.agency_id` antes de escribir
+      — mismo patrón que el bug de `01-01`: RLS no tiene fallback seguro por
+      defecto para un GUC olvidado)
 
 ## Pendiente / próximos pasos
 
-- [ ] `01-02` (Wave 2, desbloqueada) — webhook de Clerk y aprovisionamiento
-      de agencia, sobre el esquema y `withTenantContext` de `01-01`
+- [ ] `01-03` y `01-04` (Wave 3, desbloqueadas, en paralelo) — marca del
+      agente (CTA-02) y equipo/roles/asignación de clientes (CTA-04/05/06),
+      ambos sobre el dashboard shell de `01-02`. Nota para `01-04`: debe
+      confirmar que su manejo de `organizationMembership.created` también
+      aprovisiona el `team_members` del admin-fundador (no solo miembros
+      invitados) — ver "Next Phase Readiness" de `01-02`-SUMMARY.
 - [ ] Resolver con abogado la estructura corporativa (Kodevon SAS vs. SAS propia
       para Genzia) — consulta ya enviada (`01-05`), respuesta pendiente;
       idealmente antes de someter los pasos entidad-específicos de la
@@ -79,10 +96,11 @@ Clerk y aprovisionamiento de agencia) queda desbloqueada.
 
 ## Continuidad de sesión
 
-Última sesión: 2026-09-08 — Completado `01-fundaciones-cuenta-equipo-01-PLAN.md`
-(Next.js 16 + esquema Drizzle + RLS de Postgres forzada, probada 7/7 contra
-Neon real; ver `01-fundaciones-cuenta-equipo-01-SUMMARY.md` para los dos
-checkpoints atravesados — credenciales Neon/Clerk, y el bloqueo de red de
-esta sesión sandboxed hacia Neon/Clerk, resuelto verificando desde la máquina
-local del usuario). Wave 1 de Fase 1 completa (`01-01` + `01-05`).
+Última sesión: 2026-09-08 — Completado `01-fundaciones-cuenta-equipo-02-PLAN.md`
+(webhook de Clerk + signup/onboarding + dashboard shell; ver
+`01-fundaciones-cuenta-equipo-02-SUMMARY.md` para el checkpoint atravesado —
+mismo bloqueo de red de esta sesión sandboxed hacia Neon/Clerk documentado en
+`01-01`, resuelto verificando de punta a punta desde la máquina local del
+usuario, que encontró y corrigió un bug real de RLS en las escrituras del
+webhook). Wave 1 y Wave 2 de Fase 1 completas (`01-01` + `01-05` + `01-02`).
 Resume file: ninguno.
