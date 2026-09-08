@@ -3,3 +3,6 @@ export * from "./team-members";
 export * from "./clients";
 export * from "./client-assignments";
 export * from "./agent-brand-config";
+export * from "./authorized-contacts";
+export * from "./agent-action-catalog";
+export * from "./audit-log";
