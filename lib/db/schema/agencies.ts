@@ -11,6 +11,10 @@ export const agencies = pgTable("agencies", {
   name: text("name").notNull(),
   plan: text("plan").notNull().default("trial"),
   trialEndsAt: timestamp("trial_ends_at", { withTimezone: true }),
+  // 'active' | 'inactive'. Set to 'inactive' by the Clerk webhook on
+  // organization.deleted — never hard-deleted, so later audit logging
+  // (SEG-11, Phase 4) can still reference a historical agency.
+  status: text("status").notNull().default("active"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
