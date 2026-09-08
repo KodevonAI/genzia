@@ -36,6 +36,13 @@
       "when": 1788877526605,
       "tag": "0004_client_assignments_check",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788901742302,
+      "tag": "0005_phase2_identity_tables",
+      "breakpoints": true
     }
   ]
 }
