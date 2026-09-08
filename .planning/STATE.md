@@ -1,12 +1,13 @@
 # STATE.md — Genzia
 
-**Última actualización**: 2026-09-07
+**Última actualización**: 2026-09-08
 
 ## Dónde vamos
 
-Etapa de **planeación funcional Y stack técnico** completadas: `PROJECT.md`,
-`REQUIREMENTS.md`, `ROADMAP.md` y `STACK.md` están definidos. Listo para pasar a
-`plan-phase 1` cuando se decida empezar a ejecutar.
+Fase 1 (fundaciones de cuenta y equipo) en ejecución. Plan `01-05` (tracks
+externos no-código: verificación de negocio ante Meta y consulta legal de
+estructura corporativa) completo — ambos trámites externos confirmados en
+marcha por el usuario.
 
 ## Completado
 
@@ -29,13 +30,21 @@ Etapa de **planeación funcional Y stack técnico** completadas: `PROJECT.md`,
       directo a Anthropic, para poder variar de modelo sin lock-in
 - [x] Costos de hosting verificados a 250 y 10,000 usuarios — la arquitectura
       escala por facturación, no por reconstrucción
+- [x] `01-05` — `META-BUSINESS-VERIFICATION-CHECKLIST.md` y
+      `CORPORATE-STRUCTURE-LEGAL-QUESTIONS.md` redactados; usuario confirmó que
+      ambos trámites externos (verificación ante Meta, consulta al abogado) ya
+      arrancaron — ver
+      `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-05-SUMMARY.md`
 
 ## Pendiente / próximos pasos
 
-- [ ] `plan-phase 1` cuando se decida empezar a ejecutar
 - [ ] Resolver con abogado la estructura corporativa (Kodevon SAS vs. SAS propia
-      para Genzia) — idealmente antes de iniciar la verificación ante Meta
-- [ ] Iniciar el trámite de verificación de negocio ante Meta (Tech Provider)
+      para Genzia) — consulta ya enviada (`01-05`), respuesta pendiente;
+      idealmente antes de someter los pasos entidad-específicos de la
+      verificación ante Meta (documentos legales, aplicación al Tech Provider
+      Program — ver gate en `META-BUSINESS-VERIFICATION-CHECKLIST.md`)
+- [ ] Verificación de negocio ante Meta (Tech Provider) — trámite ya iniciado
+      (`01-05`); dar seguimiento a su avance fuera de este repo
 - [ ] Confirmar residencia de datos en Colombia (Ley 1581/Habeas Data) contra la
       región elegida de Neon/Vercel/R2
 
@@ -50,3 +59,10 @@ Etapa de **planeación funcional Y stack técnico** completadas: `PROJECT.md`,
 - Confirmación de pago automática SOLO vía procesador de pagos real, nunca por
   inferencia de chat.
 - Genzia = Tech Provider directo de Meta, sin intermediario (BSP).
+
+## Continuidad de sesión
+
+Última sesión: 2026-09-08 — Completado `01-fundaciones-cuenta-equipo-05-PLAN.md`
+(checklist de verificación Meta + preguntas legales de estructura corporativa;
+ambos trámites externos confirmados en marcha).
+Resume file: ninguno.
