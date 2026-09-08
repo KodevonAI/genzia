@@ -4,10 +4,11 @@
 
 ## Dónde vamos
 
-Fase 1 (fundaciones de cuenta y equipo) en ejecución. Plan `01-05` (tracks
+Fase 1 (fundaciones de cuenta y equipo) en ejecución. **Wave 1 completa**:
+`01-01` (Next.js 16 + schema Drizzle + RLS de Postgres) y `01-05` (tracks
 externos no-código: verificación de negocio ante Meta y consulta legal de
-estructura corporativa) completo — ambos trámites externos confirmados en
-marcha por el usuario.
+estructura corporativa). Con `01-01` cerrado, Wave 2 (`01-02` — webhook de
+Clerk y aprovisionamiento de agencia) queda desbloqueada.
 
 ## Completado
 
@@ -35,9 +36,20 @@ marcha por el usuario.
       ambos trámites externos (verificación ante Meta, consulta al abogado) ya
       arrancaron — ver
       `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-05-SUMMARY.md`
+- [x] `01-01` — App Next.js 16 (App Router, next-intl es/en, Clerk) +
+      esquema Drizzle completo (agencies, team_members, clients,
+      client_assignments, agent_brand_config) + RLS de Postgres forzada en
+      cada tabla multi-tenant, con políticas por `app.agency_id` /
+      `app.team_member_id` / `app.role`; `withTenantContext` como único
+      camino a datos multi-tenant; aislamiento probado con
+      `scripts/verify-rls-isolation.ts` (7/7 aserciones) contra la base Neon
+      real — ver
+      `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-01-SUMMARY.md`
 
 ## Pendiente / próximos pasos
 
+- [ ] `01-02` (Wave 2, desbloqueada) — webhook de Clerk y aprovisionamiento
+      de agencia, sobre el esquema y `withTenantContext` de `01-01`
 - [ ] Resolver con abogado la estructura corporativa (Kodevon SAS vs. SAS propia
       para Genzia) — consulta ya enviada (`01-05`), respuesta pendiente;
       idealmente antes de someter los pasos entidad-específicos de la
@@ -47,6 +59,11 @@ marcha por el usuario.
       (`01-05`); dar seguimiento a su avance fuera de este repo
 - [ ] Confirmar residencia de datos en Colombia (Ley 1581/Habeas Data) contra la
       región elegida de Neon/Vercel/R2
+- [ ] Esta sesión sandboxed no tiene salida de red hacia Neon ni Clerk (ver
+      `01-01`-SUMMARY, sección "Authentication / Environment Gates") — cualquier
+      plan futuro ejecutado en una sesión de este mismo tipo debe esperar el
+      mismo bloqueo para pasos que toquen la base de datos real o la API de
+      Clerk en vivo, y verificar localmente o en CI en su lugar
 
 ## Decisiones clave que no deben perderse
 
@@ -62,7 +79,10 @@ marcha por el usuario.
 
 ## Continuidad de sesión
 
-Última sesión: 2026-09-08 — Completado `01-fundaciones-cuenta-equipo-05-PLAN.md`
-(checklist de verificación Meta + preguntas legales de estructura corporativa;
-ambos trámites externos confirmados en marcha).
+Última sesión: 2026-09-08 — Completado `01-fundaciones-cuenta-equipo-01-PLAN.md`
+(Next.js 16 + esquema Drizzle + RLS de Postgres forzada, probada 7/7 contra
+Neon real; ver `01-fundaciones-cuenta-equipo-01-SUMMARY.md` para los dos
+checkpoints atravesados — credenciales Neon/Clerk, y el bloqueo de red de
+esta sesión sandboxed hacia Neon/Clerk, resuelto verificando desde la máquina
+local del usuario). Wave 1 de Fase 1 completa (`01-01` + `01-05`).
 Resume file: ninguno.
