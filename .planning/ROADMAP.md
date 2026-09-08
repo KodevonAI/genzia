@@ -4,7 +4,7 @@ Profundidad: **Comprehensiva** (config.json). Deriva de `REQUIREMENTS.md`. Orden
 por dependencia real, no por categoría — lo que todo lo demás necesita va primero.
 No define stack técnico ni asigna tiempos (GSD no estima en horas/días/semanas).
 
-## Fase 1 — Fundaciones de cuenta y equipo (multi-tenant)
+## Fase 1 — Fundaciones de cuenta y equipo (multi-tenant) — COMPLETA
 
 **Objetivo**: una agencia puede registrarse, invitar a su equipo, y el sistema
 distingue quién es quién.
@@ -22,19 +22,45 @@ distingue quién es quién.
 **Éxito**: una agencia se registra, invita a 2+ miembros con roles distintos, y
 cada quien ve solo lo que su rol permite.
 
+**Plans:** 5 plans
+
+Plans:
+- [x] 01-PLAN.md — Esquema Drizzle + RLS forzada multi-tenant
+- [x] 02-PLAN.md — Webhook de Clerk + onboarding self-serve con trial
+- [x] 03-PLAN.md — Marca del agente (nombre, tono, logo)
+- [x] 04-PLAN.md — Invitación de equipo con rol/WhatsApp y asignación de clientes
+- [x] 05-PLAN.md — Checklist de verificación ante Meta y consulta legal
+
 ## Fase 2 — Modelo de identidad y permisos
 
-**Objetivo**: el sistema resuelve correctamente quién escribe y qué puede ver,
-para cualquier canal — esto es prerrequisito de todo lo que hable con clientes.
+**Objetivo**: dado un mensaje o sesión entrante, el sistema resuelve quién escribe
+(miembro de equipo con rol, contacto autorizado de un cliente, o número
+desconocido) y a qué datos tiene acceso — con el aislamiento cliente-a-cliente
+enforced por RLS de Postgres, nunca por filtro en la aplicación. Sin canal real
+todavía (WhatsApp llega en Fase 3; se prueba con mensajes simulados).
 
-- SEG-01 a SEG-12 (resolución de identidad, contactos autorizados, opt-in,
-  aislamiento por conversación, capas visible/solo-equipo, divulgación honesta,
-  clasificación de riesgo, bitácora)
+- SEG-01 a SEG-09 y SEG-12 (resolución de identidad, contactos autorizados,
+  opt-in, aislamiento por conversación, capas visible/solo-equipo, divulgación
+  honesta, número desconocido)
+- SEG-10/SEG-11 solo como modelo de datos (catálogo estático de riesgo + esquema
+  de `audit_log`), per 02-CONTEXT.md D-01 — el motor de clasificación, la cola de
+  aprobación y la UI de bitácora son Fase 4.
 
 **Éxito**: dado un mensaje simulado desde un número de equipo, un número de
 cliente A, un número de cliente B y un número desconocido, el sistema resuelve
 cada uno a la identidad y alcance correctos, y nunca deja pasar datos de un
 cliente hacia otro.
+
+**Plans:** 7 plans (4 waves)
+
+Plans:
+- [ ] 02-01-PLAN.md — Contrato `ResolvedIdentity`, clasificador puro y suite unitaria sin red (SEG-01, SEG-09)
+- [ ] 02-02-PLAN.md — Tablas Drizzle `authorized_contacts` / `agent_action_catalog` / `audit_log` + migración generada 0005 (SEG-02, SEG-04)
+- [ ] 02-03-PLAN.md — Migraciones a mano 0006/0007/0008: GRANTs, RLS, triggers de colisión, rama `client_contact` y semilla del catálogo (SEG-02, SEG-03, SEG-05, SEG-07, SEG-08, SEG-12)
+- [ ] 02-04-PLAN.md — `resolveIdentity` + `withResolvedIdentityContext` (GUC `app.client_id`) (SEG-01, SEG-05, SEG-06, SEG-07, SEG-12)
+- [ ] 02-05-PLAN.md — Server Actions admin-only del roster de contactos con opt-in obligatorio (SEG-02, SEG-03, SEG-04)
+- [ ] 02-06-PLAN.md — Suite de integración `verify-identity-resolution.ts` contra Neon real (SEG-01..SEG-08, SEG-12)
+- [ ] 02-07-PLAN.md — [BLOCKING] aplicar migraciones a Neon y correr ambas suites en vivo (checkpoint, requiere red)
 
 ## Fase 3 — Integración con WhatsApp / Meta
 
@@ -57,6 +83,7 @@ correctamente el modelo de identidad de la Fase 2.
 - Comprensión multimodal end-to-end (WA-05)
 - Motor de clasificación de riesgo y cola de aprobación humana (SEG-10)
 - Bitácora visible de acciones/mensajes (SEG-11, SIS-01)
+- Inyectar `AI_DISCLOSURE_RULE` (creado en Fase 2) en todo system prompt (SEG-09)
 
 **Éxito**: el agente sostiene una conversación de varios turnos, usa solo el
 contexto permitido por la Fase 2, y cualquier acción de alto riesgo queda
@@ -67,6 +94,8 @@ pendiente de aprobación visible para el equipo.
 **Objetivo**: dar de alta y consultar clientes, por formulario o por conversación.
 
 - CLI-01 a CLI-05
+- Toda tabla nueva con alcance por cliente debe repetir la convención de tres
+  ramas de RLS establecida en Fase 2 (admin / miembro asignado / `client_contact`).
 
 **Éxito**: se da de alta un cliente dictándoselo al agente, y otro por formulario;
 ambos quedan consultables y editables, con la separación visible-cliente /
@@ -153,5 +182,8 @@ completa en español e inglés.
   Fase 3 con agencias reales — no bloquea el desarrollo).
 - **Definición de estructura corporativa** (arranca en Fase 1, debe resolverse
   antes de completar la verificación ante Meta para no tener que rehacerla).
-- **Stack técnico**: pendiente de una fase de planeación separada, antes de
-  empezar a ejecutar cualquier fase de este roadmap.
+- **Residencia de datos en Colombia (Ley 1581/Habeas Data)** — relevante desde
+  Fase 2, que introduce la primera tabla con datos personales de terceros
+  (`authorized_contacts`: nombre, teléfono, email de contactos del cliente).
+- **Stack técnico**: resuelto en `STACK.md` (Next.js 16, Postgres+RLS, Drizzle,
+  Neon, Clerk, Inngest, OpenRouter, MercadoPago).
