@@ -4,6 +4,14 @@
 
 ## Dónde vamos
 
+**Fase 2 (modelo de identidad y permisos) — contexto capturado.**
+`02-CONTEXT.md` fija: motor de riesgo/bitácora solo modelo de datos en Fase 2
+(motor+cola+UI a Fase 4); opt-in de WhatsApp confirmado manualmente por el
+equipo (checkbox), bloquea solo mensajes proactivos; resolver de identidad
+como función pura testeable, resuelve equipo por `team_members.whatsapp_number`;
+número duplicado entre dos clientes se bloquea con error claro. Próximo paso:
+`/gsd-plan-phase 2`.
+
 **Fase 1 (fundaciones de cuenta y equipo) — COMPLETA.** Los 5 planes
 (`01-01`, `01-02`, `01-03`, `01-04`, `01-05`) están verificados de punta a
 punta contra Neon/Clerk/R2 reales, desde la máquina del usuario. `01-03` y
@@ -114,11 +122,16 @@ paso (Fase 2: modelo de identidad y permisos).
 
 ## Continuidad de sesión
 
-Última sesión: 2026-09-08 — **Fase 1 completa.** Verificados `01-03` y
+Última sesión: 2026-09-08 — **Fase 2: contexto capturado.** Discutidas 4
+áreas grises (riesgo/bitácora, contactos+opt-in, contrato de resolución de
+identidad, duplicado de número) — ver
+`.planning/phases/02-modelo-identidad-permisos/02-CONTEXT.md`. Próximo paso:
+`/gsd-plan-phase 2`.
+Resume file: `.planning/phases/02-modelo-identidad-permisos/02-CONTEXT.md`.
+
+Sesión previa: 2026-09-08 — **Fase 1 completa.** Verificados `01-03` y
 `01-04` de punta a punta contra Neon/Clerk/R2 reales desde la máquina local
 del usuario, backfillenado sus SUMMARY.md (el código había llegado por una
 sesión previa sin generarlos). Encontrados y corregidos 2 bugs reales:
 `middleware.ts` excluía `/api/**` del contexto de auth de Clerk, y faltaba
-CORS en el bucket R2. Próximo paso: cerrar Fase 1 en `ROADMAP.md` y decidir
-si arrancar Fase 2 (modelo de identidad y permisos) o revisar backlog.
-Resume file: ninguno.
+CORS en el bucket R2.
