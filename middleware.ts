@@ -4,16 +4,22 @@ import { routing } from "@/i18n/routing";
 
 const handleI18nRouting = createMiddleware(routing);
 
-// Public (unauthenticated) routes: the marketing homepage and, once Plan 02
-// adds them, sign-in/sign-up. Next.js strips route groups like
-// `(dashboard)` from the actual request URL, so a matcher literally written
-// against "/(dashboard)/**" would never match a real request — silently
-// protecting nothing. Instead, everything is protected by default EXCEPT
-// this explicit allowlist: functionally the same scope the plan describes
-// ("protect app/[locale]/(dashboard)/**, leave marketing/auth public"), but
-// expressed the way route groups actually resolve, and safer by
-// construction — a future page added under `app/[locale]/(dashboard)/**`
-// is protected automatically, with no middleware change required.
+// Public (unauthenticated) routes: the marketing homepage and sign-up
+// (Plan 02). Everything else — /[locale]/onboarding, /[locale]/dashboard/**
+// — is protected by default via this explicit allowlist rather than a
+// matcher naming those paths directly, so a future page added under
+// app/[locale]/dashboard/** is protected automatically with no middleware
+// change required.
+//
+// Note on route groups: app/[locale]/dashboard/** is a LITERAL path
+// segment, not a `(dashboard)` route group. Plan 02 originally tried the
+// route-group form to mirror Plan 01's file-naming convention, but Next.js
+// strips route groups from the real request URL — `(dashboard)/page.tsx`
+// silently resolved to `/[locale]`, the same URL as the marketing homepage
+// (app/[locale]/page.tsx), and one of the two pages was dropped rather than
+// erroring. Any later plan adding pages under the dashboard shell
+// (Plan 03's settings/brand, Plan 04's team) must nest them under the
+// literal app/[locale]/dashboard/ folder, not a `(dashboard)` group.
 const isPublicRoute = createRouteMatcher([
   "/",
   "/:locale",

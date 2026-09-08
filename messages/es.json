@@ -1,5 +1,22 @@
 {
   "HomePage": {
     "title": "Genzia"
+  },
+  "Onboarding": {
+    "title": "Crea tu agencia",
+    "agencyNameLabel": "Nombre de tu agencia",
+    "agencyNamePlaceholder": "Ej. Agencia Nova",
+    "submit": "Crear mi cuenta",
+    "submitting": "Creando tu cuenta...",
+    "error": "No pudimos crear tu agencia. Intenta de nuevo."
+  },
+  "Dashboard": {
+    "welcome": "Hola, {name}",
+    "trialBanner": "Tu prueba gratis termina en {days, plural, =0 {menos de un día} one {# día} other {# días}}",
+    "settingUp": "Estamos preparando tu cuenta...",
+    "nav": {
+      "branding": "Marca",
+      "team": "Equipo"
+    }
   }
 }

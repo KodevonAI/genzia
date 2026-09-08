@@ -1,5 +1,22 @@
 {
   "HomePage": {
     "title": "Genzia"
+  },
+  "Onboarding": {
+    "title": "Create your agency",
+    "agencyNameLabel": "Your agency's name",
+    "agencyNamePlaceholder": "E.g. Nova Agency",
+    "submit": "Create my account",
+    "submitting": "Creating your account...",
+    "error": "We couldn't create your agency. Please try again."
+  },
+  "Dashboard": {
+    "welcome": "Hi, {name}",
+    "trialBanner": "Your free trial ends in {days, plural, =0 {less than a day} one {# day} other {# days}}",
+    "settingUp": "We're setting up your account...",
+    "nav": {
+      "branding": "Branding",
+      "team": "Team"
+    }
   }
 }
