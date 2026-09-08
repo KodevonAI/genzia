@@ -1,3 +1,17 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: unknown
+last_updated: "2026-09-08T21:04:01.814Z"
+progress:
+  total_phases: 2
+  completed_phases: 1
+  total_plans: 12
+  completed_plans: 5
+  percent: 42
+---
+
 # STATE.md — Genzia
 
 **Última actualización**: 2026-09-08
@@ -34,6 +48,7 @@ paso (Fase 2: modelo de identidad y permisos).
 
 - [x] `PROJECT.md` — visión, modelo de negocio, roles, modelo de identidad y
       permisos, integración con Meta, consideraciones legales abiertas
+
 - [x] `config.json` — modo YOLO, profundidad comprehensiva, ejecución paralela
 - [x] `research/FEATURES.md` y `research/PITFALLS.md` — investigación de dominio
 - [x] `REQUIREMENTS.md` — requisitos v1 con REQ-IDs por categoría, backlog v2/futuro
@@ -42,20 +57,26 @@ paso (Fase 2: modelo de identidad y permisos).
 - [x] `STACK.md` — síntesis de decisiones: Next.js 16, Postgres+RLS multi-tenant,
       Drizzle, Neon, Clerk, Inngest, Claude Sonnet 5 + Haiku 4.5, orquestación a
       mano, MercadoPago (Split Payments), Documenso, KMS
+
 - [x] Ajuste de alcance derivado del research: grupos de WhatsApp sacados de v1
       (limitación real de la API de Meta)
+
 - [x] Ajuste de alcance: firma electrónica de contratos (CTR-01) movida a v2 —
       costo fijo de US$250/mes desde el primer contrato no se justifica en v1;
       v1 mantiene solo alertas de vencimiento (CTR-02)
+
 - [x] LLM consumido vía OpenRouter (endpoint compatible-Anthropic) en vez de
       directo a Anthropic, para poder variar de modelo sin lock-in
+
 - [x] Costos de hosting verificados a 250 y 10,000 usuarios — la arquitectura
       escala por facturación, no por reconstrucción
+
 - [x] `01-05` — `META-BUSINESS-VERIFICATION-CHECKLIST.md` y
       `CORPORATE-STRUCTURE-LEGAL-QUESTIONS.md` redactados; usuario confirmó que
       ambos trámites externos (verificación ante Meta, consulta al abogado) ya
       arrancaron — ver
       `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-05-SUMMARY.md`
+
 - [x] `01-01` — App Next.js 16 (App Router, next-intl es/en, Clerk) +
       esquema Drizzle completo (agencies, team_members, clients,
       client_assignments, agent_brand_config) + RLS de Postgres forzada en
@@ -65,6 +86,7 @@ paso (Fase 2: modelo de identidad y permisos).
       `scripts/verify-rls-isolation.ts` (7/7 aserciones) contra la base Neon
       real — ver
       `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-01-SUMMARY.md`
+
 - [x] `01-02` — webhook de Clerk (`organization.created`/`.deleted`,
       verificado con Svix, idempotente) que aprovisiona `agencies` con
       trial de 14 días; flujo self-serve completo signup -> onboarding
@@ -77,6 +99,7 @@ paso (Fase 2: modelo de identidad y permisos).
       `agencies` violaban RLS por no fijar `app.agency_id` antes de escribir
       — mismo patrón que el bug de `01-01`: RLS no tiene fallback seguro por
       defecto para un GUC olvidado)
+
 - [x] `01-03` — CTA-02 verificado de punta a punta: nombre/tono/logo se
       guardan y persisten, aislados por agencia. 2 bugs reales encontrados y
       corregidos en la verificación: `middleware.ts` excluía `/api/**` del
@@ -84,6 +107,7 @@ paso (Fase 2: modelo de identidad y permisos).
       política CORS en el bucket R2 (bloqueaba el PUT presignado con 403) —
       ver
       `.planning/phases/01-fundaciones-cuenta-equipo/01-fundaciones-cuenta-equipo-03-SUMMARY.md`
+
 - [x] `01-04` — CTA-04/05/06 verificado de punta a punta: founder queda
       admin activo sin invitación (tras suscribir
       `organizationMembership.created` en Clerk Dashboard), invitación con
@@ -98,15 +122,19 @@ paso (Fase 2: modelo de identidad y permisos).
 - [ ] Cerrar Fase 1 formalmente en `ROADMAP.md` (marcar sus 5 planes
       completos) y decidir si seguir a Fase 2 (modelo de identidad y
       permisos) o revisar backlog primero
+
 - [ ] Resolver con abogado la estructura corporativa (Kodevon SAS vs. SAS propia
       para Genzia) — consulta ya enviada (`01-05`), respuesta pendiente;
       idealmente antes de someter los pasos entidad-específicos de la
       verificación ante Meta (documentos legales, aplicación al Tech Provider
       Program — ver gate en `META-BUSINESS-VERIFICATION-CHECKLIST.md`)
+
 - [ ] Verificación de negocio ante Meta (Tech Provider) — trámite ya iniciado
       (`01-05`); dar seguimiento a su avance fuera de este repo
+
 - [ ] Confirmar residencia de datos en Colombia (Ley 1581/Habeas Data) contra la
       región elegida de Neon/Vercel/R2
+
 - [ ] Esta sesión sandboxed no tiene salida de red hacia Neon ni Clerk (ver
       `01-01`-SUMMARY, sección "Authentication / Environment Gates") — cualquier
       plan futuro ejecutado en una sesión de este mismo tipo debe esperar el
@@ -117,12 +145,16 @@ paso (Fase 2: modelo de identidad y permisos).
 
 - El agente ES la interfaz principal; el dashboard es vista de apoyo, no el modo
   primario de uso.
+
 - Dos números de WhatsApp: uno propio por agencia (de cara al cliente, el que ya
   tienen) + uno compartido de la plataforma (uso interno del equipo).
+
 - Aislamiento de datos entre clientes es una regla dura resuelta por identidad del
   remitente + contexto de conversación, nunca por instrucción/filtro.
+
 - Confirmación de pago automática SOLO vía procesador de pagos real, nunca por
   inferencia de chat.
+
 - Genzia = Tech Provider directo de Meta, sin intermediario (BSP).
 
 ## Continuidad de sesión
