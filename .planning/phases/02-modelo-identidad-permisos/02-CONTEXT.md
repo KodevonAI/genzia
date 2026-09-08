@@ -73,6 +73,14 @@ UI de bitácora visible — todos dependen de que el agente exista primero.
   qué otro cliente ya pertenece ese número. Refuerza SEG-02 sin ambigüedad
   silenciosa de contexto.
 
+### Permisos sobre `authorized_contacts` (resueltas post-research)
+- **D-09:** Lectura (SELECT) de contactos autorizados es por agencia, igual
+  que `team_members` — cualquier miembro de la agencia ve todos los contactos
+  autorizados de la agencia, sin filtrar por cliente asignado.
+- **D-10:** Escritura (agregar/quitar contactos autorizados) es solo admin —
+  mismo patrón que `assign-client.ts` y el resto de mutaciones cerca de
+  `clients` hoy.
+
 ### Claude's Discretion
 - Nombres exactos de tablas/columnas, forma exacta del tipo de retorno del
   resolver, y estructura interna de la suite de tests quedan a criterio de
