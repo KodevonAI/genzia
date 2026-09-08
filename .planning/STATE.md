@@ -4,13 +4,18 @@
 
 ## Dónde vamos
 
-**Fase 2 (modelo de identidad y permisos) — contexto capturado.**
-`02-CONTEXT.md` fija: motor de riesgo/bitácora solo modelo de datos en Fase 2
-(motor+cola+UI a Fase 4); opt-in de WhatsApp confirmado manualmente por el
-equipo (checkbox), bloquea solo mensajes proactivos; resolver de identidad
-como función pura testeable, resuelve equipo por `team_members.whatsapp_number`;
-número duplicado entre dos clientes se bloquea con error claro. Próximo paso:
-`/gsd-plan-phase 2`.
+**Fase 2 (modelo de identidad y permisos) — planeada, lista para ejecutar.**
+7 planes en 4 waves (`02-01` a `02-07`), verificados por gsd-plan-checker sin
+issues bloqueantes. `02-CONTEXT.md` fija: motor de riesgo/bitácora solo
+modelo de datos en Fase 2 (motor+cola+UI a Fase 4); opt-in de WhatsApp
+confirmado manualmente por el equipo (checkbox), bloquea solo mensajes
+proactivos; resolver de identidad como función pura testeable, resuelve
+equipo por `team_members.whatsapp_number`; número duplicado entre dos
+clientes se bloquea con error claro; lectura de `authorized_contacts` por
+agencia (D-09), escritura solo admin (D-10). Wave 4 (`02-07`) requiere
+salida de red a Neon (`npm run db:migrate` + suites de integración) — no
+disponible en sesiones sandboxed, debe correr localmente o en CI. Próximo
+paso: `/gsd-execute-phase 2`.
 
 **Fase 1 (fundaciones de cuenta y equipo) — COMPLETA.** Los 5 planes
 (`01-01`, `01-02`, `01-03`, `01-04`, `01-05`) están verificados de punta a
@@ -122,12 +127,13 @@ paso (Fase 2: modelo de identidad y permisos).
 
 ## Continuidad de sesión
 
-Última sesión: 2026-09-08 — **Fase 2: contexto capturado.** Discutidas 4
-áreas grises (riesgo/bitácora, contactos+opt-in, contrato de resolución de
-identidad, duplicado de número) — ver
-`.planning/phases/02-modelo-identidad-permisos/02-CONTEXT.md`. Próximo paso:
-`/gsd-plan-phase 2`.
-Resume file: `.planning/phases/02-modelo-identidad-permisos/02-CONTEXT.md`.
+Última sesión: 2026-09-08 — **Fase 2: planeada.** Discutidas 4 áreas grises
+(riesgo/bitácora, contactos+opt-in, contrato de resolución de identidad,
+duplicado de número), investigada (`02-RESEARCH.md`), mapeada contra código
+existente (`02-PATTERNS.md`), y planeada en 7 planes / 4 waves — verificación
+de gsd-plan-checker pasó sin issues bloqueantes. Próximo paso:
+`/gsd-execute-phase 2`.
+Resume file: `.planning/phases/02-modelo-identidad-permisos/02-01-PLAN.md`.
 
 Sesión previa: 2026-09-08 — **Fase 1 completa.** Verificados `01-03` y
 `01-04` de punta a punta contra Neon/Clerk/R2 reales desde la máquina local

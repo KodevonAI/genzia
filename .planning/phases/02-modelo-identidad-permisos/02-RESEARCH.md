@@ -545,10 +545,11 @@ tightly coupled to Phase 1's shipped code.
 confirmed with the user or explicitly accepted as planner discretion before
 the corresponding migrations are written.
 
-## Open Questions
+## Open Questions (RESOLVED — see 02-CONTEXT.md D-09/D-10 and 02-PLAN files)
 
-1. **What exactly does SEG-08 require from Phase 2, given `clients.ts` is
-   still a deliberate stub?**
+1. **(RESOLVED — option (b), via migration 0006/0007, plan 02-03)** What
+   exactly does SEG-08 require from Phase 2, given `clients.ts` is
+   still a deliberate stub?
    - What we know: PROJECT.md's visible/team-only layer distinction applies
      to CRM fields that don't exist until Phase 5. 02-CONTEXT.md's Phase
      Boundary doesn't mention SEG-08 at all in its decisions, yet SEG-08 is
@@ -566,8 +567,9 @@ the corresponding migrations are written.
      for the planner to confirm this framing satisfies the requirement's
      intent, since 02-CONTEXT.md doesn't discuss it explicitly.
 
-2. **Should `authorized_contacts` write access be admin-only or
-   admin+assigned-member?**
+2. **(RESOLVED — admin-only, per 02-CONTEXT.md D-10, implemented in
+   plans 02-03/02-05)** Should `authorized_contacts` write access be
+   admin-only or admin+assigned-member?
    - What we know: SEG-03 says "solo el equipo" (team, undifferentiated).
      The existing `clients_write_admin_only` policy is deliberately
      admin-only for creating clients themselves, with an explicit code
@@ -584,8 +586,10 @@ the corresponding migrations are written.
      admin-only, not admin+member). Confirm with the user during planning if
      this feels too restrictive for day-to-day contact management.
 
-3. **Does the `resolveIdentity` transaction need to run inside
-   `tenantDb` (the `neon-serverless` persistent-connection driver), same as
+3. **(RESOLVED — `neon-serverless`, zero `neon-http` usage, implemented in
+   `with-resolved-identity-context.ts`, plan 02-04)** Does the
+   `resolveIdentity` transaction need to run inside `tenantDb` (the
+   `neon-serverless` persistent-connection driver), same as
    `withTenantContext`, or can it use the stateless `neon-http` driver?**
    - What we know: `withResolvedIdentityContext` needs the same
      lookup-then-set-more-GUCs imperative multi-step transaction shape as
