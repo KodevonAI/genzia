@@ -14,9 +14,56 @@
     "welcome": "Hi, {name}",
     "trialBanner": "Your free trial ends in {days, plural, =0 {less than a day} one {# day} other {# days}}",
     "settingUp": "We're setting up your account...",
+    "clientsHeading": "Clients",
+    "noClients": "You don't have any clients yet.",
     "nav": {
       "branding": "Branding",
       "team": "Team"
+    }
+  },
+  "Team": {
+    "title": "Team",
+    "subtitle": "Invite your team and control which clients each person can see.",
+    "provisioning": "We're setting up your team profile...",
+    "inviteHeading": "Invite someone",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "roleLabel": "Role",
+    "whatsappLabel": "WhatsApp number",
+    "whatsappPlaceholder": "+1 555 1234567",
+    "inviteSubmit": "Send invitation",
+    "inviteSubmitting": "Sending...",
+    "rosterHeading": "Members",
+    "empty": "You haven't invited anyone yet.",
+    "noWhatsapp": "No WhatsApp number",
+    "manageClients": "Assign clients",
+    "role": {
+      "admin": "Admin",
+      "member": "Member"
+    },
+    "status": {
+      "invited": "Invited",
+      "active": "Active",
+      "removed": "Removed"
+    },
+    "assignHeading": "{email}'s clients",
+    "assignSubtitle": "Check the clients this member should be able to see.",
+    "adminSeesAllNote": "This member is an admin and already sees every client, regardless of assignment.",
+    "assigned": "Assigned",
+    "unassigned": "Unassigned",
+    "noClients": "There are no clients to assign yet.",
+    "addClientLabel": "New client",
+    "addClientPlaceholder": "Client name",
+    "addClientSubmit": "Add",
+    "addClientSubmitting": "Adding...",
+    "errors": {
+      "notAdmin": "Only an admin can do this.",
+      "invalidEmail": "Enter a valid email address.",
+      "invalidRole": "Select a valid role.",
+      "invalidWhatsapp": "Enter a valid WhatsApp number (e.g. +15551234567).",
+      "alreadyInvited": "An invitation or member with that email already exists.",
+      "clerkError": "We couldn't send the invitation. Please try again.",
+      "invalidClientName": "Enter a valid client name."
     }
   },
   "BrandSettings": {

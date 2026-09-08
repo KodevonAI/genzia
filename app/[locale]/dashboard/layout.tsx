@@ -3,11 +3,11 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
 /**
- * The shared authenticated shell every dashboard page mounts into. "Team"
- * (Plan 04, CTA-04/05/06 roster + assignments) is still an unlinked
- * placeholder slot — that page doesn't exist until Plan 04 builds it.
- * "Branding" (Plan 03, CTA-02 settings) now links to
- * /dashboard/settings/brand.
+ * The shared authenticated shell every dashboard page mounts into.
+ * "Branding" (Plan 03, CTA-02 settings) links to /dashboard/settings/brand.
+ * "Team" (Plan 04, CTA-04/05/06 roster + assignments) links to
+ * /dashboard/team — the literal path segment, NOT a `(dashboard)` route
+ * group (see middleware.ts).
  */
 export default async function DashboardLayout({
   children,
@@ -26,10 +26,9 @@ export default async function DashboardLayout({
           <Link href="/dashboard/settings/brand" className="hover:underline">
             {t("nav.branding")}
           </Link>
-          {/* Nav slot for Plan 04 (CTA-04/05/06 team roster). */}
-          <span className="text-zinc-400 dark:text-zinc-600">
+          <Link href="/dashboard/team" className="hover:underline">
             {t("nav.team")}
-          </span>
+          </Link>
           <UserButton />
         </nav>
       </header>

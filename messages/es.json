@@ -14,9 +14,56 @@
     "welcome": "Hola, {name}",
     "trialBanner": "Tu prueba gratis termina en {days, plural, =0 {menos de un día} one {# día} other {# días}}",
     "settingUp": "Estamos preparando tu cuenta...",
+    "clientsHeading": "Clientes",
+    "noClients": "Todavía no tienes clientes.",
     "nav": {
       "branding": "Marca",
       "team": "Equipo"
+    }
+  },
+  "Team": {
+    "title": "Equipo",
+    "subtitle": "Invita a tu equipo y controla qué clientes ve cada quien.",
+    "provisioning": "Estamos preparando tu perfil de equipo...",
+    "inviteHeading": "Invitar a alguien",
+    "emailLabel": "Correo",
+    "emailPlaceholder": "nombre@ejemplo.com",
+    "roleLabel": "Rol",
+    "whatsappLabel": "Número de WhatsApp",
+    "whatsappPlaceholder": "+57 300 1234567",
+    "inviteSubmit": "Enviar invitación",
+    "inviteSubmitting": "Enviando...",
+    "rosterHeading": "Miembros",
+    "empty": "Todavía no has invitado a nadie.",
+    "noWhatsapp": "Sin número de WhatsApp",
+    "manageClients": "Asignar clientes",
+    "role": {
+      "admin": "Admin",
+      "member": "Miembro"
+    },
+    "status": {
+      "invited": "Invitado",
+      "active": "Activo",
+      "removed": "Removido"
+    },
+    "assignHeading": "Clientes de {email}",
+    "assignSubtitle": "Marca los clientes que este miembro puede ver.",
+    "adminSeesAllNote": "Este miembro es admin y ya ve todos los clientes, sin importar la asignación.",
+    "assigned": "Asignado",
+    "unassigned": "Sin asignar",
+    "noClients": "Todavía no hay clientes para asignar.",
+    "addClientLabel": "Nuevo cliente",
+    "addClientPlaceholder": "Nombre del cliente",
+    "addClientSubmit": "Agregar",
+    "addClientSubmitting": "Agregando...",
+    "errors": {
+      "notAdmin": "Solo un administrador puede hacer esto.",
+      "invalidEmail": "Ingresa un correo válido.",
+      "invalidRole": "Selecciona un rol válido.",
+      "invalidWhatsapp": "Ingresa un número de WhatsApp válido (ej. +573001234567).",
+      "alreadyInvited": "Ya existe una invitación o miembro con ese correo.",
+      "clerkError": "No pudimos enviar la invitación. Intenta de nuevo.",
+      "invalidClientName": "Ingresa un nombre de cliente válido."
     }
   },
   "BrandSettings": {
