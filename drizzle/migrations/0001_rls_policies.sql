@@ -47,49 +47,64 @@ BEGIN
   END IF;
 END
 $$;
+--> statement-breakpoint
 
 GRANT USAGE ON SCHEMA public TO app_user;
+--> statement-breakpoint
 GRANT SELECT, INSERT, UPDATE, DELETE ON
   agencies, team_members, clients, client_assignments, agent_brand_config
   TO app_user;
 -- Sequences aren't used (all surrogate keys are uuid defaults via
 -- gen_random_uuid(), not serial/identity), so no sequence grants needed.
+--> statement-breakpoint
 
 -- === agencies: single-row policy, restricted to the caller's own tenant ===
 
 ALTER TABLE agencies ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
 ALTER TABLE agencies FORCE ROW LEVEL SECURITY;
+--> statement-breakpoint
 
 CREATE POLICY agencies_tenant_isolation ON agencies
   USING (id = current_setting('app.agency_id', true))
   WITH CHECK (id = current_setting('app.agency_id', true));
+--> statement-breakpoint
 
 -- === team_members: standard agency_id isolation ===
 
 ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
 ALTER TABLE team_members FORCE ROW LEVEL SECURITY;
+--> statement-breakpoint
 
 CREATE POLICY team_members_tenant_isolation ON team_members
   USING (agency_id = current_setting('app.agency_id', true))
   WITH CHECK (agency_id = current_setting('app.agency_id', true));
+--> statement-breakpoint
 
 -- === client_assignments: standard agency_id isolation ===
 
 ALTER TABLE client_assignments ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
 ALTER TABLE client_assignments FORCE ROW LEVEL SECURITY;
+--> statement-breakpoint
 
 CREATE POLICY client_assignments_tenant_isolation ON client_assignments
   USING (agency_id = current_setting('app.agency_id', true))
   WITH CHECK (agency_id = current_setting('app.agency_id', true));
+--> statement-breakpoint
 
 -- === agent_brand_config: standard agency_id isolation ===
 
 ALTER TABLE agent_brand_config ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
 ALTER TABLE agent_brand_config FORCE ROW LEVEL SECURITY;
+--> statement-breakpoint
 
 CREATE POLICY agent_brand_config_tenant_isolation ON agent_brand_config
   USING (agency_id = current_setting('app.agency_id', true))
   WITH CHECK (agency_id = current_setting('app.agency_id', true));
+--> statement-breakpoint
 
 -- === clients: agency_id isolation PLUS role-aware visibility ===
 --
@@ -103,7 +118,9 @@ CREATE POLICY agent_brand_config_tenant_isolation ON agent_brand_config
 --      not this one).
 
 ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
 ALTER TABLE clients FORCE ROW LEVEL SECURITY;
+--> statement-breakpoint
 
 CREATE POLICY clients_select_by_role ON clients
   FOR SELECT
@@ -117,6 +134,7 @@ CREATE POLICY clients_select_by_role ON clients
       )
     )
   );
+--> statement-breakpoint
 
 CREATE POLICY clients_write_admin_only ON clients
   FOR ALL

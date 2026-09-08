@@ -15,6 +15,13 @@
       "when": 1788831277418,
       "tag": "0001_rls_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788831277419,
+      "tag": "0002_fix_clients_rls_uuid_cast",
+      "breakpoints": true
     }
   ]
 }
