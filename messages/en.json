@@ -18,5 +18,34 @@
       "branding": "Branding",
       "team": "Team"
     }
+  },
+  "BrandSettings": {
+    "title": "Agent branding",
+    "description": "This is how the agent presents itself to your agency's clients.",
+    "agentNameLabel": "Agent name",
+    "agentNamePlaceholder": "E.g. Sofia",
+    "toneLabel": "Tone",
+    "tones": {
+      "professional": "Professional",
+      "friendly": "Friendly",
+      "playful": "Playful",
+      "formal": "Formal"
+    },
+    "logoLabel": "Logo",
+    "logoAlt": "Agent logo",
+    "logoUploading": "Uploading logo...",
+    "logoBroken": "We couldn't load the logo. Try uploading it again.",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "saveSuccess": "Changes saved.",
+    "errors": {
+      "agentNameRequired": "The agent name is required.",
+      "agentNameTooLong": "The agent name must be under 60 characters.",
+      "invalidTone": "Select a valid tone.",
+      "invalidFileType": "The logo must be PNG, JPEG, or WEBP.",
+      "uploadFailed": "We couldn't upload the logo. Please try again.",
+      "forbidden": "Only an admin can change the agent branding.",
+      "unknown": "Something went wrong. Please try again."
+    }
   }
 }

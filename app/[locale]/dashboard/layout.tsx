@@ -3,10 +3,11 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
 /**
- * The shared authenticated shell every dashboard page mounts into. Nav has
- * two placeholder slots — "Branding" (Plan 03, CTA-02 settings) and "Team"
- * (Plan 04, CTA-04/05/06 roster + assignments) — deliberately not linked
- * yet: those pages don't exist until their own plans build them.
+ * The shared authenticated shell every dashboard page mounts into. "Team"
+ * (Plan 04, CTA-04/05/06 roster + assignments) is still an unlinked
+ * placeholder slot — that page doesn't exist until Plan 04 builds it.
+ * "Branding" (Plan 03, CTA-02 settings) now links to
+ * /dashboard/settings/brand.
  */
 export default async function DashboardLayout({
   children,
@@ -22,10 +23,9 @@ export default async function DashboardLayout({
           Genzia
         </Link>
         <nav className="flex items-center gap-6 text-sm">
-          {/* Nav slot for Plan 03 (CTA-02 brand settings). */}
-          <span className="text-zinc-400 dark:text-zinc-600">
+          <Link href="/dashboard/settings/brand" className="hover:underline">
             {t("nav.branding")}
-          </span>
+          </Link>
           {/* Nav slot for Plan 04 (CTA-04/05/06 team roster). */}
           <span className="text-zinc-400 dark:text-zinc-600">
             {t("nav.team")}

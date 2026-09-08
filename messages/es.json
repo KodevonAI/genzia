@@ -18,5 +18,34 @@
       "branding": "Marca",
       "team": "Equipo"
     }
+  },
+  "BrandSettings": {
+    "title": "Marca del agente",
+    "description": "Así se presenta el agente ante los clientes de tu agencia.",
+    "agentNameLabel": "Nombre del agente",
+    "agentNamePlaceholder": "Ej. Sofía",
+    "toneLabel": "Tono",
+    "tones": {
+      "professional": "Profesional",
+      "friendly": "Cercano",
+      "playful": "Desenfadado",
+      "formal": "Formal"
+    },
+    "logoLabel": "Logo",
+    "logoAlt": "Logo del agente",
+    "logoUploading": "Subiendo logo...",
+    "logoBroken": "No pudimos cargar el logo. Intenta subirlo de nuevo.",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "saveSuccess": "Cambios guardados.",
+    "errors": {
+      "agentNameRequired": "El nombre del agente es obligatorio.",
+      "agentNameTooLong": "El nombre del agente debe tener menos de 60 caracteres.",
+      "invalidTone": "Selecciona un tono válido.",
+      "invalidFileType": "El logo debe ser PNG, JPEG o WEBP.",
+      "uploadFailed": "No pudimos subir el logo. Intenta de nuevo.",
+      "forbidden": "Solo un administrador puede cambiar la marca del agente.",
+      "unknown": "Ocurrió un error. Intenta de nuevo."
+    }
   }
 }
