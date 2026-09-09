@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Milestone complete
-last_updated: "2026-09-09T14:24:03.479Z"
+last_updated: "2026-09-09T19:15:23.677Z"
 progress:
-  total_phases: 2
+  total_phases: 3
   completed_phases: 2
   total_plans: 12
   completed_plans: 12
@@ -221,7 +221,7 @@ en un scope ya resuelto); el primer intento de arreglo (migración 0009) rompió
 los webhooks de Clerk Y `resolveIdentity()` mismo — revertido por completo
 (0010/0011), gap documentado y abierto en vez de forzado. Próximo paso:
 `/gsd-verify-work 2` o continuar a Fase 3.
-Resume file: `.planning/phases/02-modelo-identidad-permisos/02-07-SUMMARY.md`.
+Resume file: .planning/phases/03-integraci-n-con-whatsapp-meta/03-CONTEXT.md
 
 Sesión previa: 2026-09-08 — **Fase 1 completa.** Verificados `01-03` y
 `01-04` de punta a punta contra Neon/Clerk/R2 reales desde la máquina local
