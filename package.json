@@ -9,7 +9,8 @@
     "lint": "eslint",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:verify-rls": "tsx scripts/verify-rls-isolation.ts",
-    "verify:identity-classification": "tsx scripts/verify-identity-classification.ts"
+    "verify:identity-classification": "tsx scripts/verify-identity-classification.ts",
+    "db:verify-identity": "tsx scripts/verify-identity-resolution.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1127.0",
