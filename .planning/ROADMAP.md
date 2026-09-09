@@ -60,7 +60,7 @@ Plans:
 - [x] 02-04-PLAN.md — `resolveIdentity` + `withResolvedIdentityContext` (GUC `app.client_id`) (SEG-01, SEG-05, SEG-06, SEG-07, SEG-12)
 - [x] 02-05-PLAN.md — Server Actions admin-only del roster de contactos con opt-in obligatorio (SEG-02, SEG-03, SEG-04)
 - [x] 02-06-PLAN.md — Suite de integración `verify-identity-resolution.ts` contra Neon real (SEG-01..SEG-08, SEG-12)
-- [ ] 02-07-PLAN.md — [BLOCKING] aplicar migraciones a Neon y correr ambas suites en vivo (checkpoint, requiere red)
+- [x] 02-07-PLAN.md — [BLOCKING] aplicar migraciones a Neon y correr ambas suites en vivo (checkpoint, requiere red)
 
 ## Fase 3 — Integración con WhatsApp / Meta
 
