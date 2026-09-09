@@ -7,6 +7,7 @@ import { authorizedContacts } from "@/lib/db/schema/authorized-contacts";
 import { clients } from "@/lib/db/schema/clients";
 import { NoTenantContextError, withTenantContext } from "@/lib/tenant/with-tenant-context";
 import { NotAdminError, assertCallerIsAdmin } from "@/lib/team/current-member";
+import type { AdminActionResult } from "@/lib/clients/assign-client";
 
 // Intentionally identical to lib/team/invite-member.ts's WHATSAPP_RE — one
 // phone-shape rule for the whole app. Full E.164 validation stays deferred
@@ -75,7 +76,7 @@ export async function addAuthorizedContact(
       // RLS (authorized_contacts_write_admin_only) already blocks this
       // write for a non-admin — this explicit check keeps the failure
       // typed and fails closed by construction (same reasoning as
-      // assign-client.ts's assertCallerIsAdmin call).
+      // assign-client.ts's own admin check).
       const admin = await assertCallerIsAdmin(tx, userId);
 
       const [row] = await tx
@@ -135,4 +136,66 @@ export async function addAuthorizedContact(
 
     throw err;
   }
+}
+
+/**
+ * Admin-only (D-10): the inverse of `addAuthorizedContact`. Mirrors
+ * `unassignClient`'s shape exactly (assign-client.ts). Deliberately no
+ * `agencyId` predicate on the delete — RLS
+ * (`authorized_contacts_write_admin_only`) has already scoped every row
+ * this statement can touch to the caller's own agency, and duplicating
+ * that check in application code is the exact anti-pattern
+ * lib/team/current-member.ts's `findCallerTeamMember` comment warns
+ * against.
+ */
+export async function removeAuthorizedContact(contactId: string): Promise<AdminActionResult> {
+  const { userId } = await requireOrgContext();
+
+  try {
+    await withTenantContext(async (tx) => {
+      await assertCallerIsAdmin(tx, userId);
+      await tx.delete(authorizedContacts).where(eq(authorizedContacts.id, contactId));
+    });
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof NotAdminError) {
+      return { ok: false, error: "not_admin" };
+    }
+    throw err;
+  }
+}
+
+export type AuthorizedContactSummary = {
+  id: string;
+  clientId: string;
+  name: string;
+  phoneNumber: string;
+  email: string | null;
+  contactRole: string | null;
+  optInConfirmedByTeam: boolean;
+};
+
+/**
+ * Agency-wide (D-09) — deliberately NOT admin-gated: any team member may
+ * list the whole contact roster, same as `team_members` today. No `where`
+ * clause of any kind here; `authorized_contacts_select_team_only`
+ * (migration 0006) does the scoping, including excluding `app.role =
+ * 'client_contact'` (SEG-08) — the contact roster is team-only data, and a
+ * resolved client contact must never read it. Do not add a `client_contact`
+ * read path here, or in that policy, ever.
+ */
+export async function listAuthorizedContacts(): Promise<AuthorizedContactSummary[]> {
+  return withTenantContext((tx) =>
+    tx
+      .select({
+        id: authorizedContacts.id,
+        clientId: authorizedContacts.clientId,
+        name: authorizedContacts.name,
+        phoneNumber: authorizedContacts.phoneNumber,
+        email: authorizedContacts.email,
+        contactRole: authorizedContacts.contactRole,
+        optInConfirmedByTeam: authorizedContacts.optInConfirmedByTeam,
+      })
+      .from(authorizedContacts),
+  );
 }
