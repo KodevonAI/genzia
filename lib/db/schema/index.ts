@@ -6,3 +6,4 @@ export * from "./agent-brand-config";
 export * from "./authorized-contacts";
 export * from "./agent-action-catalog";
 export * from "./audit-log";
+export * from "./messages";
