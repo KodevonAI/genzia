@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to execute
-last_updated: "2026-09-10T00:00:00.000Z"
+status: Waiting on human setup
+last_updated: "2026-09-10T14:55:00.000Z"
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 20
-  completed_plans: 12
-  percent: 60
+  completed_plans: 19
+  percent: 95
 ---
 
 # STATE.md — Genzia
@@ -18,17 +18,38 @@ progress:
 
 ## Dónde vamos
 
-**Fase 3 (integración con WhatsApp/Meta) — PLANEADA, lista para ejecutar.**
-8 planes en 4 waves (`03-01` a `03-08`). Research + pattern mapping +
-plan-checker completos (1 blocker trivial corregido: RESEARCH.md Open
-Questions sin marcar resuelto). Punto crítico de arquitectura: función
-`find_agency_by_team_whatsapp_number` (SECURITY DEFINER) debe existir antes
-de resolver identidad contra el número interno compartido — ver
-`03-RESEARCH.md`. RLS de `messages` usa un GUC de actor de sistema
-(`withSystemWebhookContext`), no `withResolvedIdentityContext`, para evitar
-reintroducir la regresión de la migración 0009. Wave 4 (`03-08`) es
-checkpoint bloqueante: migración real a Neon + verificación E2E manual con
-WhatsApp real. Próximo paso: `/gsd-execute-phase 3`.
+**Fase 3 (integración con WhatsApp/Meta) — 7/8 planes ejecutados (waves 1-3),
+esperando setup humano para wave 4.** `03-01` a `03-07` completos, mergeados
+a `main`, verificados (tsc limpio, `npx next build` limpio, 31/31 assertions
+en `verify-whatsapp-webhook-parsing.ts` + `verify-whatsapp-send.ts` sin
+regresión en cada wave). Pipeline completo entra/sale de WhatsApp existe en
+código: webhook `/api/webhooks/meta` (GET handshake + POST intake), función
+`find_agency_by_team_whatsapp_number` (SECURITY DEFINER, en migración
+0013, aún NO aplicada a Neon), ingesta idempotente con identidad de Fase 2,
+envío directo a Graph API v25.0, función Inngest `send-whatsapp-ack`.
+
+**Wave 4 (`03-08`) bloqueada — requiere setup humano, no automatizable:**
+- `DATABASE_URL` real de Neon (aplicar migraciones 0012/0013 vía
+  `npm run db:migrate`)
+- Credenciales Meta reales: `META_APP_SECRET`, `META_WEBHOOK_VERIFY_TOKEN`,
+  `META_WHATSAPP_PHONE_NUMBER_ID`, `META_WHATSAPP_ACCESS_TOKEN`
+- Config en dashboard de Meta: registrar URL de callback + verify token,
+  suscribir el app al field `messages`, confirmar la suscripción WABA→App,
+  agregar números de prueba (tope 5)
+- Round-trip real: mandar un WhatsApp real al número de prueba y confirmar
+  que llega el ack
+
+Varias desviaciones documentadas (Rule 1, bug fix) a lo largo de las waves:
+API real de `inngest@4.20.0` difiere de lo que RESEARCH.md asumía
+(`eventType`/`staticSchema` en vez de `EventSchemas`/`.fromRecord()`);
+`import "server-only"` removido de `verify-meta-signature.ts` (rompía la
+importación bajo `tsx`, mismo patrón ya usado en
+`with-resolved-identity-context.ts`); `next build --no-lint` ya no existe en
+esta versión del CLI. Todo documentado en los SUMMARY.md de cada plan.
+
+Próximo paso: usuario corre `/gsd-execute-phase 3` de nuevo (o
+`/gsd-execute-phase 3 --wave 4`) cuando tenga las credenciales/acceso reales
+listos — el usuario eligió pausar en vez de que yo lo guíe paso a paso ahora.
 
 **Fase 2 (modelo de identidad y permisos) — COMPLETA, verificada de punta a
 punta contra Neon real.** 7 planes en 4 waves. Migraciones 0005-0008
