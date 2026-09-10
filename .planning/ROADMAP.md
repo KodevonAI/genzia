@@ -74,7 +74,21 @@ Plans:
   apruebe.
 
 **Éxito**: un mensaje de WhatsApp real llega al sistema y se le aplica
-correctamente el modelo de identidad de la Fase 2.
+correctamente el modelo de identidad de la Fase 2, y el sistema responde con
+un ack fijo por la API real de envío de Meta (D-01), probando el pipeline
+completo entra/sale.
+
+**Plans:** 8 plans (4 waves)
+
+Plans:
+- [ ] 03-01-PLAN.md — Tabla `messages` (D-04) + migraciones 0012/0013: RLS con GUC `app.actor`, función SECURITY DEFINER `find_agency_by_team_whatsapp_number`, índice único global de `whatsapp_number` (WA-04, WA-07)
+- [ ] 03-02-PLAN.md — Credenciales Meta en `.env.example`, instalación de Inngest + cliente tipado, `withSystemWebhookContext`, manejo de colisión global de WhatsApp al invitar (WA-01, WA-03)
+- [ ] 03-03-PLAN.md — Verificación HMAC de `X-Hub-Signature-256` y parser de payloads (texto/imagen/audio/no-soportado/status) + suite sin red (WA-05)
+- [ ] 03-04-PLAN.md — Envío saliente directo a Graph API v25.0 + suite con `fetch` stub (WA-01)
+- [ ] 03-05-PLAN.md — Resolución cross-agencia del número, ruteo por `phone_number_id` e ingesta idempotente con identidad de Fase 2 (WA-02, WA-03, WA-04)
+- [ ] 03-06-PLAN.md — Función Inngest `send-whatsapp-ack` (D-01) y handler `serve()` (WA-01, WA-07)
+- [ ] 03-07-PLAN.md — Route handler `/api/webhooks/meta` (handshake GET + intake POST) y backfill de estado/precio desde `statuses[]` (WA-01, WA-03, WA-05, WA-07)
+- [ ] 03-08-PLAN.md — [BLOCKING] aplicar migraciones a Neon real, suite de integración `verify-whatsapp-webhook.ts`, sin regresión Fase 1/2, y round-trip real de WhatsApp (WA-01, WA-03, WA-04, WA-05, WA-07)
 
 ## Fase 4 — Agente conversacional core
 
