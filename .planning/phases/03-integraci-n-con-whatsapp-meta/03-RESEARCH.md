@@ -735,10 +735,13 @@ export const messages = pgTable(
 
 **If this table is empty:** N/A — see entries above.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Should this phase's `messages` table writes happen through
-   `withResolvedIdentityContext`, or a dedicated service-role write path?**
+1. **RESOLVED — 03-01-PLAN.md DEC-A adopts a dedicated system-actor GUC path
+   (`withSystemWebhookContext`), not `withResolvedIdentityContext`, for both
+   inbound and outbound `messages` writes.** Original question: Should this
+   phase's `messages` table writes happen through
+   `withResolvedIdentityContext`, or a dedicated service-role write path?
    - What we know: `withResolvedIdentityContext` is designed exactly for
      non-Clerk, WhatsApp-sender-authenticated writes (per its own doc
      comment in `02-04-SUMMARY.md`), and its GUC contract (agency_id always,
@@ -756,8 +759,12 @@ export const messages = pgTable(
      eventual audit-log writes expect to attribute agent-initiated outbound
      messages.
 
-2. **Is the free developer test WABA subject to the same webhook retry/backoff
-   behavior as a production-verified WABA?**
+2. **RESOLVED — deferred to empirical observation in 03-08-PLAN.md Task 3,
+   step 8, which explicitly instructs recording observed behavior against
+   this question; treated as identical-to-production for planning purposes
+   in the meantime.** Original question: Is the free developer test WABA
+   subject to the same webhook retry/backoff behavior as a
+   production-verified WABA?
    - What we know: retry behavior is documented generally for the platform.
    - What's unclear: whether test-mode WABAs have different (possibly more
      lenient, possibly more aggressive) retry/rate characteristics — not
