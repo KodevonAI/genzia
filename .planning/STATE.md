@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Milestone complete
-last_updated: "2026-09-09T19:15:23.677Z"
+status: Ready to execute
+last_updated: "2026-09-10T00:00:00.000Z"
 progress:
   total_phases: 3
   completed_phases: 2
-  total_plans: 12
+  total_plans: 20
   completed_plans: 12
-  percent: 100
+  percent: 60
 ---
 
 # STATE.md — Genzia
@@ -17,6 +17,18 @@ progress:
 **Última actualización**: 2026-09-09
 
 ## Dónde vamos
+
+**Fase 3 (integración con WhatsApp/Meta) — PLANEADA, lista para ejecutar.**
+8 planes en 4 waves (`03-01` a `03-08`). Research + pattern mapping +
+plan-checker completos (1 blocker trivial corregido: RESEARCH.md Open
+Questions sin marcar resuelto). Punto crítico de arquitectura: función
+`find_agency_by_team_whatsapp_number` (SECURITY DEFINER) debe existir antes
+de resolver identidad contra el número interno compartido — ver
+`03-RESEARCH.md`. RLS de `messages` usa un GUC de actor de sistema
+(`withSystemWebhookContext`), no `withResolvedIdentityContext`, para evitar
+reintroducir la regresión de la migración 0009. Wave 4 (`03-08`) es
+checkpoint bloqueante: migración real a Neon + verificación E2E manual con
+WhatsApp real. Próximo paso: `/gsd-execute-phase 3`.
 
 **Fase 2 (modelo de identidad y permisos) — COMPLETA, verificada de punta a
 punta contra Neon real.** 7 planes en 4 waves. Migraciones 0005-0008
