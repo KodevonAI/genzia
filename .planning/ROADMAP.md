@@ -87,7 +87,7 @@ Plans:
 - [x] 03-04-PLAN.md — Envío saliente directo a Graph API v25.0 + suite con `fetch` stub (WA-01)
 - [x] 03-05-PLAN.md — Resolución cross-agencia del número, ruteo por `phone_number_id` e ingesta idempotente con identidad de Fase 2 (WA-02, WA-03, WA-04)
 - [x] 03-06-PLAN.md — Función Inngest `send-whatsapp-ack` (D-01) y handler `serve()` (WA-01, WA-07)
-- [ ] 03-07-PLAN.md — Route handler `/api/webhooks/meta` (handshake GET + intake POST) y backfill de estado/precio desde `statuses[]` (WA-01, WA-03, WA-05, WA-07)
+- [x] 03-07-PLAN.md — Route handler `/api/webhooks/meta` (handshake GET + intake POST) y backfill de estado/precio desde `statuses[]` (WA-01, WA-03, WA-05, WA-07)
 - [ ] 03-08-PLAN.md — [BLOCKING] aplicar migraciones a Neon real, suite de integración `verify-whatsapp-webhook.ts`, sin regresión Fase 1/2, y round-trip real de WhatsApp (WA-01, WA-03, WA-04, WA-05, WA-07)
 
 ## Fase 4 — Agente conversacional core
