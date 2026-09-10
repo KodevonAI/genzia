@@ -62,6 +62,7 @@
       "invalidRole": "Selecciona un rol válido.",
       "invalidWhatsapp": "Ingresa un número de WhatsApp válido (ej. +573001234567).",
       "alreadyInvited": "Ya existe una invitación o miembro con ese correo.",
+      "whatsappTaken": "Ese número de WhatsApp ya está registrado en otra cuenta. Cada número pertenece a una sola persona.",
       "clerkError": "No pudimos enviar la invitación. Intenta de nuevo.",
       "invalidClientName": "Ingresa un nombre de cliente válido."
     }

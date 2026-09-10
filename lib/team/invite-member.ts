@@ -29,11 +29,27 @@ export type InviteMemberResult =
         | "invalid_role"
         | "invalid_whatsapp"
         | "already_invited"
+        | "whatsapp_taken"
         | "clerk_error";
     };
 
 function toClerkOrgRole(role: "admin" | "member"): "org:admin" | "org:member" {
   return role === "admin" ? "org:admin" : "org:member";
+}
+
+/**
+ * DEC-B / WA-04: `team_members_whatsapp_number_global_idx` (migration 0012)
+ * makes a WhatsApp number unique across the WHOLE platform, not per agency,
+ * so `find_agency_by_team_whatsapp_number` (migration 0013) can resolve a
+ * number to exactly one agency with no `app.agency_id` GUC available. The
+ * collision this creates is a real product rule — one person belongs to one
+ * agency — so it gets a specific, translated error instead of a generic
+ * failure. The index name is matched (not just the SQLSTATE) so an unrelated
+ * 23505, e.g. the (agency_id, email) index, is never mislabelled.
+ */
+function isGlobalWhatsappCollision(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err);
+  return message.includes("team_members_whatsapp_number_global_idx");
 }
 
 /**
@@ -108,11 +124,22 @@ export async function inviteMember(input: InviteMemberInput): Promise<InviteMemb
       // matching team_members row) — logged, not silently discarded, and
       // rare enough (concurrent double-submit) not to warrant a
       // cross-system rollback in this phase.
-      const [inserted] = await tx
-        .insert(teamMembers)
-        .values({ agencyId: orgId, email, role, whatsappNumber, status: "invited" })
-        .onConflictDoNothing({ target: [teamMembers.agencyId, teamMembers.email] })
-        .returning({ id: teamMembers.id });
+      let inserted: { id: string } | undefined;
+      try {
+        [inserted] = await tx
+          .insert(teamMembers)
+          .values({ agencyId: orgId, email, role, whatsappNumber, status: "invited" })
+          .onConflictDoNothing({ target: [teamMembers.agencyId, teamMembers.email] })
+          .returning({ id: teamMembers.id });
+      } catch (insertError) {
+        if (isGlobalWhatsappCollision(insertError)) {
+          console.warn(
+            `inviteMember: WhatsApp number ${whatsappNumber} is already registered to a team member in another agency.`,
+          );
+          return { ok: false, error: "whatsapp_taken" } as const;
+        }
+        throw insertError;
+      }
 
       if (!inserted) {
         console.warn(
