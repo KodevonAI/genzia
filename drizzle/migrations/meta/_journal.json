@@ -85,6 +85,13 @@
       "when": 1788902940000,
       "tag": "0011_revert_authorized_contacts_regression",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1789065213114,
+      "tag": "0012_whatsapp_messages",
+      "breakpoints": true
     }
   ]
 }
