@@ -11,6 +11,7 @@ const ERROR_KEYS: Record<string, string> = {
   invalid_role: "errors.invalidRole",
   invalid_whatsapp: "errors.invalidWhatsapp",
   already_invited: "errors.alreadyInvited",
+  whatsapp_taken: "errors.whatsappTaken",
   clerk_error: "errors.clerkError",
 };
 
