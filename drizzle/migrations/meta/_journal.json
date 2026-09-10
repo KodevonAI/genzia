@@ -92,6 +92,13 @@
       "when": 1789065213114,
       "tag": "0012_whatsapp_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1789065213115,
+      "tag": "0013_whatsapp_messages_rls",
+      "breakpoints": true
     }
   ]
 }
