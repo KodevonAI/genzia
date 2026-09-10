@@ -1,4 +1,3 @@
-import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 /**
@@ -15,6 +14,18 @@ import { createHmac, timingSafeEqual } from "node:crypto";
  * The comparison MUST be timingSafeEqual, never `===`: a byte-at-a-time
  * string comparison leaks the expected signature through response timing,
  * which is a cheap and well-known attack against webhook secrets.
+ *
+ * No `import "server-only"` here, deliberately — same reasoning as
+ * `lib/tenant/with-resolved-identity-context.ts`:
+ * `scripts/verify-whatsapp-webhook-parsing.ts` imports this module directly
+ * under plain `tsx`, where the `server-only` package resolves to its
+ * throwing entrypoint (it only resolves to the no-op `empty.js` under the
+ * `react-server` bundler condition Next.js sets, which `tsx`/plain Node does
+ * not) and would crash the verification run before a single assertion runs.
+ * The module is still only ever called from `app/api/webhooks/meta/route.ts`
+ * (a server-only Route Handler) — this omission does not add a real client-
+ * bundling path, only removes the marker package's build-time guard against
+ * one.
  */
 export class MetaWebhookVerificationError extends Error {
   constructor(message: string) {
