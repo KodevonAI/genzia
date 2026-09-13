@@ -597,19 +597,24 @@ OpenRouter's current API reference page in this pass. Confirm against
 
 **If this table is empty:** N/A — see rows above; none are compliance/retention-policy claims, all are technical-integration claims resolvable by a short spike or a docs check before the relevant task begins.
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+All three questions below were resolved during planning (`/gsd-plan-phase 4`) as locked decisions rather than left open — see the pointers under each.
 
 1. **Architecture Decision Point 1 — Vercel AI SDK vs. raw Anthropic SDK for the web-chat transport**
+   **RESOLVED: LD-01 in `04-02-PLAN.md`** — hand-rolled raw `@anthropic-ai/sdk` client pointed at OpenRouter's passthrough (option (a) below), matching `STACK-AGENT.md`/`STACK-OPENROUTER.md`'s stated rationale and this project's existing "orquestación a mano" decision (STATE.md). No spike was run; the choice was made directly since it required no new unverified integration risk.
    - What we know: `STACK.md` names Vercel AI SDK (`streamText`/`useChat`) for "chat en tiempo real" generically; `STACK-AGENT.md`/`STACK-OPENROUTER.md` argue for a hand-rolled loop against the raw Anthropic wire format specifically for auditability and cache_control preservation, and don't mention Vercel AI SDK at all.
    - What's unclear: whether `@ai-sdk/anthropic`'s `baseURL` override, combined with OpenRouter's passthrough, preserves `cache_control` semantics — no source found confirms or denies this specific combination.
    - Recommendation: treat this as a Wave 0 spike task, not an assumption. Two viable resolutions: (a) skip Vercel AI SDK entirely — hand-roll SSE via a `ReadableStream` fed by the raw Anthropic SDK's own streaming iterator (`anthropic.messages.stream(...)`), and have the web chat frontend read the stream with a plain `fetch` + reader loop instead of `useChat()`; this is the option most consistent with `STACK-AGENT.md`'s stated security rationale and has zero unverified integration risk. (b) adopt `@ai-sdk/anthropic` + `streamText`/`useChat` per `STACK.md`'s literal text, but only after confirming (via a 10-line throwaway script hitting OpenRouter with `cache_control` set) that caching survives — if it doesn't, (a) becomes mandatory anyway. Recommend defaulting to (a) unless the planner/user has a strong reason to want `useChat()`'s client ergonomics enough to spend the spike.
 
 2. **Web chat's identity/auth model — is a web-chat sender a Clerk-authenticated team member, an unauthenticated-but-tokenized client contact, or both?**
+   **RESOLVED: LD-02 in `04-04-PLAN.md`** — team-only for v1, via the existing `withTenantContext` (Clerk-authenticated dashboard). Client-facing web-chat auth deferred to whichever future phase owns POR-01 (client portal login).
    - What we know: `withTenantContext` (Clerk sessions, team-facing) and `withResolvedIdentityContext` (phone-resolved, WhatsApp-facing) both exist. `STACK.md`'s "Auth — cliente final" line mentions "flujo propio ligero de magic-link/OTP" for client-final auth generically, but that's dated to a different phase's scope (POR — client portal, Phase 11+) and no code implementing it exists yet.
    - What's unclear: for v1's web chat (WA-05 says "chat web" without specifying whose), is it team-only (an admin/member testing the agent from the dashboard, naturally using `withTenantContext`) or does it need to serve client contacts too (requiring the not-yet-built magic-link/OTP flow to even resolve an identity)?
    - Recommendation: scope Phase 4's web chat to team members only (`withTenantContext`, inside the existing Clerk-authenticated dashboard) unless CONTEXT.md/discuss-phase says otherwise — this reuses fully-built auth infrastructure and defers the client-facing web-chat auth question to whichever phase actually owns POR-01 (client portal login). Flag this explicitly for user confirmation before locking the plan.
 
 3. **How does image/audio content actually get INTO a web-chat message, if in scope at all?**
+   **RESOLVED: shared `interpretMedia` design in `04-05-PLAN.md`/`04-10-PLAN.md`** — one shared interpretation function is called both by the Meta-download path (WhatsApp) and a direct web-upload path (web chat), exactly as recommended below. No duplicate image-interpretation pipeline was built.
    - What we know: no upload mechanism exists for chat messages; the only existing upload path (`app/api/uploads/brand-logo`) is a presigned-R2-PUT flow for a single brand-logo file, a different shape (one file per agency setting, not a chat attachment per turn).
    - What's unclear: whether web-chat multimodal input (if in scope per Open Question 2) needs R2 storage at all, or can pass bytes directly in the request body to the same `downloadMedia`-adjacent code path used for WhatsApp media (skipping the "download from Meta" step since the bytes arrive directly).
    - Recommendation: if the planner scopes web-chat multimodal to v1, design one shared function, e.g. `interpretMedia(buffer, mimeType, kind)`, called by both the Meta-download path and a direct web-upload path — do not build two independent image-interpretation pipelines.
