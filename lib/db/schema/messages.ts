@@ -17,12 +17,13 @@ import { clients } from "./clients";
  * decisions in later phases (see 02-02-SUMMARY.md); this table is the
  * message transcript itself.
  *
- * Written exclusively through `withSystemWebhookContext` (Phase 3, DEC-A),
- * never through `withResolvedIdentityContext`: the webhook legitimately has
- * to persist a message from an `unknown` sender, and an `unknown` identity
- * scope sets only `app.agency_id` — indistinguishable at the GUC level from
- * the SEG-12 read pattern 02-07-SUMMARY.md warns against. The `app.actor`
- * GUC makes the two distinguishable, so RLS can allow one and deny the other.
+ * Written exclusively through `withSystemWebhookContext` (Phase 3, DEC-A) for
+ * the WhatsApp channel, never through `withResolvedIdentityContext`: the
+ * webhook legitimately has to persist a message from an `unknown` sender, and
+ * an `unknown` identity scope sets only `app.agency_id` — indistinguishable
+ * at the GUC level from the SEG-12 read pattern 02-07-SUMMARY.md warns
+ * against. The `app.actor` GUC makes the two distinguishable, so RLS can
+ * allow one and deny the other.
  *
  * `resolved_identity_type` mirrors `ResolvedIdentity["type"]` in
  * lib/identity/types.ts exactly — 'team_member' | 'client_contact' |
@@ -33,6 +34,31 @@ import { clients } from "./clients";
  * NO CHECK constraint on purpose: Meta has added both statuses and pricing
  * categories mid-platform-life, and a CHECK here would turn a new upstream
  * value into a hard write failure inside a retry-until-success webhook loop.
+ *
+ * === Plan 04-10: the web channel ===
+ *
+ * `channel` gained a real CHECK ('whatsapp' | 'web') in migration 0017 — this
+ * table was future-proofed for exactly this from the start (see the old
+ * comment on the column itself, kept below). `fromPhoneNumber`/
+ * `toPhoneNumber` are nullable as of 0017 because a web-chat message has no
+ * phone numbers at all; the WhatsApp invariant that both must be present is
+ * preserved as `messages_whatsapp_phone_numbers_check` (a CHECK), not by
+ * column nullability — nullability alone cannot express "required only when
+ * channel = 'whatsapp'".
+ *
+ * LD-16 (locked decision): a web conversation is keyed by `(agency_id,
+ * channel = 'web', resolved_identity_id = the team member)` — one thread per
+ * team member, no thread management UI. `client_id` stays NULL on every web
+ * row in this phase: a team member talking to the agent is a team-internal
+ * conversation, and per LD-03 that history is visible to the whole team in
+ * the bitácora (see `messages_select_by_role`, migration 0015, which is
+ * channel-agnostic and needed no change for this).
+ *
+ * LD-02 (locked decision): the web chat is TEAM-ONLY in this phase,
+ * authenticated by the Clerk session through `withTenantContext` — never
+ * `withResolvedIdentityContext`. A client-facing web chat needs a
+ * magic-link/OTP mechanism that exists nowhere in this codebase and belongs
+ * to the client-portal phase (POR-01).
  */
 export const messages = pgTable(
   "messages",
@@ -44,11 +70,15 @@ export const messages = pgTable(
     // Nullable: team-internal 1:1 conversations (WA-03) have no client.
     clientId: uuid("client_id").references(() => clients.id, { onDelete: "cascade" }),
     direction: text("direction").notNull(),
-    // Future-proofs the web chat channel (SIS-01) without a schema change —
-    // this phase only ever writes 'whatsapp'.
+    // Future-proofs the web chat channel (SIS-01) — 0017 added the web
+    // channel itself, constrained below by `messages_channel_check`.
     channel: text("channel").notNull().default("whatsapp"),
-    fromPhoneNumber: text("from_phone_number").notNull(),
-    toPhoneNumber: text("to_phone_number").notNull(),
+    // Nullable as of 0017: a web-chat message has no phone numbers at all.
+    // The WhatsApp invariant (both must be present for that channel) is
+    // enforced by `messages_whatsapp_phone_numbers_check` below, not by
+    // column nullability.
+    fromPhoneNumber: text("from_phone_number"),
+    toPhoneNumber: text("to_phone_number"),
     // Meta's wamid — the idempotency key. Nullable because a send that fails
     // before Meta assigns an id has no value; the unique index below is
     // partial and only applies where it is present.
@@ -82,6 +112,11 @@ export const messages = pgTable(
     check(
       "messages_message_type_check",
       sql`${table.messageType} in ('text', 'image', 'audio', 'unsupported')`,
+    ),
+    check("messages_channel_check", sql`${table.channel} in ('whatsapp', 'web')`),
+    check(
+      "messages_whatsapp_phone_numbers_check",
+      sql`${table.channel} <> 'whatsapp' or (${table.fromPhoneNumber} is not null and ${table.toPhoneNumber} is not null)`,
     ),
   ],
 );
