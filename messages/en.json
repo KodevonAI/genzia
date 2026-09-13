@@ -18,7 +18,8 @@
     "noClients": "You don't have any clients yet.",
     "nav": {
       "branding": "Branding",
-      "team": "Team"
+      "team": "Team",
+      "chat": "Chat"
     }
   },
   "Team": {
@@ -66,6 +67,17 @@
       "clerkError": "We couldn't send the invitation. Please try again.",
       "invalidClientName": "Enter a valid client name."
     }
+  },
+  "Chat": {
+    "title": "Chat with the agent",
+    "subtitle": "Talk to the agent the way your team would — text, images, or voice notes.",
+    "placeholder": "Type a message...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "attach": "Attach an image or audio file",
+    "tooLarge": "That file is too large.",
+    "error": "We couldn't send your message. Please try again.",
+    "empty": "No messages yet. Say something to the agent."
   },
   "BrandSettings": {
     "title": "Agent branding",

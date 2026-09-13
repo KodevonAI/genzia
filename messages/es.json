@@ -18,7 +18,8 @@
     "noClients": "Todavía no tienes clientes.",
     "nav": {
       "branding": "Marca",
-      "team": "Equipo"
+      "team": "Equipo",
+      "chat": "Chat"
     }
   },
   "Team": {
@@ -66,6 +67,17 @@
       "clerkError": "No pudimos enviar la invitación. Intenta de nuevo.",
       "invalidClientName": "Ingresa un nombre de cliente válido."
     }
+  },
+  "Chat": {
+    "title": "Chat con el agente",
+    "subtitle": "Habla con el agente como lo haría tu equipo — texto, imágenes o notas de voz.",
+    "placeholder": "Escribe un mensaje...",
+    "send": "Enviar",
+    "thinking": "Pensando...",
+    "attach": "Adjuntar imagen o audio",
+    "tooLarge": "El archivo es demasiado grande.",
+    "error": "No pudimos enviar tu mensaje. Intenta de nuevo.",
+    "empty": "Todavía no hay mensajes. Escríbele algo al agente."
   },
   "BrandSettings": {
     "title": "Marca del agente",

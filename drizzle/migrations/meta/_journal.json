@@ -120,6 +120,13 @@
       "when": 1789065213118,
       "tag": "0016_approval_queue",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1789065213119,
+      "tag": "0017_web_chat_messages",
+      "breakpoints": true
     }
   ]
 }

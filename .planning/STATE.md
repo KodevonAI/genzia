@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Fase 4 en ejecución — waves 1-4/7 completas y verificadas, esperando continuar waves 5-7
-last_updated: "2026-09-13T21:00:00.000Z"
+last_updated: "2026-09-13T21:25:52.145Z"
 progress:
-  total_phases: 12
+  total_phases: 4
   completed_phases: 3
-  total_plans: 21
-  completed_plans: 21
-  percent: 25
+  total_plans: 32
+  completed_plans: 28
+  percent: 75
 ---
 
 # STATE.md — Genzia
@@ -81,13 +81,17 @@ Próximo paso: `/gsd-execute-phase 4 --wave 5` (o sin `--wave` para seguir
 todas las que falten) cuando se retome la sesión.
 
 **Wave 4 (`03-08`) bloqueada — requiere setup humano, no automatizable:**
+
 - `DATABASE_URL` real de Neon (aplicar migraciones 0012/0013 vía
   `npm run db:migrate`)
+
 - Credenciales Meta reales: `META_APP_SECRET`, `META_WEBHOOK_VERIFY_TOKEN`,
   `META_WHATSAPP_PHONE_NUMBER_ID`, `META_WHATSAPP_ACCESS_TOKEN`
+
 - Config en dashboard de Meta: registrar URL de callback + verify token,
   suscribir el app al field `messages`, confirmar la suscripción WABA→App,
   agregar números de prueba (tope 5)
+
 - Round-trip real: mandar un WhatsApp real al número de prueba y confirmar
   que llega el ack
 
@@ -351,20 +355,26 @@ Vercel. Dos causas reales encontradas, ninguna era el método de pago:
    *envío*, no la recepción).
 
 Pendiente explícito para retomar (reemplaza la lista de la sesión anterior):
+
 - [ ] Someter App Review formal (política de privacidad pública + video de
       envío real) para poder publicar la app — sin esto, NINGÚN webhook real
       llega, sin importar configuración
+
 - [ ] Agregar método de pago a la cuenta WhatsApp Business (bloquea el
       *envío*, aparte del punto anterior)
+
 - [ ] Una vez publicada la app: reintentar el round-trip real (Task 3 de
       `03-08-PLAN.md`)
+
 - [ ] Rotar credenciales expuestas: password `app_user` de Neon (se imprimió
       accidentalmente en este chat vía `grep -n` — ver incidente abajo),
       password Neon vieja, credenciales R2
+
 - [ ] Considerar revocar/rotar el nuevo `META_WHATSAPP_ACCESS_TOKEN`
       permanente: un wrapper de `grep` local mostró sin pedirlo un preview
       parcial del valor (prefijo, ~70 de 203 caracteres) al verificar que se
       escribió en `.env.local` — exposición parcial, no completa, pero real
+
 - [ ] Borrar deploy huérfano en `infokodevon-3644s-projects`
 
 **Incidente de seguridad de esta sesión**: un comando `grep -n` propio
@@ -416,6 +426,7 @@ password `app_user` nueva, y credenciales R2 (`R2_ACCESS_KEY_ID`,
 `R2_SECRET_ACCESS_KEY`).
 
 Pendiente explícito para retomar:
+
 - [ ] Agregar método de pago a la cuenta WhatsApp Business (usuario)
 - [ ] Reenviar plantilla `hello_world` al número de prueba, confirmar ack
 - [ ] Rotar credenciales expuestas (R2, Neon viejo, Neon `app_user` nuevo)
