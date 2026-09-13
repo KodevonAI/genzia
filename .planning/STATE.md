@@ -2,31 +2,43 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Waiting on human setup (payment method for WhatsApp send)
-last_updated: "2026-09-12T20:55:00.000Z"
+status: Fase 3 completa con gap documentado (App Review de Meta pendiente) — avanzando a Fase 4
+last_updated: "2026-09-13T18:30:00.000Z"
 progress:
-  total_phases: 3
-  completed_phases: 2
-  total_plans: 20
-  completed_plans: 19
-  percent: 95
+  total_phases: 12
+  completed_phases: 3
+  total_plans: 21
+  completed_plans: 21
+  percent: 25
 ---
 
 # STATE.md — Genzia
 
-**Última actualización**: 2026-09-09
+**Última actualización**: 2026-09-13
 
 ## Dónde vamos
 
-**Fase 3 (integración con WhatsApp/Meta) — 7/8 planes ejecutados (waves 1-3),
-esperando setup humano para wave 4.** `03-01` a `03-07` completos, mergeados
-a `main`, verificados (tsc limpio, `npx next build` limpio, 31/31 assertions
-en `verify-whatsapp-webhook-parsing.ts` + `verify-whatsapp-send.ts` sin
-regresión en cada wave). Pipeline completo entra/sale de WhatsApp existe en
-código: webhook `/api/webhooks/meta` (GET handshake + POST intake), función
-`find_agency_by_team_whatsapp_number` (SECURITY DEFINER, en migración
-0013, aún NO aplicada a Neon), ingesta idempotente con identidad de Fase 2,
-envío directo a Graph API v25.0, función Inngest `send-whatsapp-ack`.
+**Fase 3 (integración con WhatsApp/Meta) — COMPLETA, con un gap externo
+documentado.** Las 8 planes ejecutadas (`03-01` a `03-08`), 28/28 en
+`db:verify-whatsapp` contra Neon real, sin regresión Fase 1/2. Pipeline
+completo entra/sale de WhatsApp existe en código y está probado: webhook
+`/api/webhooks/meta` (GET handshake + POST intake), función
+`find_agency_by_team_whatsapp_number` (SECURITY DEFINER, aplicada a Neon),
+ingesta idempotente con identidad de Fase 2, envío directo a Graph API
+v25.0, función Inngest `send-whatsapp-ack`. Token de acceso permanente de
+System User generado y desplegado (reemplaza el temporal de 24h que había
+expirado).
+
+**Gap documentado, no bloqueante para seguir**: el round-trip real (un
+WhatsApp real produce un ack real) no se pudo confirmar — Meta no entrega
+NINGÚN webhook real a una app no publicada, sin importar que la config esté
+perfecta (verificado: URL, verify token y suscripción a `messages` correctos
+los tres). Requiere App Review formal de Meta (fuera del control de este
+repo). Ver `03-08-SUMMARY.md` para el diagnóstico completo. Por decisión
+explícita del usuario (2026-09-13), se avanza a Fase 4 con este gap abierto
+en vez de bloquear el resto del roadmap en un proceso externo de Meta.
+
+Próximo paso: `/gsd-plan-phase 4` (agente conversacional core).
 
 **Wave 4 (`03-08`) bloqueada — requiere setup humano, no automatizable:**
 - `DATABASE_URL` real de Neon (aplicar migraciones 0012/0013 vía
