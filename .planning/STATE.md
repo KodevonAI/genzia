@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Fase 3 completa con gap documentado (App Review de Meta pendiente) — avanzando a Fase 4
-last_updated: "2026-09-13T18:30:00.000Z"
+status: Fase 4 en ejecución — waves 1-4/7 completas y verificadas, esperando continuar waves 5-7
+last_updated: "2026-09-13T21:00:00.000Z"
 progress:
   total_phases: 12
   completed_phases: 3
@@ -38,7 +38,47 @@ repo). Ver `03-08-SUMMARY.md` para el diagnóstico completo. Por decisión
 explícita del usuario (2026-09-13), se avanza a Fase 4 con este gap abierto
 en vez de bloquear el resto del roadmap en un proceso externo de Meta.
 
-Próximo paso: `/gsd-plan-phase 4` (agente conversacional core).
+**Fase 4 (agente conversacional core) — EN EJECUCIÓN, waves 1-4 de 7 completas
+y verificadas (tsc limpio, eslint limpio, suites offline sin regresión en
+cada wave).** 12 planes en 7 waves, planeados y verificados por plan-checker
+(2 blockers + 4 warnings encontrados y corregidos antes de ejecutar — ver
+`04-VALIDATION.md` y el `04-RESEARCH.md` actualizado).
+
+Completado: `04-01` (fix RLS real: `audit_log` sin role-branching y
+`messages_select_by_role` sin chequeo de `client_assignments` — ambos huecos
+reales encontrados en research, no hipotéticos, migraciones 0014/0015),
+`04-02` (cliente Anthropic vía passthrough de OpenRouter con fallback directo,
+`buildSystemPrompt` con SEG-09 inyectado sin condición), `04-03` (tabla
+`approval_queue`, migración 0016, columnas `status`/`approval_id` en
+`audit_log`), `04-04` (`buildAgentContext`/`buildAgentContextInScope` — único
+lector de `messages` para el agente, historial tope 40, cero filtro de
+cliente en aplicación), `04-05` (descarga autenticada de media de Meta en dos
+pasos, transcripción Deepgram, `interpretMedia` compartido), `04-06`
+(registro de herramientas + interceptor de riesgo SEG-10: `classifyAndExecute`,
+`writeAuditLog`, 2 tools ejecutables), `04-07` (`runTurn` acotado +
+`process-agent-turn` de Inngest reemplazando el ack fijo de Fase 3), `04-08`
+(suite `verify-agent.ts`, 31 assertions, real-Neon, aún no corrida contra
+Neon real — eso es 04-12).
+
+Pendiente: waves 5-7 (`04-09` aprobar/rechazar acciones, `04-10` chat web,
+`04-11` bitácora visible, `04-12` [BLOCKING] aplicar migraciones 0014-0017 a
+Neon real + correr las 6 suites + 2 checkpoints humanos con conversación real).
+
+**Bloqueante conocido para 04-12 y para cualquier llamada real al LLM**:
+`OPENROUTER_API_KEY` (y `ANTHROPIC_API_KEY`/`DEEPGRAM_API_KEY`) no están
+provisionadas — ni siquiera estaban en `.env.example` antes de esta fase
+(ya agregadas por `04-02`, pero sin valor real). Sin al menos
+`OPENROUTER_API_KEY` ningún wave posterior puede probarse con una llamada
+real al LLM; el código en sí no depende de tenerla para tipar/lintar.
+
+**Un plan (`04-04`) se recuperó de un cuelgue real** (subagente sin progreso
+600s tras escribir `build-context.ts` pero antes de comitear/verificar) —
+el contenido ya escrito era correcto, se verificó contra los acceptance
+criteria manualmente y se comiteó sin reescribir nada. Documentado en su
+propio `04-04-SUMMARY.md`.
+
+Próximo paso: `/gsd-execute-phase 4 --wave 5` (o sin `--wave` para seguir
+todas las que falten) cuando se retome la sesión.
 
 **Wave 4 (`03-08`) bloqueada — requiere setup humano, no automatizable:**
 - `DATABASE_URL` real de Neon (aplicar migraciones 0012/0013 vía
