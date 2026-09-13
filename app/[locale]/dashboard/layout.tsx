@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 
 /**
  * The shared authenticated shell every dashboard page mounts into.
+ * "Chat" (Plan 04-10, WA-05's web chat surface) links to /dashboard/chat.
  * "Branding" (Plan 03, CTA-02 settings) links to /dashboard/settings/brand.
  * "Team" (Plan 04, CTA-04/05/06 roster + assignments) links to
  * /dashboard/team — the literal path segment, NOT a `(dashboard)` route
@@ -23,6 +24,9 @@ export default async function DashboardLayout({
           Genzia
         </Link>
         <nav className="flex items-center gap-6 text-sm">
+          <Link href="/dashboard/chat" className="hover:underline">
+            {t("nav.chat")}
+          </Link>
           <Link href="/dashboard/settings/brand" className="hover:underline">
             {t("nav.branding")}
           </Link>
