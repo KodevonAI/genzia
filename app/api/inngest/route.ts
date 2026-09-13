@@ -1,6 +1,6 @@
 import { serve } from "inngest/next";
 import { inngest } from "@/inngest/client";
-import { sendWhatsAppAck } from "@/inngest/functions/send-whatsapp-ack";
+import { processAgentTurn } from "@/inngest/functions/process-agent-turn";
 
 /**
  * Inngest's own HTTP endpoint. Inngest discovers registered functions here
@@ -21,5 +21,5 @@ export const runtime = "nodejs";
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [sendWhatsAppAck],
+  functions: [processAgentTurn],
 });

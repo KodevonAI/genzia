@@ -5,7 +5,10 @@ import {
   verifyMetaWebhookSignature,
 } from "@/lib/webhooks/verify-meta-signature";
 import { ingestInboundMessage } from "@/lib/whatsapp/ingest-inbound-message";
-import { parseMetaWebhookPayload } from "@/lib/whatsapp/parse-webhook-payload";
+import {
+  parseMetaWebhookPayload,
+  toMessageType,
+} from "@/lib/whatsapp/parse-webhook-payload";
 import { recordDeliveryStatus } from "@/lib/whatsapp/record-delivery-status";
 
 // Signature verification needs Node's crypto module, not the Edge runtime —
@@ -47,6 +50,13 @@ function identityRowId(identity: ResolvedIdentity): string | null {
 
 function identityClientId(identity: ResolvedIdentity): string | null {
   return identity.type === "client_contact" ? identity.clientId : null;
+}
+
+/** 'admin' | 'member' for a team_member sender, null otherwise — carried on
+ * the event so process-agent-turn can rebuild the exact ResolvedIdentity
+ * without re-reading team_members inside its system-webhook scope. */
+function identityRole(identity: ResolvedIdentity): "admin" | "member" | null {
+  return identity.type === "team_member" ? identity.role : null;
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -109,6 +119,10 @@ export async function POST(request: Request): Promise<Response> {
               resolvedIdentityType: result.identity.type,
               resolvedIdentityId: identityRowId(result.identity),
               clientId: identityClientId(result.identity),
+              messageType: toMessageType(message),
+              resolvedIdentityRole: identityRole(result.identity),
+              mediaId: message.kind === "media" ? message.mediaId : null,
+              mediaMimeType: message.kind === "media" ? message.mimeType : null,
             },
           });
         }

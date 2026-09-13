@@ -51,7 +51,40 @@ export type WhatsAppMessageReceivedData = {
   resolvedIdentityId: string | null;
   /** clients.id for a client_contact sender; null otherwise. */
   clientId: string | null;
+  /** Mirrors messages.message_type — 'text' | 'image' | 'audio' | 'unsupported'. */
+  messageType: "text" | "image" | "audio" | "unsupported";
+  /** 'admin' | 'member' for a team_member sender, null otherwise. Required so
+   *  process-agent-turn can rebuild the exact ResolvedIdentity — the role
+   *  decides which RLS branch opens, and re-reading team_members inside a
+   *  webhook scope is forbidden by withSystemWebhookContext's INVARIANT. */
+  resolvedIdentityRole: "admin" | "member" | null;
+  /** Meta media id for an image/audio message; null otherwise. Carried on the
+   *  event so Phase 4's turn can download the bytes without a second
+   *  RLS-scoped read of the row it was just told about. */
+  mediaId: string | null;
+  mediaMimeType: string | null;
 };
+
+/**
+ * Phase 4 (plan 04-09): a human decision on a queued `approval_queue` row.
+ * Defined here — not in a new module 04-09 would otherwise have to open
+ * this same file for — because a second Inngest event type belongs next to
+ * the first one, not scattered across files by which plan introduced it.
+ *
+ * LD-09: high-risk actions are replayed by a separate function listening on
+ * this event, never by a suspended turn waiting on `step.waitForEvent` — a
+ * turn's Inngest run does not stay alive across a human's approval delay.
+ */
+export type AgentApprovalDecidedData = {
+  agencyId: string;
+  approvalId: string;
+  decision: "approved" | "rejected";
+  decidedByTeamMemberId: string;
+};
+
+export const agentApprovalDecidedEvent = eventType("agent/approval.decided", {
+  schema: staticSchema<AgentApprovalDecidedData>(),
+});
 
 /**
  * Typed event definition for `whatsapp/message.received` — the binding
