@@ -1,5 +1,6 @@
 import { serve } from "inngest/next";
 import { inngest } from "@/inngest/client";
+import { executeApprovedAction } from "@/inngest/functions/execute-approved-action";
 import { processAgentTurn } from "@/inngest/functions/process-agent-turn";
 
 /**
@@ -21,5 +22,5 @@ export const runtime = "nodejs";
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [processAgentTurn],
+  functions: [processAgentTurn, executeApprovedAction],
 });
