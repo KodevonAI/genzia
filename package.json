@@ -13,12 +13,18 @@
     "db:verify-identity": "tsx scripts/verify-identity-resolution.ts",
     "verify:whatsapp-parsing": "tsx scripts/verify-whatsapp-webhook-parsing.ts",
     "verify:whatsapp-send": "tsx scripts/verify-whatsapp-send.ts",
-    "db:verify-whatsapp": "tsx scripts/verify-whatsapp-webhook.ts"
+    "db:verify-whatsapp": "tsx scripts/verify-whatsapp-webhook.ts",
+    "verify:agent-prompt": "tsx scripts/verify-agent-prompt.ts",
+    "verify:agent-media": "tsx scripts/verify-agent-media.ts",
+    "db:verify-agent-rls": "tsx scripts/verify-agent-rls.ts",
+    "db:verify-agent": "tsx scripts/verify-agent.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.125.0",
     "@aws-sdk/client-s3": "^3.1127.0",
     "@aws-sdk/s3-request-presigner": "^3.1127.0",
     "@clerk/nextjs": "^7.9.1",
+    "@deepgram/sdk": "^5.10.1",
     "@neondatabase/serverless": "^1.1.0",
     "drizzle-orm": "^0.45.2",
     "inngest": "^4.20.0",
