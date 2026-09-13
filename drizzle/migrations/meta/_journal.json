@@ -99,6 +99,13 @@
       "when": 1789065213115,
       "tag": "0013_whatsapp_messages_rls",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1789065213116,
+      "tag": "0014_audit_log_role_rls",
+      "breakpoints": true
     }
   ]
 }
