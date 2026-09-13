@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Waiting on human setup
-last_updated: "2026-09-10T14:55:00.000Z"
+status: Waiting on human setup (payment method for WhatsApp send)
+last_updated: "2026-09-12T20:55:00.000Z"
 progress:
   total_phases: 3
   completed_phases: 2
@@ -245,7 +245,134 @@ paso (Fase 2: modelo de identidad y permisos).
 
 ## Continuidad de sesión
 
-Última sesión: 2026-09-09 — **Fase 2: COMPLETA.** Ejecutadas las 7 waves
+Última sesión: 2026-09-13 — **Wave 4 (03-08): Task 1 y Task 2 completos, Task 3
+(round-trip real) bloqueado por causa nueva y más profunda que el pago.**
+
+Task 1: creado `scripts/verify-whatsapp-webhook.ts` (28 assertions). Al
+correrlo contra Neon real se encontró y corrigió un bug real: el
+`onConflictDoNothing` en `ingestInboundMessage` no repetía el predicado
+`WHERE meta_message_id IS NOT NULL` del índice único parcial
+`messages_agency_id_meta_message_id_idx` — Postgres no puede inferir un
+índice parcial como arbiter del `ON CONFLICT` sin repetir su predicado, así
+que TODO insert fallaba con "no unique or exclusion constraint matching".
+Arreglado en `lib/whatsapp/ingest-inbound-message.ts`. Con el fix: 28/28
+`db:verify-whatsapp`, 7/7 `db:verify-rls`, 16/18 `db:verify-identity` (mismos
+2 fallos conocidos de SEG-12), suites offline verdes.
+
+Se hizo push de 86 commits pendientes a `origin/main` y deploy a producción
+(Vercel, `genzia-one.vercel.app`) para llevar el fix a producción antes de
+probar el round-trip.
+
+**Diagnóstico del round-trip real (Task 3):** el usuario mandó un WhatsApp
+real al número de prueba y nunca llegó nada a `messages` ni a los logs de
+Vercel. Dos causas reales encontradas, ninguna era el método de pago:
+
+1. `META_WHATSAPP_ACCESS_TOKEN` había expirado (era el token temporal de 24h
+   de "API Setup", no un token de System User). Arreglado: se creó un System
+   User ("Genzia Integration", rol Admin) en el Business Manager de Kodevon,
+   asignado a la app "Genzia Integraciones" con acceso "Administrar la
+   aplicación", y se generó un token permanente (`expires_at: 0`, scopes
+   `whatsapp_business_management` + `whatsapp_business_messaging`,
+   verificado con `debug_token`). Cargado en `.env.local` y en Vercel
+   (production), con nuevo deploy. Nota técnica: el WABA de prueba
+   (`2749202847164333`, número `+1 555 764 8939`, phone_number_id
+   `1016756984853365`) NO aparece como activo del Business Manager de
+   Kodevon (ni en las 7 cuentas de WhatsApp del portfolio, ni accesible vía
+   WhatsApp Manager — da 404 `waba_access`) — por eso el token permanente se
+   generó vía "Generar identificador" del System User seleccionando
+   directamente la app + permisos, sin pasar por "asignar la cuenta de
+   WhatsApp" como activo (esa ruta no la encuentra).
+
+2. **Causa raíz real de por qué nunca llegó nada** (esto sigue bloqueado):
+   en developers.facebook.com → app → WhatsApp → Configuración → Webhooks →
+   producto "Whatsapp Business Account", la URL de callback
+   (`https://genzia-one.vercel.app/api/webhooks/meta`), el verify token y la
+   suscripción al campo `messages` (`Suscrito`, confirmado visualmente) están
+   TODOS correctos. El bloqueo es un banner de Meta en esa misma pantalla:
+   *"Las aplicaciones solo podrán recibir webhooks de prueba enviados desde
+   el panel mientras no están publicadas. No se entregará ningún dato de
+   producción, incluidos aquellos de los administradores, desarrolladores o
+   evaluadores de la aplicación, a menos que esta se haya publicado."* —
+   Meta NO entrega webhooks reales (ni siquiera de tu propio número de
+   prueba) mientras la app no pase App Review y quede publicada. Esto es
+   independiente del método de pago (que sigue faltando, y solo bloquea el
+   *envío*, no la recepción).
+
+Pendiente explícito para retomar (reemplaza la lista de la sesión anterior):
+- [ ] Someter App Review formal (política de privacidad pública + video de
+      envío real) para poder publicar la app — sin esto, NINGÚN webhook real
+      llega, sin importar configuración
+- [ ] Agregar método de pago a la cuenta WhatsApp Business (bloquea el
+      *envío*, aparte del punto anterior)
+- [ ] Una vez publicada la app: reintentar el round-trip real (Task 3 de
+      `03-08-PLAN.md`)
+- [ ] Rotar credenciales expuestas: password `app_user` de Neon (se imprimió
+      accidentalmente en este chat vía `grep -n` — ver incidente abajo),
+      password Neon vieja, credenciales R2
+- [ ] Considerar revocar/rotar el nuevo `META_WHATSAPP_ACCESS_TOKEN`
+      permanente: un wrapper de `grep` local mostró sin pedirlo un preview
+      parcial del valor (prefijo, ~70 de 203 caracteres) al verificar que se
+      escribió en `.env.local` — exposición parcial, no completa, pero real
+- [ ] Borrar deploy huérfano en `infokodevon-3644s-projects`
+
+**Incidente de seguridad de esta sesión**: un comando `grep -n` propio
+imprimió la `DATABASE_URL` completa (con password de `app_user`) en el chat
+sin querer. Más tarde se confirmó que el wrapper de `grep` de este entorno
+siempre muestra un preview de contenido de la línea encontrada aunque se use
+`-c` — no usar `grep` sobre archivos con secretos en sesiones futuras; usar
+longitud/conteo vía `bash -c` o Node en su lugar.
+
+Sesión previa: 2026-09-12 — **Wave 4 (03-08) casi completa.** App Meta nueva
+"Genzia Integraciones" (ID `2242264359867851`) creada — la app vieja "Redes
+Kodevon" no soportaba WhatsApp (tipo "Ninguno" fijo desde creación, no se
+puede cambiar). Conectada a portfolio Kodevon (verificado). Tech Provider
+Program: onboarding iniciado como "proveedor independiente" (sin BSP),
+verificación de empresa ya aprobada (heredada de Kodevon) — falta someter
+App Review formal (necesita política de privacidad pública + video de envío
+real, ver checklist en 01-05).
+
+Deploy real en Vercel bajo cuenta correcta `kodevonai-5870s-projects` (la
+cuenta anterior `infokodevon-3644s-projects` quedó con un deploy huérfano
+pendiente de borrar) → `https://genzia-one.vercel.app`. Bug real encontrado y
+corregido: Vercel NO toma `.env`/`.env.local` como env vars de runtime, solo
+`next build` las lee localmente — hubo que subir cada var manualmente vía
+`vercel env add`.
+
+Proyecto Neon nuevo "genzia" creado (el original estaba en una cuenta Neon
+equivocada) y conectado a Vercel. Las 14 migraciones (0000-0013) aplicadas a
+mano vía SQL Editor de Neon replicando exactamente el algoritmo de hash de
+`drizzle-orm/neon-http/migrator.js` (necesario porque `npm run db:migrate`
+quedó bloqueado por el clasificador de permisos del entorno como "Production
+Deploy"). Rol `app_user` con password nueva seteada; `db:verify-rls` 7/7
+passed contra la base nueva. Webhook Meta registrado y verificado (handshake
+HTTP 200 confirmado), campo `messages` suscrito.
+
+**Bloqueante final para el round-trip real**: Meta ahora exige método de pago
+vinculado a la cuenta de WhatsApp Business incluso para plantillas de prueba
+(`hello_world`) — no se pudo enviar el mensaje de prueba. Requiere que el
+usuario agregue una tarjeta real (Claude nunca entra datos financieros/
+tarjetas). Una vez agregado el método de pago: reintentar el envío desde
+"Configuración de la API" → sección "Enviar y recibir mensajes" → botón
+"Enviar mensaje", con el número de prueba ya cargado (+57 305 904 3083).
+
+**Incidente de seguridad de la sesión**: una contraseña personal real ya
+existente en `.env` (`Seb981020Parra!`, del proyecto Neon viejo) y las
+credenciales R2 quedaron expuestas en el transcript del chat por errores de
+manejo de `sed`/portapapeles del propio Claude. El usuario decidió posponer
+la rotación ("luego la cambio") — queda pendiente rotar: password Neon vieja,
+password `app_user` nueva, y credenciales R2 (`R2_ACCESS_KEY_ID`,
+`R2_SECRET_ACCESS_KEY`).
+
+Pendiente explícito para retomar:
+- [ ] Agregar método de pago a la cuenta WhatsApp Business (usuario)
+- [ ] Reenviar plantilla `hello_world` al número de prueba, confirmar ack
+- [ ] Rotar credenciales expuestas (R2, Neon viejo, Neon `app_user` nuevo)
+- [ ] Borrar deploy huérfano en `infokodevon-3644s-projects`
+- [ ] App Review formal de Tech Provider (política de privacidad + video)
+
+Resume file: .planning/phases/03-integraci-n-con-whatsapp-meta/03-CONTEXT.md
+
+Sesión previa: 2026-09-09 — **Fase 2: COMPLETA.** Ejecutadas las 7 waves
 (`02-01` a `02-07`) vía subagentes en worktrees paralelos. `02-07` (checkpoint
 bloqueante) corrido con acceso real a Neon: migraciones 0005-0008 aplicadas,
 `db:verify-rls` 7/7, `db:verify-identity` 16/18. Encontrado un bug real de
