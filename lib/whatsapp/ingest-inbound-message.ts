@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { messages } from "@/lib/db/schema/messages";
 import { resolveIdentity } from "@/lib/identity/resolve-identity";
 import type { ResolvedIdentity } from "@/lib/identity/types";
@@ -92,6 +93,12 @@ export async function ingestInboundMessage(
       })
       .onConflictDoNothing({
         target: [messages.agencyId, messages.metaMessageId],
+        // The unique index is partial (`where meta_message_id is not null`);
+        // Postgres can only infer it as the ON CONFLICT arbiter when the
+        // predicate is repeated here — omitting it makes every insert fail
+        // with "no unique or exclusion constraint matching the ON CONFLICT
+        // specification", not silently fall back to an unfiltered match.
+        where: sql`${messages.metaMessageId} is not null`,
       })
       .returning({ id: messages.id });
     return rows[0];
