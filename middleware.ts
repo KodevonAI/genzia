@@ -5,13 +5,24 @@ import { routing } from "@/i18n/routing";
 const handleI18nRouting = createMiddleware(routing);
 
 // Public (unauthenticated) routes: the marketing homepage, sign-up (Plan
-// 02), and the Clerk webhook (verified via its own Svix signature, not a
-// user session — see app/api/webhooks/clerk/route.ts). Everything else —
-// /[locale]/onboarding, /[locale]/dashboard/**, and every OTHER /api/**
-// route (e.g. /api/uploads/brand-logo, Plan 03) — is protected by default
-// via this explicit allowlist rather than a matcher naming those paths
-// directly, so a future page or API route is protected automatically with
-// no middleware change required.
+// 02), the Clerk/Meta webhooks (each verifies its own signature, not a user
+// session — see app/api/webhooks/clerk/route.ts), and Inngest's own HTTP
+// endpoint (app/api/inngest/route.ts). Inngest's dev server and its
+// production runner call back into that route from outside any Clerk
+// session — `auth.protect()` rejected every sync and step-execution
+// callback with no visible error until plan 04-12 found it live: the Inngest
+// dashboard showed "Error: url_not_found" for a route that plainly exists,
+// and an approved high-risk action sat at `approval_queue.status =
+// 'approved'` forever because `execute-approved-action.ts` was never
+// invoked. Same posture as the Clerk/Meta webhooks — the Inngest SDK
+// verifies its own signing key inside serve() (this file's own header
+// comment already said so), so Clerk's session gate was never the right
+// check for this path. Everything else — /[locale]/onboarding,
+// /[locale]/dashboard/**, and every OTHER /api/** route (e.g.
+// /api/uploads/brand-logo, Plan 03) — is protected by default via this
+// explicit allowlist rather than a matcher naming those paths directly, so
+// a future page or API route is protected automatically with no middleware
+// change required.
 //
 // Note on route groups: app/[locale]/dashboard/** is a LITERAL path
 // segment, not a `(dashboard)` route group. Plan 02 originally tried the
@@ -28,6 +39,7 @@ const isPublicRoute = createRouteMatcher([
   "/:locale/sign-in(.*)",
   "/:locale/sign-up(.*)",
   "/api/webhooks(.*)",
+  "/api/inngest(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

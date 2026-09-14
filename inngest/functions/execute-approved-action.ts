@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { inngest } from "@/inngest/client";
 import { writeAuditLog } from "@/lib/agent/audit";
 import { executeTool } from "@/lib/agent/tools";
@@ -97,15 +97,30 @@ export const executeApprovedAction = inngest.createFunction(
     // admin would silently widen `deliverToClient`'s RLS-based scope check
     // for this replay.
     const approver = await step.run("resolve-approver-role", async () => {
-      const [member] = await db
-        .select({ role: teamMembers.role })
-        .from(teamMembers)
-        .where(
-          and(
-            eq(teamMembers.id, decidedByTeamMemberId),
-            eq(teamMembers.agencyId, agencyId),
+      // `team_members_tenant_isolation` (0001) is FORCE ROW LEVEL SECURITY:
+      // an unscoped `db` call sets no `app.agency_id`, so the policy's
+      // `agency_id = current_setting('app.agency_id', true)` clause compares
+      // against NULL and every row is filtered out — found live in plan
+      // 04-12, where this step threw "no se encontró team_member" for a
+      // team_member_id that plainly exists. `db.batch` pairs the
+      // transaction-local `set_config` with the read, same mechanism
+      // lib/agencies/create-agency.ts uses for its own unscoped write. The
+      // policy's role clause (`role <> 'client_contact'`) already passes
+      // with no `app.role` set at all — COALESCE(..., '') <> 'client_contact'
+      // — so only `app.agency_id` needs setting here.
+      const results = await db.batch([
+        db.execute(sql`SELECT set_config('app.agency_id', ${agencyId}, true)`),
+        db
+          .select({ role: teamMembers.role })
+          .from(teamMembers)
+          .where(
+            and(
+              eq(teamMembers.id, decidedByTeamMemberId),
+              eq(teamMembers.agencyId, agencyId),
+            ),
           ),
-        );
+      ]);
+      const [member] = results[1];
       if (!member) {
         throw new Error(
           `No se encontró team_member ${decidedByTeamMemberId} en la agencia ${agencyId}.`,
