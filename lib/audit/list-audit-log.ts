@@ -100,3 +100,35 @@ export async function listRecentConversationMessages(limit = 100): Promise<Conve
       .limit(limit),
   );
 }
+
+/**
+ * The client ficha's own conversation-history reader (Phase 5 CRM):
+ * `listRecentConversationMessages`'s exact shape, with exactly one added
+ * predicate (`clientId`), still through `withTenantContext`, still no
+ * `app.role` branch of its own — same LD-17 posture as every other reader
+ * in this file. `clientName` is kept in the projection for shape
+ * consistency with `ConversationEntry`; it will always equal the ficha's
+ * own client here, which is harmless.
+ */
+export async function listConversationMessagesForClient(
+  clientId: string,
+  limit = 100,
+): Promise<ConversationEntry[]> {
+  return withTenantContext((tx) =>
+    tx
+      .select({
+        id: messages.id,
+        createdAt: messages.createdAt,
+        direction: messages.direction,
+        channel: messages.channel,
+        messageType: messages.messageType,
+        textBody: messages.textBody,
+        clientName: clients.name,
+      })
+      .from(messages)
+      .leftJoin(clients, eq(messages.clientId, clients.id))
+      .where(eq(messages.clientId, clientId))
+      .orderBy(desc(messages.createdAt))
+      .limit(limit),
+  );
+}

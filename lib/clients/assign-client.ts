@@ -7,6 +7,7 @@ import { clientAssignments } from "@/lib/db/schema/client-assignments";
 import { clients } from "@/lib/db/schema/clients";
 import { NoTenantContextError, withTenantContext } from "@/lib/tenant/with-tenant-context";
 import { NotAdminError, assertCallerIsAdmin } from "@/lib/team/current-member";
+import { insertAssignment } from "@/lib/clients/insert-assignment";
 
 export type AdminActionResult = { ok: true } | { ok: false; error: "not_admin" };
 
@@ -41,12 +42,7 @@ export async function assignClient(
   try {
     await withTenantContext(async (tx) => {
       await assertCallerIsAdmin(tx, userId);
-      await tx
-        .insert(clientAssignments)
-        .values({ agencyId: orgId, clientId, teamMemberId })
-        .onConflictDoNothing({
-          target: [clientAssignments.clientId, clientAssignments.teamMemberId],
-        });
+      await insertAssignment(tx, orgId, clientId, teamMemberId);
     });
     return { ok: true };
   } catch (err) {
