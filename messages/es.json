@@ -19,7 +19,8 @@
     "nav": {
       "branding": "Marca",
       "team": "Equipo",
-      "chat": "Chat"
+      "chat": "Chat",
+      "bitacora": "Bitácora"
     }
   },
   "Team": {
@@ -78,6 +79,35 @@
     "tooLarge": "El archivo es demasiado grande.",
     "error": "No pudimos enviar tu mensaje. Intenta de nuevo.",
     "empty": "Todavía no hay mensajes. Escríbele algo al agente."
+  },
+  "Bitacora": {
+    "title": "Bitácora",
+    "subtitle": "Todo lo que el agente hizo, propuso y conversó, en un solo lugar.",
+    "pendingHeading": "Pendientes de aprobación",
+    "pendingEmpty": "No hay acciones esperando aprobación.",
+    "auditHeading": "Bitácora de acciones",
+    "auditEmpty": "Todavía no hay acciones registradas.",
+    "conversationHeading": "Historial de conversación",
+    "conversationEmpty": "Todavía no hay mensajes registrados.",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "deciding": "Guardando...",
+    "team": "Equipo",
+    "risk": {
+      "low": "Bajo riesgo",
+      "high": "Alto riesgo"
+    },
+    "status": {
+      "executed": "Ejecutada",
+      "pending_approval": "Esperando aprobación",
+      "approved_executed": "Aprobada y ejecutada",
+      "rejected": "Rechazada",
+      "failed": "Falló"
+    },
+    "direction": {
+      "inbound": "Entrante",
+      "outbound": "Saliente"
+    }
   },
   "BrandSettings": {
     "title": "Marca del agente",

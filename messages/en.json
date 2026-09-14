@@ -19,7 +19,8 @@
     "nav": {
       "branding": "Branding",
       "team": "Team",
-      "chat": "Chat"
+      "chat": "Chat",
+      "bitacora": "Activity log"
     }
   },
   "Team": {
@@ -78,6 +79,35 @@
     "tooLarge": "That file is too large.",
     "error": "We couldn't send your message. Please try again.",
     "empty": "No messages yet. Say something to the agent."
+  },
+  "Bitacora": {
+    "title": "Activity log",
+    "subtitle": "Everything the agent has done, proposed and said, in one place.",
+    "pendingHeading": "Pending approvals",
+    "pendingEmpty": "No actions waiting for approval.",
+    "auditHeading": "Action log",
+    "auditEmpty": "No actions have been logged yet.",
+    "conversationHeading": "Conversation history",
+    "conversationEmpty": "No messages logged yet.",
+    "approve": "Approve",
+    "reject": "Reject",
+    "deciding": "Saving...",
+    "team": "Team",
+    "risk": {
+      "low": "Low risk",
+      "high": "High risk"
+    },
+    "status": {
+      "executed": "Executed",
+      "pending_approval": "Awaiting approval",
+      "approved_executed": "Approved and executed",
+      "rejected": "Rejected",
+      "failed": "Failed"
+    },
+    "direction": {
+      "inbound": "Inbound",
+      "outbound": "Outbound"
+    }
   },
   "BrandSettings": {
     "title": "Agent branding",
