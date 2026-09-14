@@ -1,7 +1,8 @@
 ---
 phase: 5
 slug: gestion-clientes-crm-conversacional
-status: draft
+status: approved
+reviewed_at: 2026-09-14
 shadcn_initialized: false
 preset: none
 created: 2026-09-14
@@ -116,6 +117,10 @@ Accent reserved for: "Nuevo cliente" button (list page), "Crear cliente" / "Guar
 cambios" submit button (form). Never for badges, links, icons, or the industry
 dropdown pill.
 
+**Primary visual anchor — list page**: the "Nuevo cliente" button is the one accent-filled
+element on `/dashboard/clients` — it is the page's focal point by construction, since it is
+the only ink-accent surface among an otherwise all-zinc/white canvas.
+
 ---
 
 ## Copywriting Contract
@@ -133,7 +138,7 @@ sentence case — no ALL-CAPS labels).
 | Search placeholder | "Buscar por nombre, industria o notas" | "Search by name, industry, or notes" |
 | Empty state — no clients at all | "Todavía no tienes clientes." / "Da de alta el primero con el formulario o dictándoselo al agente." | "You don't have any clients yet." / "Add your first one with the form, or by telling the agent." |
 | Empty state — search with no matches | "Sin resultados para “{query}”." / "Prueba con otro nombre, industria o palabra de las notas." | "No results for “{query}”." / "Try a different name, industry, or word from the notes." |
-| Empty state — conversation history (ficha) | "Todavía no hay conversación con este cliente." (reuses `Bitacora.conversationEmpty` wording) | "There's no conversation with this client yet." |
+| Empty state — conversation history (ficha) | "Todavía no hay mensajes registrados." (reuses `Bitacora.conversationEmpty` string verbatim) | "No messages logged yet." (reuses `Bitacora.conversationEmpty` string verbatim) |
 | Empty state — pagos placeholder (ficha) | "Todavía no hay pagos que mostrar aquí." | "There are no payments to show here yet." |
 | Empty state — próximas citas placeholder (ficha) | "Todavía no hay citas agendadas." | "There are no appointments scheduled yet." |
 | Validation error — missing required contact | "El nombre es obligatorio. Agrega también un teléfono o un correo." | "Name is required. Add a phone number or email too." |
@@ -260,11 +265,11 @@ section rhythm):
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-09-14 (2 non-blocking recommendations applied: fixed `conversationEmpty` copy quote to match the real stored string; added explicit list-page focal-point sentence)
