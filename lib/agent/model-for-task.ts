@@ -7,7 +7,7 @@
  * phase's turn loop (lib/agent/run-turn.ts) uses `main` exclusively.
  */
 export const MODEL_FOR_TASK = {
-  main: "anthropic/claude-sonnet-5",
+  main: "deepseek/deepseek-v4.1-flash",
   cheap: "anthropic/claude-haiku-4-5",
 } as const;
 
