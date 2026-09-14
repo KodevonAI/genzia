@@ -102,6 +102,21 @@ Fase 5 sin anotar nada adicional.
 
 ---
 
+## Preguntas abiertas de RESEARCH.md (segunda sesión de discuss-phase)
+
+**Fecha:** 2026-09-14 (post-research)
+
+| Question | Selected |
+|---|---|
+| ¿`list_clients`/`get_client` necesitan fila en `agent_action_catalog`? | Sí, riesgo bajo — mismo patrón que create/update |
+| ¿Qué hacer con el flujo viejo de alta rápida en la página Team? | Eliminar, redirigir a `/dashboard/clients/new` |
+
+**Notes:** Ambas preguntas las planteó `05-RESEARCH.md` (Open Questions 1 y 2),
+no la primera sesión de discuss-phase. El usuario aceptó la recomendación del
+researcher en ambos casos. Ver D-17/D-18 en CONTEXT.md.
+
+---
+
 ## Claude's Discretion
 
 - Set inicial exacto de categorías del dropdown de industria.

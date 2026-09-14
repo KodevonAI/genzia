@@ -104,6 +104,19 @@ archivado de clientes, portal del cliente final (Fase 9).
 - Diseño visual/layout exacto de la ficha (placeholders, disposición de
   secciones) — decisión de researcher/planner, no del usuario.
 
+### Preguntas abiertas de RESEARCH.md (resueltas tras research)
+- **D-17:** `list_clients` y `get_client` (tools de solo lectura) también se
+  siembran en `agent_action_catalog` con riesgo **bajo**, mismo patrón que
+  `create_client`/`update_client` — consistente con que TODO tool pasa por
+  `classifyAndExecute`. Un fast-path que exima a las lecturas del gate de
+  catálogo queda fuera de esta fase (posible refactor futuro).
+- **D-18:** El flujo viejo de alta rápida de cliente en la página Team
+  (`assign-clients-form.tsx` → `addClient()`, solo nombre, sin validar
+  phone/email) se **elimina**, redirigiendo esa acción a
+  `/dashboard/clients/new`. El propio comentario del stub en `clients.ts`
+  ya asumía que Fase 5 reemplaza este flujo; dejarlo vivo crearía dos
+  caminos de creación con validación distinta (diverge de D-02).
+
 </decisions>
 
 <canonical_refs>
