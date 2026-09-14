@@ -136,12 +136,12 @@ solo-equipo funcionando.
 
 **Requirements:** CLI-01, CLI-02, CLI-03, CLI-04, CLI-05, SEG-08
 
-**Plans:** 2/10 plans executed
+**Plans:** 3/10 plans executed
 
 Plans:
 - [x] 05-01-PLAN.md — Migraciones 0020/0021/0022: campos CRM en clients, split de la política de escritura RLS admin-only, semilla del catálogo para los 4 tools nuevos (CLI-01, CLI-03, CLI-05, SEG-08)
 - [x] 05-02-PLAN.md — risk-interceptor.ts: clientId condicional por tool + registro de los 4 catalogCode nuevos (CLI-01, CLI-04)
-- [ ] 05-03-PLAN.md — Capa de datos compartida: createClient/updateClient (agente + Server Action), getClient, listClients con filtro de texto, self-assign, historial de conversación por cliente (CLI-01, CLI-02, CLI-03, CLI-04, CLI-05, SEG-08)
+- [x] 05-03-PLAN.md — Capa de datos compartida: createClient/updateClient (agente + Server Action), getClient, listClients con filtro de texto, self-assign, historial de conversación por cliente (CLI-01, CLI-02, CLI-03, CLI-04, CLI-05, SEG-08)
 - [ ] 05-04-PLAN.md — Tools del agente: create_client, update_client, list_clients, get_client + registro (CLI-01, CLI-03, CLI-04)
 - [ ] 05-05-PLAN.md — Namespace i18n Clients completo + lista/búsqueda web + link de nav (CLI-04, CLI-05)
 - [ ] 05-06-PLAN.md — Formulario web de alta/edición (ClientForm compartido) (CLI-01, CLI-03)
