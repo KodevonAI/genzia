@@ -1,9 +1,9 @@
 ---
 phase: 5
 slug: gestion-clientes-crm-conversacional
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: approved
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-09-14
 ---
 
@@ -70,11 +70,11 @@ Task IDs assigned by planner — this table maps requirement → verification, n
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 180s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references (plan 05-08 authors `verify-clients-crm.ts`; live-Postgres proof deferred to 05-10, mirroring Phase 4's pattern)
+- [x] No watch-mode flags
+- [x] Feedback latency < 180s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending — planner must confirm Wave 0 tasks are scheduled before any CLI-01/03/04/D-08 task, then flip `nyquist_compliant: true`
+**Approval:** approved 2026-09-14 — confirmed by gsd-plan-checker: 10 plans/6 waves satisfy every Nyquist requirement above

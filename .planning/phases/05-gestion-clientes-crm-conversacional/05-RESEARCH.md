@@ -438,17 +438,19 @@ Not applicable — no external framework/library versions are in play this phase
 
 **If this table is empty:** N/A — see above, not empty.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should `list_clients`/`get_client` require an `agent_action_catalog` row at all, given they're read-only?**
    - What we know: `classifyAndExecute` runs unconditionally for every `tool_use` block (`run-turn.ts` line 170) and rejects any tool name with no `TOOL_TO_CATALOG_CODE` entry.
    - What's unclear: whether seeding two more `risk = 'low'` catalog rows for reads is the intended pattern, or whether a future refactor should exempt pure reads from classification entirely.
    - Recommendation: seed them as `low` risk this phase (simplest, fully consistent with the existing every-tool-passes-through-the-gate design) and leave a note that "read-only tool fast path" is a possible future refactor, not a Phase 5 concern.
+   - **RESOLVED: see D-17 in 05-CONTEXT.md** — user accepted recommendation, seeded as low risk (plan 05-01 Task 2, migration `0022_agent_action_catalog_client.sql`).
 
 2. **What happens to the old Team-page quick-add flow (Pitfall 3)?**
    - What we know: it exists, is wired into a live page, and its validation (name-only) will diverge from D-02 once this phase ships.
    - What's unclear: whether the user wants it removed, redirected, or left as an intentional shortcut.
    - Recommendation: default to removing it and pointing the Team page's "add client" affordance at `/dashboard/clients/new`, since CONTEXT.md's `code_context` section explicitly describes `clients.ts`'s stub comment as "Phase 5 adds the real client fields... via a later migration" — implying the old flow was never meant to survive this phase unchanged.
+   - **RESOLVED: see D-18 in 05-CONTEXT.md** — user accepted recommendation, removed and redirected to `/dashboard/clients/new` (plan 05-09).
 
 ## Environment Availability
 
