@@ -101,6 +101,11 @@ None - no external service configuration required. Note: this plan creates migra
 - Schema, RLS write-policy split, and tool catalog seed are ready for every downstream Phase 5 plan (services, agent tools, web UI) that writes to `clients` as a non-admin team member.
 - Migrations 0020/0021/0022 exist in the repo and are registered in the journal but have not been applied to a live database yet — that verification is explicitly deferred to plan 05-10.
 
+## Self-Check: PASSED
+
+All 7 files verified present on disk (6 plan artifacts + this SUMMARY.md).
+Both task commits (`86bfc26`, `d74949c`) confirmed present in `git log`.
+
 ---
 *Phase: 05-gestion-clientes-crm-conversacional*
 *Completed: 2026-09-14*
