@@ -148,6 +148,20 @@
       "when": 1789065213122,
       "tag": "0020_clients_crm_fields",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1789065213123,
+      "tag": "0021_clients_write_by_team_member",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1789065213124,
+      "tag": "0022_agent_action_catalog_client",
+      "breakpoints": true
     }
   ]
 }
