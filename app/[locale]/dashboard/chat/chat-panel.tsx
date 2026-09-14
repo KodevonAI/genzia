@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { Paperclip, Send, X } from "lucide-react";
@@ -34,7 +34,16 @@ function readFileAsBase64(file: File): Promise<string> {
   });
 }
 
-export function ChatPanel({ initialMessages }: { initialMessages: ChatMessage[] }) {
+export function ChatPanel({
+  threadId,
+  initialMessages,
+  onActivity,
+}: {
+  threadId: string;
+  initialMessages: ChatMessage[];
+  /** Called after a turn completes successfully — lets the sidebar refresh title/order. */
+  onActivity?: () => void;
+}) {
   const t = useTranslations("Chat");
   const [transcript, setTranscript] = useState<ChatMessage[]>(initialMessages);
   const [text, setText] = useState("");
@@ -43,6 +52,11 @@ export function ChatPanel({ initialMessages }: { initialMessages: ChatMessage[] 
   const [error, setError] = useState<string | null>(null);
   const [focused, setFocused] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [transcript.length, pending]);
 
   async function handleAttachmentChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -90,6 +104,7 @@ export function ChatPanel({ initialMessages }: { initialMessages: ChatMessage[] 
         body: JSON.stringify({
           text: trimmed,
           attachment: attachment ? { base64: attachment.base64, mimeType: attachment.mimeType } : null,
+          threadId,
         }),
       });
 
@@ -107,6 +122,7 @@ export function ChatPanel({ initialMessages }: { initialMessages: ChatMessage[] 
       ]);
       setText("");
       setAttachment(null);
+      onActivity?.();
     } catch {
       setTranscript((prev) => prev.slice(0, -1));
       setError(t("error"));
@@ -123,8 +139,8 @@ export function ChatPanel({ initialMessages }: { initialMessages: ChatMessage[] 
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
-      <div className="flex flex-1 flex-col gap-3 overflow-y-auto rounded-3xl border border-zinc-200 bg-zinc-50/60 p-4 dark:border-zinc-800 dark:bg-zinc-900/40">
+    <div className="flex min-h-0 flex-1 flex-col gap-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto rounded-3xl border border-zinc-200 bg-zinc-50/60 p-4 dark:border-zinc-800 dark:bg-zinc-900/40">
         {transcript.length === 0 ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("empty")}</p>
         ) : (
@@ -165,6 +181,7 @@ export function ChatPanel({ initialMessages }: { initialMessages: ChatMessage[] 
             {t("thinking")}
           </div>
         ) : null}
+        <div ref={bottomRef} />
       </div>
 
       {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}

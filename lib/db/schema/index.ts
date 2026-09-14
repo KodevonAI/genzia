@@ -7,4 +7,5 @@ export * from "./authorized-contacts";
 export * from "./agent-action-catalog";
 export * from "./audit-log";
 export * from "./approval-queue";
+export * from "./conversations";
 export * from "./messages";

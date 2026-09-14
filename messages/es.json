@@ -78,7 +78,13 @@
     "attach": "Adjuntar imagen o audio",
     "tooLarge": "El archivo es demasiado grande.",
     "error": "No pudimos enviar tu mensaje. Intenta de nuevo.",
-    "empty": "Todavía no hay mensajes. Escríbele algo al agente."
+    "empty": "Todavía no hay mensajes. Escríbele algo al agente.",
+    "newChat": "Nueva conversación",
+    "untitled": "Nueva conversación",
+    "conversationsEmpty": "Todavía no hay conversaciones.",
+    "loadError": "No pudimos cargar esa conversación.",
+    "delete": "Eliminar conversación",
+    "deleteError": "No pudimos eliminar esa conversación."
   },
   "Bitacora": {
     "title": "Bitácora",

@@ -127,6 +127,20 @@
       "when": 1789065213119,
       "tag": "0017_web_chat_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1789065213120,
+      "tag": "0018_conversations",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1789065213121,
+      "tag": "0019_conversations_delete",
+      "breakpoints": true
     }
   ]
 }

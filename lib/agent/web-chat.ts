@@ -1,10 +1,12 @@
 import "server-only";
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { buildAgentContextInScope } from "@/lib/agent/build-context";
+import { generateConversationTitle } from "@/lib/agent/generate-title";
 import { interpretMedia } from "@/lib/agent/media-content";
 import { runTurn, type TurnMediaInput } from "@/lib/agent/run-turn";
 import { toolsFor } from "@/lib/agent/tools";
 import type { TurnActor } from "@/lib/agent/types";
+import { conversations } from "@/lib/db/schema/conversations";
 import { messages } from "@/lib/db/schema/messages";
 import { MEDIA_LIMITS } from "@/lib/whatsapp/media";
 import { getCurrentTeamMember } from "@/lib/team/current-member";
@@ -28,6 +30,8 @@ import { withTenantContext } from "@/lib/tenant/with-tenant-context";
 export type WebChatInput = {
   text: string;
   attachment?: { base64: string; mimeType: string } | null;
+  /** Which sidebar conversation (migration 0018) this turn belongs to. */
+  threadId: string;
 };
 
 export type WebChatResult = { ok: true; replyText: string } | { ok: false; error: string };
@@ -81,7 +85,7 @@ export async function sendWebChatTurn(input: WebChatInput): Promise<WebChatResul
   // withTenantContext transaction. Never call the LLM inside this
   // transaction (T-04-50) — an API call of unbounded latency must never
   // hold a Postgres transaction open.
-  const { context, agencyId, teamMemberId, role } = await withTenantContext(async (tx) => {
+  const { context, agencyId, teamMemberId, role, needsTitle } = await withTenantContext(async (tx) => {
     const { rows } = await tx.execute<{ agency_id: string | null; role: string | null }>(
       sql`SELECT current_setting('app.agency_id', true) AS agency_id, current_setting('app.role', true) AS role`,
     );
@@ -100,7 +104,16 @@ export async function sendWebChatTurn(input: WebChatInput): Promise<WebChatResul
       resolvedIdentityId: member.id,
       messageType,
       textBody: effectiveText,
+      threadId: input.threadId,
     });
+
+    // A NULL title means this is (still) the thread's first exchange — read
+    // BEFORE the reply is known so the title-generation decision below is
+    // based on the thread's state, not on anything this turn just wrote.
+    const [conversationRow] = await tx
+      .select({ title: conversations.title })
+      .from(conversations)
+      .where(and(eq(conversations.id, input.threadId), eq(conversations.agencyId, resolvedAgencyId)));
 
     const identity = { type: "team_member" as const, teamMemberId: member.id, role: resolvedRole };
 
@@ -108,7 +121,7 @@ export async function sendWebChatTurn(input: WebChatInput): Promise<WebChatResul
       tx,
       resolvedAgencyId,
       identity,
-      { channel: "web", teamMemberId: member.id },
+      { channel: "web", teamMemberId: member.id, threadId: input.threadId },
       toolsFor(identity),
     );
 
@@ -117,6 +130,7 @@ export async function sendWebChatTurn(input: WebChatInput): Promise<WebChatResul
       agencyId: resolvedAgencyId,
       teamMemberId: member.id,
       role: resolvedRole,
+      needsTitle: (conversationRow?.title ?? null) === null,
     };
   });
 
@@ -132,12 +146,13 @@ export async function sendWebChatTurn(input: WebChatInput): Promise<WebChatResul
 
   const { replyText } = await runTurn({
     actor,
-    key: { channel: "web", teamMemberId },
+    key: { channel: "web", teamMemberId, threadId: input.threadId },
     currentTurnMedia,
     context,
   });
 
-  // Step 4: persist the outbound row so it becomes history for the next turn.
+  // Step 4: persist the outbound row and bump the thread's updated_at (for
+  // sidebar recency ordering) so both become history for the next turn.
   await withTenantContext(async (tx) => {
     await tx.insert(messages).values({
       agencyId,
@@ -151,8 +166,35 @@ export async function sendWebChatTurn(input: WebChatInput): Promise<WebChatResul
       resolvedIdentityId: teamMemberId,
       messageType: "text",
       textBody: replyText,
+      threadId: input.threadId,
     });
+
+    await tx
+      .update(conversations)
+      .set({ updatedAt: new Date() })
+      .where(and(eq(conversations.id, input.threadId), eq(conversations.agencyId, agencyId)));
   });
+
+  // Step 5: best-effort title generation, strictly OUTSIDE any transaction
+  // (same "never call the LLM inside a transaction" rule step 3 already
+  // follows) and strictly AFTER the reply is already persisted — a slow or
+  // failed title call must never delay or break the turn the person is
+  // waiting on.
+  if (needsTitle) {
+    const title = await generateConversationTitle(input.text, replyText);
+    await withTenantContext(async (tx) => {
+      await tx
+        .update(conversations)
+        .set({ title })
+        .where(
+          and(
+            eq(conversations.id, input.threadId),
+            eq(conversations.agencyId, agencyId),
+            sql`${conversations.title} is null`,
+          ),
+        );
+    });
+  }
 
   return { ok: true, replyText };
 }

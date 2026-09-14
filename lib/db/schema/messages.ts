@@ -10,6 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { agencies } from "./agencies";
 import { clients } from "./clients";
+import { conversations } from "./conversations";
 
 /**
  * Raw inbound/outbound WhatsApp message log (D-04). Deliberately separate
@@ -47,12 +48,17 @@ import { clients } from "./clients";
  * channel = 'whatsapp'".
  *
  * LD-16 (locked decision): a web conversation is keyed by `(agency_id,
- * channel = 'web', resolved_identity_id = the team member)` — one thread per
- * team member, no thread management UI. `client_id` stays NULL on every web
- * row in this phase: a team member talking to the agent is a team-internal
- * conversation, and per LD-03 that history is visible to the whole team in
- * the bitácora (see `messages_select_by_role`, migration 0015, which is
- * channel-agnostic and needed no change for this).
+ * channel = 'web', resolved_identity_id = the team member)` for identity
+ * purposes. SUPERSEDED as of migration 0018 for the "one thread per team
+ * member, no thread management UI" part specifically: `threadId` (below —
+ * named to avoid colliding with the pre-existing `conversationId`, which is
+ * Meta's own billing-conversation id and completely unrelated) now scopes a
+ * web message to one of possibly several named threads that team member
+ * owns. `client_id` still stays NULL on every web row: a team member talking
+ * to the agent is still a team-internal conversation, and per LD-03 that
+ * history is still visible to the whole team in the bitácora (see
+ * `messages_select_by_role`, migration 0015, which is channel-agnostic and
+ * needed no change for this).
  *
  * LD-02 (locked decision): the web chat is TEAM-ONLY in this phase,
  * authenticated by the Clerk session through `withTenantContext` — never
@@ -95,6 +101,12 @@ export const messages = pgTable(
     conversationId: text("conversation_id"),
     pricingCategory: text("pricing_category"),
     pricingBillable: boolean("pricing_billable"),
+    // Migration 0018: which named `conversations` thread a web message
+    // belongs to. Deliberately NOT named `conversationId` — that name was
+    // already taken by Meta's own billing-conversation id above, a totally
+    // different concept. Always NULL for whatsapp-channel rows; required
+    // (see `messages_web_conversation_id_check` below) for web-channel rows.
+    threadId: uuid("thread_id").references(() => conversations.id, { onDelete: "cascade" }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -117,6 +129,10 @@ export const messages = pgTable(
     check(
       "messages_whatsapp_phone_numbers_check",
       sql`${table.channel} <> 'whatsapp' or (${table.fromPhoneNumber} is not null and ${table.toPhoneNumber} is not null)`,
+    ),
+    check(
+      "messages_web_conversation_id_check",
+      sql`${table.channel} <> 'web' or ${table.threadId} is not null`,
     ),
   ],
 );

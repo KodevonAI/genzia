@@ -20,8 +20,8 @@ export default async function DashboardLayout({
   const t = await getTranslations("Dashboard");
 
   return (
-    <div className="flex min-h-full flex-1 flex-col">
-      <header className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <header className="flex shrink-0 items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
         <Link href="/dashboard" className="text-lg font-semibold">
           Genzia
         </Link>
@@ -41,7 +41,7 @@ export default async function DashboardLayout({
           <UserButton />
         </nav>
       </header>
-      <main className="flex flex-1 flex-col px-6 py-8">{children}</main>
+      <main className="flex min-h-0 flex-1 flex-col px-6 py-8">{children}</main>
     </div>
   );
 }

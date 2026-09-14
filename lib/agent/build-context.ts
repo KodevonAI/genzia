@@ -91,6 +91,11 @@ export async function buildAgentContextInScope(
       : and(
           eq(messages.channel, "web"),
           eq(messages.resolvedIdentityId, key.teamMemberId),
+          // threadId scopes history to ONE sidebar conversation (migration
+          // 0018). resolvedIdentityId is kept as a belt-and-suspenders
+          // predicate, not relied on alone: RLS/ownership is still keyed on
+          // it, and it's always true in tandem with threadId in practice.
+          eq(messages.threadId, key.threadId),
         );
 
   const rows = await tx

@@ -3,17 +3,19 @@ import type { ResolvedIdentity } from "@/lib/identity/types";
 
 /**
  * `ConversationKey` is the ONLY way a conversation is addressed in this
- * codebase (plan 04-04). There is no numeric conversation id: a WhatsApp
- * thread is identified by the counterpart's phone number (the platform
- * number is always the same, per-agency, so it carries no information), and
- * a web thread is identified by the team member's id (LD-02: web chat is
- * team-only in this phase, one thread per member — a client-facing web chat
- * needs a magic-link/OTP mechanism that belongs to the client-portal phase,
- * POR-01).
+ * codebase (plan 04-04). A WhatsApp thread is identified by the
+ * counterpart's phone number (the platform number is always the same,
+ * per-agency, so it carries no information); a web thread is identified by
+ * the team member's id PLUS a `threadId` (migration 0018 — superseding the
+ * "one thread per member" half of LD-16, see that migration's header;
+ * `teamMemberId` is kept alongside `threadId`, not dropped, because it is
+ * still what `messages.resolvedIdentityId` and RLS ownership are keyed on).
+ * LD-02 still holds: web chat is team-only, a client-facing web chat needs a
+ * magic-link/OTP mechanism that belongs to the client-portal phase (POR-01).
  */
 export type ConversationKey =
   | { channel: "whatsapp"; counterpartPhoneNumber: string }
-  | { channel: "web"; teamMemberId: string };
+  | { channel: "web"; teamMemberId: string; threadId: string };
 
 /**
  * Everything one LLM turn needs, produced exclusively by

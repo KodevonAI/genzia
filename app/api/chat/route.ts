@@ -31,9 +31,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const { text, attachment } = body as {
+  const { text, attachment, threadId } = body as {
     text?: unknown;
     attachment?: { base64?: unknown; mimeType?: unknown } | null;
+    threadId?: unknown;
   };
 
   const hasAttachment =
@@ -44,6 +45,10 @@ export async function POST(request: Request) {
 
   if (typeof text !== "string" || (text.length === 0 && !hasAttachment)) {
     return NextResponse.json({ error: "text is required" }, { status: 400 });
+  }
+
+  if (typeof threadId !== "string" || threadId.length === 0) {
+    return NextResponse.json({ error: "threadId is required" }, { status: 400 });
   }
 
   if (text.length > MAX_TEXT_LENGTH && !hasAttachment) {
@@ -62,6 +67,7 @@ export async function POST(request: Request) {
             mimeType: (attachment as { mimeType: string }).mimeType,
           }
         : null,
+      threadId,
     });
 
     if (!result.ok) {
