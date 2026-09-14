@@ -59,8 +59,19 @@ function check(label: string, condition: boolean, detail: string) {
   }
 }
 
+/**
+ * Drizzle's neon-serverless driver wraps the real Postgres error text (e.g.
+ * "permission denied for table audit_log") inside `DrizzleQueryError.cause`
+ * — the top-level `.message` is just the generic "Failed query: ..." SQL
+ * dump. Found live in plan 04-12: `expectThrows`'s "permission denied"
+ * assertion against 0014's REVOKE was failing not because the REVOKE didn't
+ * work (it did), but because this helper never looked past the wrapper.
+ */
 function errorMessage(err: unknown): string {
-  return err instanceof Error ? err.message : String(err);
+  if (!(err instanceof Error)) return String(err);
+  const cause = (err as { cause?: unknown }).cause;
+  const causeMessage = cause instanceof Error ? cause.message : undefined;
+  return causeMessage ? `${err.message}: ${causeMessage}` : err.message;
 }
 
 async function expectThrows(
@@ -297,45 +308,44 @@ async function main() {
     }
 
     // audit_log rows, likewise written only via withSystemWebhookContext
-    // (0014's audit_log_insert_system_actor).
-    const auditClientARow = await withSystemWebhookContext(agencyId, (tx) =>
-      tx
-        .insert(auditLog)
-        .values({
-          agencyId,
-          clientId: seededClientAId,
-          actionTypeCode: "payment_reminder",
-          riskLevel: "low",
-          summary: "recordatorio de pago enviado a client A",
-        })
-        .returning({ id: auditLog.id }));
-    auditClientAId = auditClientARow[0]?.id;
+    // (0014's audit_log_insert_system_actor). No `.returning()`: Postgres
+    // requires a RETURNING row to also pass the table's SELECT policy, and
+    // `audit_log_select_by_role` deliberately grants the system_webhook
+    // actor no read access at all (LD-04) — RETURNING here would make every
+    // insert fail RLS, not just reads. Generate `id` here instead, matching
+    // the fix in `lib/agent/audit.ts`'s `writeAuditLog`.
+    auditClientAId = randomUUID();
+    await withSystemWebhookContext(agencyId, (tx) =>
+      tx.insert(auditLog).values({
+        id: auditClientAId,
+        agencyId,
+        clientId: seededClientAId,
+        actionTypeCode: "payment_reminder",
+        riskLevel: "low",
+        summary: "recordatorio de pago enviado a client A",
+      }));
 
-    const auditClientBRow = await withSystemWebhookContext(agencyId, (tx) =>
-      tx
-        .insert(auditLog)
-        .values({
-          agencyId,
-          clientId: seededClientBId,
-          actionTypeCode: "payment_reminder",
-          riskLevel: "low",
-          summary: "recordatorio de pago enviado a client B",
-        })
-        .returning({ id: auditLog.id }));
-    auditClientBId = auditClientBRow[0]?.id;
+    auditClientBId = randomUUID();
+    await withSystemWebhookContext(agencyId, (tx) =>
+      tx.insert(auditLog).values({
+        id: auditClientBId,
+        agencyId,
+        clientId: seededClientBId,
+        actionTypeCode: "payment_reminder",
+        riskLevel: "low",
+        summary: "recordatorio de pago enviado a client B",
+      }));
 
-    const auditInternalRow = await withSystemWebhookContext(agencyId, (tx) =>
-      tx
-        .insert(auditLog)
-        .values({
-          agencyId,
-          clientId: null,
-          actionTypeCode: "payment_reminder",
-          riskLevel: "low",
-          summary: "acción interna del agente, sin cliente asociado",
-        })
-        .returning({ id: auditLog.id }));
-    auditInternalId = auditInternalRow[0]?.id;
+    auditInternalId = randomUUID();
+    await withSystemWebhookContext(agencyId, (tx) =>
+      tx.insert(auditLog).values({
+        id: auditInternalId,
+        agencyId,
+        clientId: null,
+        actionTypeCode: "payment_reminder",
+        riskLevel: "low",
+        summary: "acción interna del agente, sin cliente asociado",
+      }));
 
     if (!auditClientAId || !auditClientBId || !auditInternalId) {
       throw new Error(
