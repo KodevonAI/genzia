@@ -4,7 +4,7 @@ Profundidad: **Comprehensiva** (config.json). Deriva de `REQUIREMENTS.md`. Orden
 por dependencia real, no por categoría — lo que todo lo demás necesita va primero.
 No define stack técnico ni asigna tiempos (GSD no estima en horas/días/semanas).
 
-## Fase 1 — Fundaciones de cuenta y equipo (multi-tenant) — COMPLETA
+## Phase 1: Fundaciones de cuenta y equipo (multi-tenant) — COMPLETA
 
 **Objetivo**: una agencia puede registrarse, invitar a su equipo, y el sistema
 distingue quién es quién.
@@ -31,7 +31,7 @@ Plans:
 - [x] 04-PLAN.md — Invitación de equipo con rol/WhatsApp y asignación de clientes
 - [x] 05-PLAN.md — Checklist de verificación ante Meta y consulta legal
 
-## Fase 2 — Modelo de identidad y permisos
+## Phase 2: Modelo de identidad y permisos
 
 **Objetivo**: dado un mensaje o sesión entrante, el sistema resuelve quién escribe
 (miembro de equipo con rol, contacto autorizado de un cliente, o número
@@ -62,7 +62,7 @@ Plans:
 - [x] 02-06-PLAN.md — Suite de integración `verify-identity-resolution.ts` contra Neon real (SEG-01..SEG-08, SEG-12)
 - [x] 02-07-PLAN.md — [BLOCKING] aplicar migraciones a Neon y correr ambas suites en vivo (checkpoint, requiere red)
 
-## Fase 3 — Integración con WhatsApp / Meta — COMPLETA CON GAP DOCUMENTADO
+## Phase 3: Integración con WhatsApp / Meta — COMPLETA CON GAP DOCUMENTADO
 
 **Objetivo**: los mensajes de WhatsApp entran y salen del sistema.
 
@@ -90,7 +90,7 @@ Plans:
 - [x] 03-07-PLAN.md — Route handler `/api/webhooks/meta` (handshake GET + intake POST) y backfill de estado/precio desde `statuses[]` (WA-01, WA-03, WA-05, WA-07)
 - [x] 03-08-PLAN.md — Migraciones aplicadas a Neon real, suite de integración `verify-whatsapp-webhook.ts` (28/28), sin regresión Fase 1/2 (WA-01, WA-03, WA-04, WA-05, WA-07). Round-trip real de WhatsApp queda abierto — bloqueado por App Review de Meta (app no publicada), no por código; ver `03-08-SUMMARY.md`.
 
-## Fase 4 — Agente conversacional core
+## Phase 4: Agente conversacional core
 
 **Objetivo**: el agente responde con criterio, en el chat web y por WhatsApp.
 
@@ -122,7 +122,7 @@ Plans:
 - [x] 04-11-PLAN.md — Bitácora visible con cola de aprobación e historial de conversación (SEG-11, SIS-01, SEG-10, SEG-06)
 - [x] 04-12-PLAN.md — [BLOCKING] aplicar 0014-0017 a Neon, correr las nueve suites y verificación humana de conversación y aprobación (checkpoint, requiere red y claves)
 
-## Fase 5 — Gestión de clientes (CRM conversacional)
+## Phase 5: Gestión de clientes (CRM conversacional)
 
 **Objetivo**: dar de alta y consultar clientes, por formulario o por conversación.
 
@@ -134,7 +134,7 @@ Plans:
 ambos quedan consultables y editables, con la separación visible-cliente /
 solo-equipo funcionando.
 
-## Fase 6 — Calendario y agenda
+## Phase 6: Calendario y agenda
 
 **Objetivo**: agendar, reagendar y recordar citas y contenido, por lenguaje
 natural o vista visual.
@@ -145,7 +145,7 @@ natural o vista visual.
 aparece en la vista visual, y el sistema manda el recordatorio automático a
 tiempo.
 
-## Fase 7 — Contenido
+## Phase 7: Contenido
 
 **Objetivo**: proponer, aprobar y regenerar contenido con el cliente.
 
@@ -155,7 +155,7 @@ tiempo.
 el agente regenera automáticamente (o pide aprobación humana si el caso lo
 amerita) sin perder el hilo del cliente correcto.
 
-## Fase 8 — Cobros a clientes
+## Phase 8: Cobros a clientes
 
 **Objetivo**: cobrar sin ambigüedad ni riesgo de disputa.
 
@@ -166,7 +166,7 @@ recordatorio con link de pago, y el sistema SOLO marca como pagado con
 confirmación real del procesador (una afirmación del cliente en el chat no
 alcanza).
 
-## Fase 9 — Portal del cliente final
+## Phase 9: Portal del cliente final
 
 **Objetivo**: el cliente final tiene su propio espacio, sin salir de lo que le
 corresponde ver.
@@ -176,7 +176,7 @@ corresponde ver.
 **Éxito**: un contacto autorizado entra al portal, ve solo su calendario/pagos,
 aprueba una pieza de contenido y sube un archivo — nunca ve nada de otro cliente.
 
-## Fase 10 — Contratos y bóveda de credenciales
+## Phase 10: Contratos y bóveda de credenciales
 
 **Objetivo**: dar seguimiento a la relación contractual con el cliente y guardar
 sus accesos de forma segura. *(La firma electrónica dentro de la plataforma,
@@ -188,7 +188,7 @@ CTR-01, se movió a v2 — costaba US$250/mes fijo desde el primer contrato con 
 **Éxito**: el sistema alerta a tiempo el vencimiento/renovación de un contrato, y
 el equipo guarda credenciales del cliente visibles solo para ellos.
 
-## Fase 11 — Ventas, colaboradores externos y pagos a terceros
+## Phase 11: Ventas, colaboradores externos y pagos a terceros
 
 **Objetivo**: cubrir el ciclo completo de la agencia, no solo clientes activos.
 
@@ -197,7 +197,7 @@ el equipo guarda credenciales del cliente visibles solo para ellos.
 **Éxito**: se crea un prospecto, se le genera una propuesta asistida por el
 agente, se registra un colaborador externo y un pago a un freelancer.
 
-## Fase 12 — Tareas internas, rentabilidad y pulido de plataforma
+## Phase 12: Tareas internas, rentabilidad y pulido de plataforma
 
 **Objetivo**: cerrar el v1 con la operación interna y las vistas de apoyo.
 
