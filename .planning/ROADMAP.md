@@ -120,7 +120,7 @@ Plans:
 - [x] 04-09-PLAN.md — Server Actions de aprobación/rechazo + función Inngest que reproduce la acción aprobada (SEG-10, SEG-11)
 - [x] 04-10-PLAN.md — Chat web solo-equipo: migración 0017, `POST /api/chat` y página de conversación multimodal (WA-05, SIS-01, SEG-09, SEG-05)
 - [x] 04-11-PLAN.md — Bitácora visible con cola de aprobación e historial de conversación (SEG-11, SIS-01, SEG-10, SEG-06)
-- [ ] 04-12-PLAN.md — [BLOCKING] aplicar 0014-0017 a Neon, correr las nueve suites y verificación humana de conversación y aprobación (checkpoint, requiere red y claves)
+- [x] 04-12-PLAN.md — [BLOCKING] aplicar 0014-0017 a Neon, correr las nueve suites y verificación humana de conversación y aprobación (checkpoint, requiere red y claves)
 
 ## Fase 5 — Gestión de clientes (CRM conversacional)
 
