@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Fase 4 COMPLETA (12/12 planes) — gate 04-12 corrido contra Neon real, Inngest real y un envío real a Graph API; 5 bugs reales encontrados y arreglados en vivo
-last_updated: "2026-09-14T14:35:00.000Z"
+last_updated: "2026-09-14T17:44:35.501Z"
 progress:
-  total_phases: 4
+  total_phases: 5
   completed_phases: 4
   total_plans: 32
   completed_plans: 32
-  percent: 100
+  percent: 80
 ---
 
 # STATE.md — Genzia
@@ -433,7 +433,7 @@ Pendiente explícito para retomar:
 - [ ] Borrar deploy huérfano en `infokodevon-3644s-projects`
 - [ ] App Review formal de Tech Provider (política de privacidad + video)
 
-Resume file: .planning/phases/03-integraci-n-con-whatsapp-meta/03-CONTEXT.md
+Resume file: .planning/phases/05-gestion-clientes-crm-conversacional/05-CONTEXT.md
 
 Sesión previa: 2026-09-09 — **Fase 2: COMPLETA.** Ejecutadas las 7 waves
 (`02-01` a `02-07`) vía subagentes en worktrees paralelos. `02-07` (checkpoint
