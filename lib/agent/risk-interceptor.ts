@@ -25,7 +25,26 @@ import type { TurnActor } from "./types";
 export const TOOL_TO_CATALOG_CODE: Record<string, string> = {
   send_payment_reminder: "payment_reminder",
   draft_client_content: "new_client_content",
+  create_client: "create_client",
+  update_client: "update_client",
+  list_clients: "list_clients",
+  get_client: "get_client",
 };
+
+/**
+ * T-05-05: the tools whose input names a single existing client that the
+ * caller's own identity must be cross-checked against. `create_client` (no
+ * client exists yet) and `list_clients` (agency-wide by design, D-11) are
+ * deliberately excluded — do not add a new client-scoped tool to this set
+ * without also giving it the full UUID-validate + client_contact cross-check
+ * path in `classifyAndExecute`.
+ */
+const CLIENT_SCOPED_TOOLS = new Set([
+  "send_payment_reminder",
+  "draft_client_content",
+  "update_client",
+  "get_client",
+]);
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -85,39 +104,48 @@ export async function classifyAndExecute(
     );
   }
 
-  // 2. Scope cross-check (RESEARCH.md Pitfall 4). The model's own arguments
-  // are attacker-influenceable content (an injected instruction in a message
-  // or transcript could otherwise steer `clientId` toward a different
-  // client). None of the three checks below trust the resolved identity's
-  // own claims either — they cross-validate the model-supplied argument
-  // against what that identity actually is.
-  const clientId = extractClientId(toolUse.input);
-  if (clientId === null || !UUID_REGEX.test(clientId)) {
-    return rejectResult(
-      toolUse.id,
-      "El argumento clientId no es un identificador válido.",
-    );
-  }
-  if (
-    actor.identity.type === "client_contact" &&
-    clientId !== actor.identity.clientId
-  ) {
-    // Prevents a client contact's turn from ever producing a tool call that
-    // targets a different client (SEG-07/T-04-28).
-    return rejectResult(
-      toolUse.id,
-      "No autorizado: este contacto no puede actuar sobre otro cliente.",
-    );
-  }
+  // 2a. Unconditional identity gate — runs for EVERY tool, before any
+  // tool-specific logic. An unrecognized sender can never execute any
+  // action, client-scoped or not — this should already be unreachable in
+  // practice because toolsFor() offers no tools to an unknown identity
+  // (LD-12), but the interceptor does not rely on that alone (T-05-06,
+  // defense in depth).
   if (actor.identity.type === "unknown") {
-    // An unrecognized sender can never target a client — this should be
-    // unreachable in practice because toolsFor() offers no tools to an
-    // unknown identity (LD-12), but the interceptor does not rely on that
-    // alone.
     return rejectResult(
       toolUse.id,
       "No autorizado: un remitente no identificado no puede ejecutar acciones.",
     );
+  }
+
+  // 2b. Scope cross-check (RESEARCH.md Pitfall 4), only for tools whose
+  // input names a single existing client (T-05-05). `create_client` (no
+  // client exists yet) and `list_clients` (agency-wide by design, D-11) skip
+  // this block entirely — `clientId` stays `null`, no UUID is required. The
+  // model's own arguments are attacker-influenceable content (an injected
+  // instruction in a message or transcript could otherwise steer `clientId`
+  // toward a different client) — the check below does not trust the
+  // resolved identity's own claims either, it cross-validates the
+  // model-supplied argument against what that identity actually is.
+  let clientId: string | null = null;
+  if (CLIENT_SCOPED_TOOLS.has(toolUse.name)) {
+    clientId = extractClientId(toolUse.input);
+    if (clientId === null || !UUID_REGEX.test(clientId)) {
+      return rejectResult(
+        toolUse.id,
+        "El argumento clientId no es un identificador válido.",
+      );
+    }
+    if (
+      actor.identity.type === "client_contact" &&
+      clientId !== actor.identity.clientId
+    ) {
+      // Prevents a client contact's turn from ever producing a tool call
+      // that targets a different client (SEG-07/T-04-28).
+      return rejectResult(
+        toolUse.id,
+        "No autorizado: este contacto no puede actuar sobre otro cliente.",
+      );
+    }
   }
   // For a team_member, no assignment check is re-implemented here on
   // purpose: the tool's own reads (deliver-to-client.ts) run inside that
