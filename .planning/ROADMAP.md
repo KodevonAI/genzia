@@ -134,6 +134,22 @@ Plans:
 ambos quedan consultables y editables, con la separación visible-cliente /
 solo-equipo funcionando.
 
+**Requirements:** CLI-01, CLI-02, CLI-03, CLI-04, CLI-05, SEG-08
+
+**Plans:** 10 plans (6 waves)
+
+Plans:
+- [ ] 05-01-PLAN.md — Migraciones 0020/0021/0022: campos CRM en clients, split de la política de escritura RLS admin-only, semilla del catálogo para los 4 tools nuevos (CLI-01, CLI-03, CLI-05, SEG-08)
+- [ ] 05-02-PLAN.md — risk-interceptor.ts: clientId condicional por tool + registro de los 4 catalogCode nuevos (CLI-01, CLI-04)
+- [ ] 05-03-PLAN.md — Capa de datos compartida: createClient/updateClient (agente + Server Action), getClient, listClients con filtro de texto, self-assign, historial de conversación por cliente (CLI-01, CLI-02, CLI-03, CLI-04, CLI-05, SEG-08)
+- [ ] 05-04-PLAN.md — Tools del agente: create_client, update_client, list_clients, get_client + registro (CLI-01, CLI-03, CLI-04)
+- [ ] 05-05-PLAN.md — Namespace i18n Clients completo + lista/búsqueda web + link de nav (CLI-04, CLI-05)
+- [ ] 05-06-PLAN.md — Formulario web de alta/edición (ClientForm compartido) (CLI-01, CLI-03)
+- [ ] 05-07-PLAN.md — Ficha de cliente: historial real, placeholders de pagos/citas, notas solo-equipo, panel de asignación (CLI-02, CLI-05, SEG-08)
+- [ ] 05-08-PLAN.md — scripts/verify-clients-crm.ts: suite de integración del split RLS + interceptor + tools (CLI-01, CLI-02, CLI-03, CLI-04, SEG-08)
+- [ ] 05-09-PLAN.md — D-18: elimina el alta rápida de la página Team, redirige a /dashboard/clients/new (CLI-01)
+- [ ] 05-10-PLAN.md — [BLOCKING] aplicar migraciones 0020-0022 a Neon real, correr las 6 suites y verificación humana de dictado + ficha (checkpoint, requiere red)
+
 ## Phase 6: Calendario y agenda
 
 **Objetivo**: agendar, reagendar y recordar citas y contenido, por lenguaje
