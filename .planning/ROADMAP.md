@@ -136,7 +136,7 @@ solo-equipo funcionando.
 
 **Requirements:** CLI-01, CLI-02, CLI-03, CLI-04, CLI-05, SEG-08
 
-**Plans:** 8/10 plans executed
+**Plans:** 9/10 plans executed
 
 Plans:
 - [x] 05-01-PLAN.md — Migraciones 0020/0021/0022: campos CRM en clients, split de la política de escritura RLS admin-only, semilla del catálogo para los 4 tools nuevos (CLI-01, CLI-03, CLI-05, SEG-08)
@@ -147,7 +147,7 @@ Plans:
 - [x] 05-06-PLAN.md — Formulario web de alta/edición (ClientForm compartido) (CLI-01, CLI-03)
 - [x] 05-07-PLAN.md — Ficha de cliente: historial real, placeholders de pagos/citas, notas solo-equipo, panel de asignación (CLI-02, CLI-05, SEG-08)
 - [x] 05-08-PLAN.md — scripts/verify-clients-crm.ts: suite de integración del split RLS + interceptor + tools (CLI-01, CLI-02, CLI-03, CLI-04, SEG-08)
-- [ ] 05-09-PLAN.md — D-18: elimina el alta rápida de la página Team, redirige a /dashboard/clients/new (CLI-01)
+- [x] 05-09-PLAN.md — D-18: elimina el alta rápida de la página Team, redirige a /dashboard/clients/new (CLI-01)
 - [ ] 05-10-PLAN.md — [BLOCKING] aplicar migraciones 0020-0022 a Neon real, correr las 6 suites y verificación humana de dictado + ficha (checkpoint, requiere red)
 
 ## Phase 6: Calendario y agenda
