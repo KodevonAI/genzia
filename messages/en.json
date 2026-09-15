@@ -1,6 +1,35 @@
 {
   "HomePage": {
-    "title": "Genzia"
+    "title": "Genzia",
+    "nav": {
+      "login": "Log in",
+      "signup": "Sign up"
+    },
+    "badge": "Agent as a Service for marketing agencies",
+    "headline": "The AI agent that runs your agency, not just organizes it",
+    "subtitle": "Scheduling, content, billing, and client communication — over WhatsApp, with your agency's brand. Drop the scattered WhatsApp + spreadsheets and hand the daily operation to an agent that actually runs it.",
+    "ctaPrimary": "Try it free",
+    "ctaSecondary": "See how it works",
+    "featuresHeading": "Every client's full context, in one place",
+    "features": {
+      "clients": {
+        "title": "Centralized clients",
+        "description": "Add, look up, and search clients by chat or form — no more scattered records across chats and spreadsheets."
+      },
+      "calendar": {
+        "title": "Scheduling and content",
+        "description": "Book shoot dates, plan content, and get automatic reminders before a deadline slips."
+      },
+      "billing": {
+        "title": "Billing",
+        "description": "Recurring or per-project plans, payment-link reminders, and real confirmation — never inferred from chat."
+      },
+      "whatsapp": {
+        "title": "WhatsApp, your brand",
+        "description": "The agent replies on the number your clients already know, with the name and tone you give it — no visible platform behind it."
+      }
+    },
+    "footerNote": "Multi-tenant, multilingual from day one — Spanish and English."
   },
   "Onboarding": {
     "title": "Create your agency",
