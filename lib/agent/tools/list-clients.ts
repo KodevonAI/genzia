@@ -24,7 +24,7 @@ export const catalogCode = "list_clients";
 export const definition: Anthropic.Messages.Tool = {
   name: "list_clients",
   description:
-    "Busca clientes por nombre, rubro o notas. Devuelve solo lo que el que pregunta ya puede ver. Sin texto de búsqueda, lista todos los visibles (hasta 20).",
+    "Busca clientes por nombre, rubro o notas. Devuelve solo lo que el que pregunta ya puede ver, incluyendo el id de cada cliente — usalo para llamar a get_client o update_client sobre uno de los resultados. Sin texto de búsqueda, lista todos los visibles (hasta 20).",
   input_schema: {
     type: "object",
     properties: {
@@ -57,6 +57,7 @@ export async function execute(input: unknown, actor: TurnActor): Promise<string>
   const rows = await withResolvedIdentityContext(actor.agencyId, actor.identity, (tx) => {
     const base = tx
       .select({
+        id: clients.id,
         name: clients.name,
         phone: clients.phone,
         email: clients.email,
@@ -85,7 +86,7 @@ export async function execute(input: unknown, actor: TurnActor): Promise<string>
     .map((row) => {
       const industryLabel = row.industry ?? "sin industria";
       const contactLabel = row.phone ?? row.email ?? "sin contacto";
-      return `${row.name} (${industryLabel}) — ${contactLabel}`;
+      return `${row.name} (${industryLabel}) — ${contactLabel} [id: ${row.id}]`;
     })
     .join("\n");
 }
