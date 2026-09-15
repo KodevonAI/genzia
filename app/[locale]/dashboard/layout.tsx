@@ -11,6 +11,9 @@ import { Link } from "@/i18n/navigation";
  * "Team" (Plan 04, CTA-04/05/06 roster + assignments) links to
  * /dashboard/team — the literal path segment, NOT a `(dashboard)` route
  * group (see middleware.ts).
+ * "Clients" (Plan 05-05, CLI-04's list+search surface) links to
+ * /dashboard/clients, positioned last (natural reading order: chat,
+ * bitacora, branding, team, clients).
  */
 export default async function DashboardLayout({
   children,
@@ -37,6 +40,9 @@ export default async function DashboardLayout({
           </Link>
           <Link href="/dashboard/team" className="hover:underline">
             {t("nav.team")}
+          </Link>
+          <Link href="/dashboard/clients" className="hover:underline">
+            {t("nav.clients")}
           </Link>
           <UserButton />
         </nav>
