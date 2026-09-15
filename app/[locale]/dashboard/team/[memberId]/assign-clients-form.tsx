@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
-import { assignClient, unassignClient, addClient } from "@/lib/clients/assign-client";
+import { Link } from "@/i18n/navigation";
+import { assignClient, unassignClient } from "@/lib/clients/assign-client";
 import type { ClientRow } from "@/lib/clients/list-clients";
 
 /**
@@ -24,11 +24,9 @@ export function AssignClientsForm({
   initialAssignedIds: string[];
 }) {
   const t = useTranslations("Team");
-  const router = useRouter();
+  const tClients = useTranslations("Clients");
   const [assignedIds, setAssignedIds] = useState<Set<string>>(new Set(initialAssignedIds));
   const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
-  const [newClientName, setNewClientName] = useState("");
-  const [isAddingClient, setIsAddingClient] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function toggle(clientId: string) {
@@ -70,51 +68,16 @@ export function AssignClientsForm({
     }
   }
 
-  async function handleAddClient(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const trimmed = newClientName.trim();
-    if (!trimmed) {
-      return;
-    }
-    setIsAddingClient(true);
-    setError(null);
-
-    const result = await addClient(trimmed);
-    if (!result.ok) {
-      setError(result.error === "not_admin" ? t("errors.notAdmin") : t("errors.invalidClientName"));
-      setIsAddingClient(false);
-      return;
-    }
-    setNewClientName("");
-    setIsAddingClient(false);
-    router.refresh();
-  }
-
   return (
     <div className="flex flex-col gap-6">
-      <form onSubmit={handleAddClient} className="flex flex-wrap items-end gap-3">
-        <div className="flex min-w-[14rem] flex-1 flex-col gap-1">
-          <label htmlFor="new-client-name" className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-            {t("addClientLabel")}
-          </label>
-          <input
-            id="new-client-name"
-            type="text"
-            value={newClientName}
-            onChange={(event) => setNewClientName(event.target.value)}
-            disabled={isAddingClient}
-            placeholder={t("addClientPlaceholder")}
-            className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-black outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isAddingClient || newClientName.trim().length === 0}
-          className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-50 dark:border-zinc-700"
+      <div className="flex flex-wrap items-center justify-end">
+        <Link
+          href="/dashboard/clients/new"
+          className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium dark:border-zinc-700"
         >
-          {isAddingClient ? t("addClientSubmitting") : t("addClientSubmit")}
-        </button>
-      </form>
+          {tClients("newClient")}
+        </Link>
+      </div>
 
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
 

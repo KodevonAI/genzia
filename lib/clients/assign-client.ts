@@ -4,7 +4,6 @@ import "server-only";
 import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { clientAssignments } from "@/lib/db/schema/client-assignments";
-import { clients } from "@/lib/db/schema/clients";
 import { NoTenantContextError, withTenantContext } from "@/lib/tenant/with-tenant-context";
 import { NotAdminError, assertCallerIsAdmin } from "@/lib/team/current-member";
 import { insertAssignment } from "@/lib/clients/insert-assignment";
@@ -73,41 +72,6 @@ export async function unassignClient(
         );
     });
     return { ok: true };
-  } catch (err) {
-    if (err instanceof NotAdminError) {
-      return { ok: false, error: "not_admin" };
-    }
-    throw err;
-  }
-}
-
-export type AddClientResult =
-  | { ok: true; clientId: string }
-  | { ok: false; error: "not_admin" | "invalid_name" };
-
-/**
- * Admin-only, minimal "add client" action — `clients` is only a stub table
- * in this phase (Plan 01 Task 2: id/agency_id/name), just enough to have
- * something real to assign against for CTA-06. Full CRM client intake is
- * Phase 5's CLI-01.
- */
-export async function addClient(name: string): Promise<AddClientResult> {
-  const trimmed = name.trim();
-  if (!trimmed) {
-    return { ok: false, error: "invalid_name" };
-  }
-
-  const { userId, orgId } = await requireOrgContext();
-
-  try {
-    return await withTenantContext(async (tx) => {
-      await assertCallerIsAdmin(tx, userId);
-      const [row] = await tx
-        .insert(clients)
-        .values({ agencyId: orgId, name: trimmed })
-        .returning({ id: clients.id });
-      return { ok: true, clientId: row.id } as const;
-    });
   } catch (err) {
     if (err instanceof NotAdminError) {
       return { ok: false, error: "not_admin" };
