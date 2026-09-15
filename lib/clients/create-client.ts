@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { ilike } from "drizzle-orm";
 import { clients } from "@/lib/db/schema/clients";
 import { isClientIndustry } from "@/lib/clients/industries";
@@ -104,23 +105,27 @@ export async function insertClientRow(
     .where(ilike(clients.name, value.name))
     .limit(1);
 
-  const [inserted] = await tx
-    .insert(clients)
-    .values({
-      agencyId,
-      name: value.name,
-      phone: value.phone,
-      email: value.email,
-      industry: value.industry,
-      notes: value.notes,
-    })
-    .returning({ id: clients.id });
+  // id is generated here, not left to the column default, and the insert
+  // does not `.returning()`: Postgres re-checks INSERT...RETURNING against
+  // the SELECT policy, and a plain member has no client_assignments row for
+  // this client yet (that's the very next statement) — the RETURNING would
+  // fail RLS even though the INSERT's own WITH CHECK passed.
+  const newClientId = randomUUID();
+  await tx.insert(clients).values({
+    id: newClientId,
+    agencyId,
+    name: value.name,
+    phone: value.phone,
+    email: value.email,
+    industry: value.industry,
+    notes: value.notes,
+  });
 
-  await insertAssignment(tx, agencyId, inserted.id, creatorTeamMemberId);
+  await insertAssignment(tx, agencyId, newClientId, creatorTeamMemberId);
 
   return {
     success: true,
-    clientId: inserted.id,
+    clientId: newClientId,
     duplicateWarning: match
       ? `Ya existe un cliente llamado ${match.name}. ¿Es el mismo o uno nuevo?`
       : null,

@@ -215,15 +215,22 @@ async function main() {
     // === Group 1: RLS write split (plan 05-01) ===
     console.log("Running RLS write-split assertions (plan 05-01)...");
 
-    const memberOtherInsertRows = await withResolvedIdentityContext(agencyId, memberOtherIdentity, (tx) =>
-      tx
-        .insert(clients)
-        .values({ agencyId, name: "Direct Insert By Member Other", phone: "+573000000099" })
-        .returning({ id: clients.id }));
+    // Goes through the REAL createClient(), not a raw insert: a raw
+    // `INSERT ... RETURNING` here would fail RLS for a different reason than
+    // the one this assertion is checking — Postgres re-checks RETURNING
+    // against the SELECT policy, and memberOther has no client_assignments
+    // row yet for a client that doesn't exist until this statement runs.
+    // createClient() sidesteps this by generating the id itself and not
+    // using RETURNING; see its own comment for the full explanation.
+    const memberOtherCreateResult = await createClient({
+      agencyId,
+      identity: memberOtherIdentity,
+      input: { name: "Direct Insert By Member Other", phone: "+573000000099" },
+    });
     check(
-      "(1) D-13 PROOF: clients_insert_by_team_member lets memberOther (any team member) INSERT directly into clients",
-      memberOtherInsertRows.length === 1,
-      `expected 1 row, got ${JSON.stringify(memberOtherInsertRows)}`,
+      "(1) D-13 PROOF: clients_insert_by_team_member lets memberOther (any team member) create a client via the real createClient()",
+      memberOtherCreateResult.success,
+      `expected success, got ${JSON.stringify(memberOtherCreateResult)}`,
     );
 
     const memberOtherUpdateAttempt = await withResolvedIdentityContext(agencyId, memberOtherIdentity, (tx) =>
