@@ -20,7 +20,8 @@
       "branding": "Branding",
       "team": "Team",
       "chat": "Chat",
-      "bitacora": "Activity log"
+      "bitacora": "Activity log",
+      "clients": "Clients"
     }
   },
   "Team": {
@@ -143,5 +144,56 @@
       "forbidden": "Only an admin can change the agent branding.",
       "unknown": "Something went wrong. Please try again."
     }
+  },
+  "Clients": {
+    "title": "Clients",
+    "subtitle": "Everything your team knows about each client, in one place.",
+    "newClient": "New client",
+    "searchPlaceholder": "Search by name, industry, or notes",
+    "emptyNoClients": {
+      "title": "You don't have any clients yet.",
+      "subtitle": "Add your first one with the form, or by telling the agent."
+    },
+    "emptyNoResults": {
+      "title": "No results for “{query}”.",
+      "subtitle": "Try a different name, industry, or word from the notes."
+    },
+    "emptyPayments": "There are no payments to show here yet.",
+    "emptyAppointments": "There are no appointments scheduled yet.",
+    "createSubmit": "Create client",
+    "createSubmitting": "Creating...",
+    "editSubmit": "Save changes",
+    "editSubmitting": "Saving...",
+    "nameLabel": "Name",
+    "namePlaceholder": "Client name",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+1 555 1234567",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "industryLabel": "Industry",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "Internal notes about this client",
+    "industries": {
+      "restaurants_food": "Restaurants/food",
+      "health_beauty": "Health/beauty",
+      "fashion_retail": "Fashion/retail",
+      "professional_services": "Professional services",
+      "real_estate": "Real estate",
+      "fitness_sports": "Fitness/sports",
+      "education": "Education",
+      "other": "Other",
+      "notSpecified": "Not specified"
+    },
+    "notesTeamOnlyCaption": "Only your team can see this.",
+    "errors": {
+      "nameRequired": "Name is required. Add a phone number or email too.",
+      "saveFailed": "We couldn't save the client. Please try again."
+    },
+    "assignmentLabel": "Assigned to",
+    "reassign": "Reassign",
+    "unassigned": "Unassigned",
+    "editLink": "Edit",
+    "pagosHeading": "Payments",
+    "appointmentsHeading": "Upcoming appointments"
   }
 }
