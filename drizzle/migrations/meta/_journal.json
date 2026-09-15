@@ -162,6 +162,13 @@
       "when": 1789065213124,
       "tag": "0022_agent_action_catalog_client",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1789065213125,
+      "tag": "0023_client_assignments_check_security_definer",
+      "breakpoints": true
     }
   ]
 }
