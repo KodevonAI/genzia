@@ -442,13 +442,32 @@ async function main() {
       `expected 0 rows, got ${JSON.stringify(noRowForAskBack)}`,
     );
 
-    const duplicateToolResult = await executeTool(
+    // Deliberately NOT a duplicate against seeded Client A: per
+    // 05-RESEARCH.md's "Duplicate-name detection (D-09)" entry, the check is
+    // scoped by the caller's own RLS-visible rows, not agency-wide — Client A
+    // is assigned to memberAssigned, so memberOther has no visibility into it
+    // and correctly gets no warning either way. The tool-level relay can only
+    // be proven with a name memberOther can actually see: one they created
+    // (and self-assigned to) themselves, same as assertions (7)/(8) already
+    // prove at the service layer.
+    const firstToolCreateResult = await executeTool(
       "create_client",
-      { name: "Client A", phone: "+573000000202" },
+      { name: "Tool Dup Test", phone: "+573000000201" },
       memberActor,
     );
     check(
-      "(19) D-09 PROOF: create_client tool relays the duplicate-name warning for a name matching seeded Client A",
+      "(19a) create_client tool creates a fresh-named client with no duplicate warning",
+      typeof firstToolCreateResult === "string" && !firstToolCreateResult.includes("Ya existe un cliente llamado"),
+      `got ${JSON.stringify(firstToolCreateResult)}`,
+    );
+
+    const duplicateToolResult = await executeTool(
+      "create_client",
+      { name: "Tool Dup Test", phone: "+573000000202" },
+      memberActor,
+    );
+    check(
+      "(19b) D-09 PROOF: create_client tool relays the duplicate-name warning for a name memberOther can see (their own prior creation)",
       typeof duplicateToolResult === "string" && duplicateToolResult.includes("Ya existe un cliente llamado"),
       `got ${JSON.stringify(duplicateToolResult)}`,
     );
