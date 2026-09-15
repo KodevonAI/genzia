@@ -3,14 +3,18 @@ import type { TurnActor } from "@/lib/agent/types";
 import type { ResolvedIdentity } from "@/lib/identity/types";
 import * as draftClientContent from "./draft-client-content";
 import * as sendPaymentReminder from "./send-payment-reminder";
+import * as createClientTool from "./create-client";
+import * as updateClientTool from "./update-client";
+import * as listClientsTool from "./list-clients";
+import * as getClientTool from "./get-client";
 
 /**
- * The tool registry (LD-06): exactly two executable tools this phase, both
- * backed by infrastructure that already exists. `reschedule_appointment`
- * (the catalog's third seeded code) gets no entry here — there is no
- * calendar to reschedule against until a later phase, and migration 0008's
- * own comment forbids inventing a stub for an action the agent cannot
- * actually perform.
+ * The tool registry (LD-06, extended by Phase 5 CRM): the original two
+ * tools plus the 4 CLI-01/CLI-03/CLI-04 client-dictation tools.
+ * `reschedule_appointment` (the catalog's third seeded code from migration
+ * 0008) still gets no entry here — there is no calendar to reschedule
+ * against until a later phase, and that migration's own comment forbids
+ * inventing a stub for an action the agent cannot actually perform.
  */
 type AgentTool = {
   definition: Anthropic.Messages.Tool;
@@ -21,6 +25,10 @@ type AgentTool = {
 export const AGENT_TOOLS: readonly AgentTool[] = [
   sendPaymentReminder,
   draftClientContent,
+  createClientTool,
+  updateClientTool,
+  listClientsTool,
+  getClientTool,
 ] as const;
 
 /**
