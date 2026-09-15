@@ -20,7 +20,8 @@
       "branding": "Marca",
       "team": "Equipo",
       "chat": "Chat",
-      "bitacora": "Bitácora"
+      "bitacora": "Bitácora",
+      "clients": "Clientes"
     }
   },
   "Team": {
@@ -143,5 +144,56 @@
       "forbidden": "Solo un administrador puede cambiar la marca del agente.",
       "unknown": "Ocurrió un error. Intenta de nuevo."
     }
+  },
+  "Clients": {
+    "title": "Clientes",
+    "subtitle": "Todo lo que tu equipo sabe de cada cliente, en un solo lugar.",
+    "newClient": "Nuevo cliente",
+    "searchPlaceholder": "Buscar por nombre, industria o notas",
+    "emptyNoClients": {
+      "title": "Todavía no tienes clientes.",
+      "subtitle": "Da de alta el primero con el formulario o dictándoselo al agente."
+    },
+    "emptyNoResults": {
+      "title": "Sin resultados para “{query}”.",
+      "subtitle": "Prueba con otro nombre, industria o palabra de las notas."
+    },
+    "emptyPayments": "Todavía no hay pagos que mostrar aquí.",
+    "emptyAppointments": "Todavía no hay citas agendadas.",
+    "createSubmit": "Crear cliente",
+    "createSubmitting": "Creando...",
+    "editSubmit": "Guardar cambios",
+    "editSubmitting": "Guardando...",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Nombre del cliente",
+    "phoneLabel": "Teléfono",
+    "phonePlaceholder": "+57 300 1234567",
+    "emailLabel": "Correo",
+    "emailPlaceholder": "nombre@ejemplo.com",
+    "industryLabel": "Industria",
+    "notesLabel": "Notas",
+    "notesPlaceholder": "Notas internas sobre este cliente",
+    "industries": {
+      "restaurants_food": "Restaurantes/gastronomía",
+      "health_beauty": "Salud/estética",
+      "fashion_retail": "Moda/retail",
+      "professional_services": "Servicios profesionales",
+      "real_estate": "Inmobiliaria",
+      "fitness_sports": "Fitness/deporte",
+      "education": "Educación",
+      "other": "Otro",
+      "notSpecified": "Sin especificar"
+    },
+    "notesTeamOnlyCaption": "Solo el equipo puede ver esto.",
+    "errors": {
+      "nameRequired": "El nombre es obligatorio. Agrega también un teléfono o un correo.",
+      "saveFailed": "No pudimos guardar el cliente. Intenta de nuevo."
+    },
+    "assignmentLabel": "Asignado a",
+    "reassign": "Reasignar",
+    "unassigned": "Sin asignar",
+    "editLink": "Editar",
+    "pagosHeading": "Pagos",
+    "appointmentsHeading": "Próximas citas"
   }
 }
