@@ -17,7 +17,8 @@
     "verify:agent-prompt": "tsx scripts/verify-agent-prompt.ts",
     "verify:agent-media": "tsx scripts/verify-agent-media.ts",
     "db:verify-agent-rls": "tsx scripts/verify-agent-rls.ts",
-    "db:verify-agent": "tsx scripts/verify-agent.ts"
+    "db:verify-agent": "tsx scripts/verify-agent.ts",
+    "db:verify-clients-crm": "tsx scripts/verify-clients-crm.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.125.0",
