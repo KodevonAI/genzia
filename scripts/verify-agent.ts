@@ -391,8 +391,8 @@ async function main() {
     const unknownTools = toolsFor(unknownIdentity);
     const teamTools = toolsFor(adminIdentity);
     check(
-      "(8) LD-06: toolsFor(client_contact) and toolsFor(unknown) are empty; toolsFor(team_member) returns exactly 2 tools",
-      contactTools.length === 0 && unknownTools.length === 0 && teamTools.length === 2,
+      "(8) LD-06: toolsFor(client_contact) and toolsFor(unknown) are empty; toolsFor(team_member) returns exactly 6 tools",
+      contactTools.length === 0 && unknownTools.length === 0 && teamTools.length === 6,
       `contact=${contactTools.length}, unknown=${unknownTools.length}, team=${teamTools.length}`,
     );
 
