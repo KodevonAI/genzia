@@ -148,14 +148,14 @@ async function main() {
     const clientASetup = await batch([
       db.execute(sql`SELECT set_config('app.agency_id', ${agencyAId}, true)`),
       db.execute(sql`SELECT set_config('app.role', 'admin', true)`),
-      db.insert(clients).values({ agencyId: agencyAId, name: "Client A" }).returning({ id: clients.id }),
+      db.insert(clients).values({ agencyId: agencyAId, name: "Client A", phone: "+10000000004" }).returning({ id: clients.id }),
     ]);
     clientAId = clientASetup[2]?.[0]?.id;
 
     const clientBSetup = await batch([
       db.execute(sql`SELECT set_config('app.agency_id', ${agencyAId}, true)`),
       db.execute(sql`SELECT set_config('app.role', 'admin', true)`),
-      db.insert(clients).values({ agencyId: agencyAId, name: "Client B" }).returning({ id: clients.id }),
+      db.insert(clients).values({ agencyId: agencyAId, name: "Client B", phone: "+10000000005" }).returning({ id: clients.id }),
     ]);
     clientBId = clientBSetup[2]?.[0]?.id;
 

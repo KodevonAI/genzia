@@ -141,9 +141,9 @@ async function seed(agencyId: string): Promise<Seeded> {
   const adminIdentity: ResolvedIdentity = { type: "team_member", teamMemberId: adminId, role: "admin" };
 
   const [clientARow] = await withResolvedIdentityContext(agencyId, adminIdentity, (tx) =>
-    tx.insert(clients).values({ agencyId, name: "Client A" }).returning({ id: clients.id }));
+    tx.insert(clients).values({ agencyId, name: "Client A", phone: "+10000000001" }).returning({ id: clients.id }));
   const [clientBRow] = await withResolvedIdentityContext(agencyId, adminIdentity, (tx) =>
-    tx.insert(clients).values({ agencyId, name: "Client B" }).returning({ id: clients.id }));
+    tx.insert(clients).values({ agencyId, name: "Client B", phone: "+10000000002" }).returning({ id: clients.id }));
 
   const clientAId = clientARow?.id;
   const clientBId = clientBRow?.id;

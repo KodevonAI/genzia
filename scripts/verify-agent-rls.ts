@@ -199,11 +199,11 @@ async function main() {
 
     // clients_write_admin_only requires app.role = 'admin' exactly.
     const clientARow = await withResolvedIdentityContext(agencyId, adminIdentity, (tx) =>
-      tx.insert(clients).values({ agencyId, name: "Client A" }).returning({ id: clients.id }));
+      tx.insert(clients).values({ agencyId, name: "Client A", phone: "+10000000001" }).returning({ id: clients.id }));
     clientAId = clientARow[0]?.id;
 
     const clientBRow = await withResolvedIdentityContext(agencyId, adminIdentity, (tx) =>
-      tx.insert(clients).values({ agencyId, name: "Client B" }).returning({ id: clients.id }));
+      tx.insert(clients).values({ agencyId, name: "Client B", phone: "+10000000002" }).returning({ id: clients.id }));
     clientBId = clientBRow[0]?.id;
 
     if (!clientAId || !clientBId) {
